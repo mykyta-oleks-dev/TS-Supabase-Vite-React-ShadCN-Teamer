@@ -1,0 +1,7 @@
+dist/*
+generated/*
+build/*
+
+.env*
+!.env.example
+.vscode/
