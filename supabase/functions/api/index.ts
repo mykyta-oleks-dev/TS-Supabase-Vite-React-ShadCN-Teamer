@@ -8,10 +8,12 @@ import {
     notFoundPage,
 } from './_shared/middleware/error-handling.middleware.ts';
 import { AppError } from './_shared/types/middleware/error-handling.types.ts';
+import { softAuth } from "./_shared/middleware/authentication.middleware.ts";
 
 const app = new Hono().basePath(`/api`);
 
 app.use('/*', cors());
+app.use('*', softAuth);
 
 app.get('/', (c) => {
     return c.json({ message: 'Hello World!' }, 200);
