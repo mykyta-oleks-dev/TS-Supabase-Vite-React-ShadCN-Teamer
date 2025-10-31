@@ -10,7 +10,7 @@ import { ContentfulStatusCode } from '@hono/hono/utils/http-status';
 export const errorHandler = (err: unknown, c: Context) => {
     let status: ContentfulStatusCode = HTTP.INTERNAL;
     let message = 'Internal Server Error';
-    let payload: Record<string, string | number> | undefined;
+    let payload: unknown;
     let isOperational = false;
 
     if (err instanceof AppError) {

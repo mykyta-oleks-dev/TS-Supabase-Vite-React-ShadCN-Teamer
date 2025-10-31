@@ -6,21 +6,32 @@ import {
 } from '../types/middleware/error-handling.types.ts';
 import { Auth } from '../types/middleware/authentication.types.ts';
 import { ContentfulStatusCode } from '@hono/hono/utils/http-status';
+import { Database } from '../types/supabase/database.types.ts';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { AUTH_ERRORS } from '../constants/auth-errors.constants.ts';
 
 export const softAuth = async (c: Context, next: Next) => {
-    const authHeader = c.req.header('authorization');
+    const authHeader = c.req.header('Authorization');
     const token = authHeader?.split(' ')[1];
 
     if (token) {
-        const supabase = getClient(token);
+        let supabase: SupabaseClient<Database>;
+        try {
+            supabase = getClient(token);
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
 
         const { data, error } = await supabase.auth.getUser(token);
 
         if (error) {
-            throw new AppError(
-                error.message,
-                error.status ? (error.status as ContentfulStatusCode) : 500
-            );
+            if (error.code !== AUTH_ERRORS.USER_NOT_FOUND) {
+                throw new AppError(
+                    error.message,
+                    error.status ? (error.status as ContentfulStatusCode) : 500
+                );
+            }
         }
 
         if (data?.user) {
@@ -36,7 +47,7 @@ export const softAuth = async (c: Context, next: Next) => {
 };
 
 export const requireAuth = async (c: Context, next: Next) => {
-    const auth = c.get('auth') as Auth;
+    const auth = c.get('auth');
     if (!auth?.user) {
         throw new UnauthorizedError('Authentication required');
     }

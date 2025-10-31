@@ -3,12 +3,12 @@ import { SUPABASE } from '../constants/env.constants.ts';
 import type { Database } from '../types/supabase/database.types.ts';
 
 const getClient = (token: string) => {
-    if (!SUPABASE.URL || !SUPABASE.ANON_KEY)
+    if (!SUPABASE.URL || !SUPABASE.PUBLISHABLE_KEY)
         throw new Error('Env vars not set');
 
     const supabaseClient = createClient<Database>(
         SUPABASE.URL,
-        SUPABASE.ANON_KEY,
+        SUPABASE.PUBLISHABLE_KEY,
         {
             global: {
                 headers: {
@@ -22,12 +22,12 @@ const getClient = (token: string) => {
 };
 
 export const getSuperClient = () => {
-    if (!SUPABASE.URL || !SUPABASE.SERVICE_ROLE_KEY)
+    if (!SUPABASE.URL || !SUPABASE.SECRET_KEY)
         throw new Error('Env vars not set');
 
     const supabaseClient = createClient<Database>(
         SUPABASE.URL,
-        SUPABASE.SERVICE_ROLE_KEY
+        SUPABASE.SECRET_KEY
     );
 
     return supabaseClient;

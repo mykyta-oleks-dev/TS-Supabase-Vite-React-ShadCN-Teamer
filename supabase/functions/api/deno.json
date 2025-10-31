@@ -2,6 +2,7 @@
     "imports": {
         "@hono/hono": "jsr:@hono/hono@^4.10.4",
         "@supabase/functions-js": "jsr:@supabase/functions-js@^2.5.0",
-        "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.58.0"
+        "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.58.0",
+        "@zod/zod": "jsr:@zod/zod@^4.1.12"
     }
 }
