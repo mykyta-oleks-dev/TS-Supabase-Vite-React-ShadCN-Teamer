@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { SUPABASE } from '../constants/env.ts';
+import { SUPABASE } from '../constants/env.constants.ts';
 import type {Database} from '../types/supabase/database.types.ts'
 
 const getSupabaseClient = (token: string) => {
