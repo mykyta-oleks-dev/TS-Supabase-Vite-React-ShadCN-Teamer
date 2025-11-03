@@ -2,7 +2,7 @@ import { Context } from '@hono/hono';
 import { HTTP } from '../../_shared/constants/http.constants.ts';
 import usersService from './users.service.ts';
 import { CreateProfileBody, AuthBody } from './types/body.types.ts';
-import { assertIsAuth } from '../../_shared/utils/auth.ts';
+import { assertIsAuth, getAuthOrThrow } from '../../_shared/utils/auth.ts';
 import { AppError } from '../../_shared/types/middleware/error-handling.types.ts';
 import { ERRORS } from '../../_shared/constants/errors.constants.ts';
 
@@ -36,11 +36,7 @@ class UsersController {
     };
 
     createProfile = async (c: Context) => {
-        const auth = c.get('auth');
-
-        if (!assertIsAuth(auth)) {
-            throw new AppError(ERRORS.UNEXPECTED);
-        }
+        const auth = getAuthOrThrow(c)
 
         const body = (await c.req.json()) as CreateProfileBody;
 

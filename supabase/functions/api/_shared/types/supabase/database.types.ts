@@ -112,7 +112,23 @@ export type Database = {
             [_ in never]: never;
         };
         Functions: {
-            [_ in never]: never;
+            create_team_with_leader: {
+                Args: { team_code: string; team_name: string };
+                Returns: {
+                    code: string;
+                    created_at: string;
+                    id: string;
+                    leader_id: string | null;
+                    name: string;
+                    updated_at: string;
+                };
+                SetofOptions: {
+                    from: '*';
+                    to: 'teams';
+                    isOneToOne: true;
+                    isSetofReturn: false;
+                };
+            };
         };
         Enums: {
             [_ in never]: never;

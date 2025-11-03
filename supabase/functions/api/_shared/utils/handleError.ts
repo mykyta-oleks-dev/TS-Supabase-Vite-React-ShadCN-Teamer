@@ -20,6 +20,15 @@ export const handleError = (error: unknown) => {
 
     if (error instanceof PostgrestError) handlePostgrestError(error);
 
+    if (isPostgrestErrorObj(error))
+        handlePostgrestError(
+            new PostgrestError({
+                ...error,
+                details: error.details ?? '',
+                hint: error.hint ?? '',
+            })
+        );
+
     if (
         typeof error === 'object' &&
         error !== null &&
@@ -63,3 +72,23 @@ const handlePostgrestError = (error: PostgrestError) => {
             });
     }
 };
+
+const isPostgrestErrorObj = (
+    error: unknown
+): error is {
+    code: string;
+    details: string | null;
+    hint: string | null;
+    message: string;
+} =>
+    error !== null &&
+    typeof error === 'object' &&
+    !Array.isArray(error) &&
+    'code' in error &&
+    typeof error['code'] === 'string' &&
+    'message' in error &&
+    typeof error['message'] === 'string' &&
+    'details' in error &&
+    (typeof error['details'] === 'string' || error['details'] === null) &&
+    'hint' in error &&
+    (typeof error['hint'] === 'string' || error['hint'] === null);
