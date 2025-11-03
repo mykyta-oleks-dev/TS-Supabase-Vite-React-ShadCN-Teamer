@@ -12,4 +12,14 @@ export const SCHEMAS = {
             TOO_SHORT: `Password has to be at least ${PSW_MIN} characters long`,
         },
     },
+
+    PROFILE: {
+        FULL_NAME: {
+            REQUIRED: 'Full name is required'
+        },
+        AVATAR: {
+            REQUIRED: 'Avatar public URL is required',
+            INVALID: 'Avatar has to be a valid URL',
+        }
+    }
 } as const;

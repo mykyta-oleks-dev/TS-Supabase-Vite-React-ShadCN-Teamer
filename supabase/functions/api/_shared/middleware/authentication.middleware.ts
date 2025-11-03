@@ -4,35 +4,25 @@ import {
     AppError,
     UnauthorizedError,
 } from '../types/middleware/error-handling.types.ts';
-import { Auth } from '../types/middleware/authentication.types.ts';
 import { ContentfulStatusCode } from '@hono/hono/utils/http-status';
 import { Database } from '../types/supabase/database.types.ts';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { AUTH_ERRORS } from '../constants/auth-errors.constants.ts';
+import { AuthError, SupabaseClient } from '@supabase/supabase-js';
+import { ERRORS, ERRORS_CODES } from '../constants/errors.constants.ts';
+import { assertIsAuth } from '../utils/auth.ts';
+import { handleError } from "../utils/handleError.ts";
+
+const { AUTH } = ERRORS_CODES;
 
 export const softAuth = async (c: Context, next: Next) => {
     const authHeader = c.req.header('Authorization');
     const token = authHeader?.split(' ')[1];
 
     if (token) {
-        let supabase: SupabaseClient<Database>;
-        try {
-            supabase = getClient(token);
-        } catch (err) {
-            console.error(err);
-            throw err;
-        }
+        const supabase = getClient(token);
 
         const { data, error } = await supabase.auth.getUser(token);
 
-        if (error) {
-            if (error.code !== AUTH_ERRORS.USER_NOT_FOUND) {
-                throw new AppError(
-                    error.message,
-                    error.status ? (error.status as ContentfulStatusCode) : 500
-                );
-            }
-        }
+        if (error) handleJwtError(error);
 
         if (data?.user) {
             c.set('auth', { token, user: data.user });
@@ -46,10 +36,18 @@ export const softAuth = async (c: Context, next: Next) => {
     await next();
 };
 
+const handleJwtError = (error: AuthError) => {
+    if (error.code === AUTH.USER_NOT_FOUND || error.code === AUTH.BAD_JWT) {
+        return;
+    }
+
+    handleError(error);
+};
+
 export const requireAuth = async (c: Context, next: Next) => {
     const auth = c.get('auth');
-    if (!auth?.user) {
-        throw new UnauthorizedError('Authentication required');
+    if (!assertIsAuth(auth)) {
+        throw new UnauthorizedError(ERRORS.AUTH.REQUIRED);
     }
 
     await next();

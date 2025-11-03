@@ -1,3 +1,8 @@
-import { signUpData } from "../validation/schemas.ts";
+import { Database } from '../../../_shared/types/supabase/database.types.ts';
+import { authData } from '../validation/schemas.ts';
 
-export type SignUpBody = Partial<signUpData>;
+export type AuthBody = Partial<authData>;
+
+export type CreateProfileData = Database['public']['Tables']['users']['Insert'];
+
+export type CreateProfileBody = Partial<CreateProfileData>;

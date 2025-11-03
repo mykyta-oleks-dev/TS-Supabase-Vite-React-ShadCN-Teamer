@@ -1,9 +1,8 @@
+export const USERS_ERRORS = {
+    VALIDATION: {
+        AUTH: 'Authentication data is not valid',
+        PROFILE: 'Profile data is not valid',
+    },
 
-
-export const ERRORS = {
-	VALIDATION:{
-    SIGN_UP: 'Invalid data for signing up',},
-	REQUEST: {
-		USER_EXISTS: 'User by the specified credentials already exists'
-	}
+    PROFILE_NOT_CREATED: 'Profile was not created',
 };

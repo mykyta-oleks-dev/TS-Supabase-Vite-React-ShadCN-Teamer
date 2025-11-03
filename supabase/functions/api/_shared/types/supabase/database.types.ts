@@ -71,6 +71,7 @@ export type Database = {
             };
             users: {
                 Row: {
+                    about: string | null;
                     avatar: string;
                     created_at: string;
                     full_name: string;
@@ -79,6 +80,7 @@ export type Database = {
                     updated_at: string;
                 };
                 Insert: {
+                    about?: string | null;
                     avatar: string;
                     created_at?: string;
                     full_name: string;
@@ -87,6 +89,7 @@ export type Database = {
                     updated_at?: string;
                 };
                 Update: {
+                    about?: string | null;
                     avatar?: string;
                     created_at?: string;
                     full_name?: string;
