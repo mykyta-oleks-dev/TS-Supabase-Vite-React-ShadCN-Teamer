@@ -1,11 +1,11 @@
 import { ZodSafeParseResult } from '@zod/zod';
-import { TeamBody, TeamData } from '../types/body.types.ts';
-import { teamData } from './schemas.ts';
+import { CreateTeamBody, CreateTeamData } from '../types/body.types.ts';
+import { teamCreateData } from './schemas.ts';
 
 export const assertIsTeamData = (
-    _body: TeamBody,
-    parsed: ZodSafeParseResult<teamData>
-): _body is TeamData => {
-	if (!parsed.success) return false;
-	return true;
+    _body: CreateTeamBody,
+    parsed: ZodSafeParseResult<teamCreateData>
+): _body is CreateTeamData => {
+    if (!parsed.success) return false;
+    return true;
 };

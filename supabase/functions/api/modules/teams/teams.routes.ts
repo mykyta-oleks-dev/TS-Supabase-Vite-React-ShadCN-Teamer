@@ -7,5 +7,6 @@ const teamsRouter = new Hono();
 
 teamsRouter.post(TEAMS_ROUTES.ROOT, requireAuth, teamsController.create);
 teamsRouter.post(TEAMS_ROUTES.JOIN, requireAuth, teamsController.join);
+teamsRouter.patch(TEAMS_ROUTES.ROOT, requireAuth, teamsController.update);
 
 export default teamsRouter;

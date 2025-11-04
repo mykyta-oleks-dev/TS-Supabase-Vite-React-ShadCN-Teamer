@@ -39,7 +39,7 @@ export type Database = {
                     code: string;
                     created_at: string;
                     id: string;
-                    leader_id: string | null;
+                    leader_id: string;
                     name: string;
                     updated_at: string;
                 };
@@ -47,7 +47,7 @@ export type Database = {
                     code: string;
                     created_at?: string;
                     id?: string;
-                    leader_id?: string | null;
+                    leader_id: string;
                     name: string;
                     updated_at?: string;
                 };
@@ -55,7 +55,7 @@ export type Database = {
                     code?: string;
                     created_at?: string;
                     id?: string;
-                    leader_id?: string | null;
+                    leader_id?: string;
                     name?: string;
                     updated_at?: string;
                 };
@@ -121,7 +121,7 @@ export type Database = {
                     code: string;
                     created_at: string;
                     id: string;
-                    leader_id: string | null;
+                    leader_id: string;
                     name: string;
                     updated_at: string;
                 };

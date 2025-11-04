@@ -1,6 +1,6 @@
 import { Context } from '@hono/hono';
 import { HTTP } from '../../_shared/constants/http.constants.ts';
-import { TeamBody } from './types/body.types.ts';
+import { CreateTeamBody, UpdateTeamBody } from './types/body.types.ts';
 import { getAuthOrThrow } from '../../_shared/utils/auth.ts';
 import teamsService from './teams.service.ts';
 
@@ -8,7 +8,7 @@ class TeamsController {
     create = async (c: Context) => {
         const auth = getAuthOrThrow(c);
 
-        const body = (await c.req.json()) as TeamBody;
+        const body = (await c.req.json()) as CreateTeamBody;
 
         const team = await teamsService.create(auth, body);
 
@@ -29,6 +29,16 @@ class TeamsController {
         await teamsService.join(auth, code);
 
         return c.json({ message: 'Successfuly joined the team!' }, HTTP.OK);
+    };
+
+    update = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const body = (await c.req.json()) as UpdateTeamBody;
+
+        await teamsService.update(auth, body);
+
+        return c.body(null, HTTP.NO_CONTENT);
     };
 }
 
