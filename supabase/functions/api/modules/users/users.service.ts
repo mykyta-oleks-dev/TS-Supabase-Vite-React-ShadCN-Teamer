@@ -6,13 +6,11 @@ import {
 } from '../../_shared/types/middleware/error-handling.types.ts';
 import { CreateProfileBody, AuthBody } from './types/body.types.ts';
 import { authSchema, profileSchema } from './validation/schemas.ts';
-import {
-    ERRORS,
-} from '../../_shared/constants/errors.constants.ts';
+import { ERRORS } from '../../_shared/constants/errors.constants.ts';
 import { Auth } from '../../_shared/types/middleware/authentication.types.ts';
 import usersRepository from './users.repository.ts';
 import { handleError } from '../../_shared/utils/handleError.ts';
-import { USERS_ERRORS } from "./constants/errors.constants.ts";
+import { USERS_ERRORS } from './constants/errors.constants.ts';
 
 class UsersService {
     signUp = async (body: AuthBody) => {
@@ -83,6 +81,22 @@ class UsersService {
         );
 
         return user;
+    };
+
+    getAll = (auth: Auth) => {
+        const client = getClient(auth.token);
+
+        return usersRepository.getAll(client);
+    };
+
+    getOne = (auth: Auth, id?: string) => {
+        if (!id?.length) {
+            throw new BadRequestError(USERS_ERRORS.NO_ID);
+        }
+
+        const client = getClient(auth.token);
+
+        return usersRepository.getOne(client, id);
     };
 }
 

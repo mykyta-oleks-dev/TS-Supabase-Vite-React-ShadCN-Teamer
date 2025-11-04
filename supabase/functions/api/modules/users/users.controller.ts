@@ -22,7 +22,7 @@ class UsersController {
     };
 
     logIn = async (c: Context) => {
-        const body = await (c.req.json()) as AuthBody;
+        const body = (await c.req.json()) as AuthBody;
 
         const data = await usersService.logIn(body);
 
@@ -36,7 +36,7 @@ class UsersController {
     };
 
     createProfile = async (c: Context) => {
-        const auth = getAuthOrThrow(c)
+        const auth = getAuthOrThrow(c);
 
         const body = (await c.req.json()) as CreateProfileBody;
 
@@ -48,6 +48,37 @@ class UsersController {
                 user,
             },
             HTTP.CREATED
+        );
+    };
+
+    // Gets only own profile or of team members
+    getAll = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const users = await usersService.getAll(auth);
+
+        return c.json(
+            {
+                message: 'Profiles fetched succesfuly!',
+                users,
+            },
+            HTTP.OK
+        );
+    };
+
+    getOne = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const id = c.req.param('id');
+
+        const user = await usersService.getOne(auth, id);
+
+        return c.json(
+            {
+                message: 'Profile fetched succesfuly!',
+                user,
+            },
+            HTTP.OK
         );
     };
 }
