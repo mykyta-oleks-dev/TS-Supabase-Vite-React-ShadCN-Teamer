@@ -1,16 +1,16 @@
 import { AuthError, PostgrestError } from '@supabase/supabase-js';
 import {
-    AppError,
-    BadRequestError,
-    ConflictError,
-    ForbiddenError,
-} from '../types/middleware/error-handling.types.ts';
-import {
-    ERRORS_CODES,
-    AUTH_ERRORS,
-    POSTGREST_ERRORS,
+  AUTH_ERRORS,
+  ERRORS_CODES,
+  POSTGREST_ERRORS
 } from '../constants/errors.constants.ts';
 import { HTTP } from '../constants/http.constants.ts';
+import {
+  AppError,
+  BadRequestError,
+  ConflictError,
+  ForbiddenError,
+} from '../types/middleware/error-handling.types.ts';
 
 export const handleError = (error: unknown) => {
     console.log('handleError', error, typeof error);

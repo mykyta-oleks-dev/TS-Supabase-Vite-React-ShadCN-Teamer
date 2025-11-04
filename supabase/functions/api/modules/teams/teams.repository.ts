@@ -6,7 +6,7 @@ import {
 } from '../../_shared/types/middleware/error-handling.types.ts';
 import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.ts';
 import { handleError } from '../../_shared/utils/handleError.ts';
-import { USERS_ERRORS } from "../users/constants/errors.constants.ts";
+import { USERS_ERRORS } from '../users/constants/errors.constants.ts';
 import { TEAMS_ERRORS } from './constants/errors.constants.ts';
 import { CreateTeamData, UpdateTeamData } from './types/body.types.ts';
 import { Team } from './types/team.ts';
@@ -46,6 +46,30 @@ class TeamsRepository {
         if (error) handleError(error);
     };
 
+    getOne = async (
+        client: TypedSupabaseClient,
+        userId: string,
+        deep: boolean
+    ) => {
+        const teamId = await this._checkUser(client, userId);
+
+        if (!teamId) throw new NotFoundError(TEAMS_ERRORS.NOT_FOUND);
+
+        const { data, error } = deep
+            ? await this._getOnePopulated(client, teamId)
+            : await this._getOne(client, teamId);
+
+        if (error) handleError(error);
+
+        if (!data || data === null)
+            throw new NotFoundError(TEAMS_ERRORS.NOT_FOUND);
+
+        const { users, ...team } = data;
+
+        if ('count' in users[0]) return { team, users: users[0].count };
+        return { team, users };
+    };
+
     update = async (
         client: TypedSupabaseClient,
         userId: string,
@@ -80,6 +104,38 @@ class TeamsRepository {
         if (!teams?.length) throw new ForbiddenError(TEAMS_ERRORS.NOT_UPDATED);
     };
 
+    private readonly _getOnePopulated = async (
+        client: TypedSupabaseClient,
+        teamId: string
+    ) => {
+        return await client
+            .from(TABLES.TEAMS)
+            .select(
+                `
+                *,
+                users:users!users_team_id_fkey (*)
+            `
+            )
+            .eq('id', teamId)
+            .single();
+    };
+
+    private readonly _getOne = async (
+        client: TypedSupabaseClient,
+        teamId: string
+    ) => {
+        return await client
+            .from(TABLES.TEAMS)
+            .select(
+                `
+                *,
+                users:users!users_team_id_fkey (count)
+            `
+            )
+            .eq('id', teamId)
+            .single();
+    };
+
     private readonly _checkUser = async (
         client: TypedSupabaseClient,
         userId: string
@@ -91,8 +147,7 @@ class TeamsRepository {
 
         if (userError) handleError(userError);
 
-        if (!userDatas?.length)
-            throw new NotFoundError(USERS_ERRORS.NOT_FOUND)
+        if (!userDatas?.length) throw new NotFoundError(USERS_ERRORS.NOT_FOUND);
 
         const userData = userDatas[0];
 
@@ -105,8 +160,7 @@ class TeamsRepository {
     ) => {
         const team_id = await this._checkUser(client, userId);
 
-        if (!team_id)
-            throw new ForbiddenError(TEAMS_ERRORS.FORBIDDEN);
+        if (!team_id) throw new ForbiddenError(TEAMS_ERRORS.FORBIDDEN_UPDATE);
 
         const { data: candidates, error: candidateError } = await client
             .from(TABLES.TEAMS)
@@ -115,12 +169,13 @@ class TeamsRepository {
 
         if (candidateError) handleError(candidateError);
 
-        if (!candidates?.length) throw new NotFoundError(TEAMS_ERRORS.NOT_FOUND);
+        if (!candidates?.length)
+            throw new NotFoundError(TEAMS_ERRORS.NOT_FOUND);
 
         const team = candidates[0];
 
         if (team.leader_id !== userId)
-            throw new ForbiddenError(TEAMS_ERRORS.FORBIDDEN);
+            throw new ForbiddenError(TEAMS_ERRORS.FORBIDDEN_UPDATE);
 
         return team_id;
     };

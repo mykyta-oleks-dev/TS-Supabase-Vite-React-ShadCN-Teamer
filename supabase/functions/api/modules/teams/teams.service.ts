@@ -43,6 +43,12 @@ class TeamsService {
         return teamsRepository.join(client, code);
     };
 
+    getOne = (auth: Auth, deep: boolean) => {
+        const client = getClient(auth.token);
+
+        return teamsRepository.getOne(client, auth.user.id, deep)
+    }
+
     update = (auth: Auth, body: UpdateTeamBody) => {
         const parsed = teamEditSchema.safeParse(body);
 

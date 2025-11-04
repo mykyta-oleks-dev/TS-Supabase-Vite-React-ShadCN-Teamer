@@ -31,6 +31,19 @@ class TeamsController {
         return c.json({ message: 'Successfuly joined the team!' }, HTTP.OK);
     };
 
+    getOne = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const deep = c.req.query('deep') === 'true';
+
+        const { team, users } = await teamsService.getOne(auth, deep);
+
+        return c.json(
+            { message: 'Team fetched successfuly!', team, users },
+            HTTP.OK
+        );
+    };
+
     update = async (c: Context) => {
         const auth = getAuthOrThrow(c);
 
@@ -47,7 +60,7 @@ class TeamsController {
         await teamsService.delete(auth);
 
         return c.body(null, HTTP.NO_CONTENT);
-    }
+    };
 }
 
 const teamsController = new TeamsController();
