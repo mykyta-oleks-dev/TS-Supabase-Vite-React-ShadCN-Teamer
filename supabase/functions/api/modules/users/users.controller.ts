@@ -1,7 +1,11 @@
 import { Context } from '@hono/hono';
 import { HTTP } from '../../_shared/constants/http.constants.ts';
 import usersService from './users.service.ts';
-import { CreateProfileBody, AuthBody } from './types/body.types.ts';
+import {
+    CreateProfileBody,
+    UpdateProfileBody,
+    AuthBody,
+} from './types/body.types.ts';
 import { assertIsAuth, getAuthOrThrow } from '../../_shared/utils/auth.ts';
 import { AppError } from '../../_shared/types/middleware/error-handling.types.ts';
 import { ERRORS } from '../../_shared/constants/errors.constants.ts';
@@ -80,6 +84,16 @@ class UsersController {
             },
             HTTP.OK
         );
+    };
+
+    update = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const body = (await c.req.json()) as UpdateProfileBody;
+
+        await usersService.update(auth, body);
+
+        return c.body(null, HTTP.NO_CONTENT);
     };
 }
 

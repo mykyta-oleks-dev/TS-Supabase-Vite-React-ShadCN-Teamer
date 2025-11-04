@@ -1,18 +1,18 @@
 import { TABLES } from '../../_shared/constants/tables.constants.ts';
 import {
-    AppError,
-    NotFoundError,
+  AppError,
+  NotFoundError,
 } from '../../_shared/types/middleware/error-handling.types.ts';
 import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.ts';
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from './constants/errors.constants.ts';
-import { profileData } from './validation/schemas.ts';
+import { createProfileData, updateProfileData } from './validation/schemas.ts';
 
 class UsersRepository {
     createProfile = async (
         client: TypedSupabaseClient,
         id: string,
-        data: profileData
+        data: createProfileData
     ) => {
         const { data: user, error } = await client
             .from(TABLES.USERS)
@@ -51,6 +51,19 @@ class UsersRepository {
         if (!users?.length) throw new NotFoundError(USERS_ERRORS.NOT_FOUND);
 
         return users[0];
+    };
+
+    update = async (
+        client: TypedSupabaseClient,
+        id: string,
+        data: updateProfileData
+    ) => {
+        const { error } = await client
+            .from(TABLES.USERS)
+            .update(data)
+            .eq('id', id);
+
+        if (error) handleError(error);
     };
 }
 

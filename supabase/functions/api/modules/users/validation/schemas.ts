@@ -12,7 +12,7 @@ export const authSchema = z.object({
 
 export type authData = z.infer<typeof authSchema>;
 
-export const profileSchema = z.object({
+export const createProfileSchema = z.object({
     full_name: z.string(PROFILE.FULL_NAME.REQUIRED).trim(),
     avatar: z
         .string(PROFILE.AVATAR.REQUIRED)
@@ -20,4 +20,14 @@ export const profileSchema = z.object({
     about: z.string().trim().optional(),
 });
 
-export type profileData = z.infer<typeof profileSchema>;
+export type createProfileData = z.infer<typeof createProfileSchema>;
+
+export const updateProfileSchema = createProfileSchema.extend({
+    full_name: z.string(PROFILE.FULL_NAME.REQUIRED).optional(),
+    avatar: z
+        .string(PROFILE.AVATAR.REQUIRED)
+        .regex(urlRegex, PROFILE.AVATAR.INVALID)
+        .optional(),
+})
+
+export type updateProfileData = z.infer<typeof updateProfileSchema>;

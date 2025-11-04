@@ -7,8 +7,10 @@ const usersRouter = new Hono();
 
 usersRouter.post(USERS_ROUTES.SIGN_UP, usersController.signUp);
 usersRouter.post(USERS_ROUTES.LOG_IN, usersController.logIn);
+
 usersRouter.post(USERS_ROUTES.ROOT, requireAuth, usersController.createProfile);
 usersRouter.get(USERS_ROUTES.ROOT, requireAuth, usersController.getAll);
 usersRouter.get(USERS_ROUTES.DYNAMIC, requireAuth, usersController.getOne);
+usersRouter.patch(USERS_ROUTES.ROOT, requireAuth, usersController.update);
 
 export default usersRouter;

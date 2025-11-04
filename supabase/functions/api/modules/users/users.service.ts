@@ -4,8 +4,12 @@ import {
     AppError,
     BadRequestError,
 } from '../../_shared/types/middleware/error-handling.types.ts';
-import { CreateProfileBody, AuthBody } from './types/body.types.ts';
-import { authSchema, profileSchema } from './validation/schemas.ts';
+import {
+    CreateProfileBody,
+    AuthBody,
+    UpdateProfileBody,
+} from './types/body.types.ts';
+import { authSchema, createProfileSchema, updateProfileSchema } from './validation/schemas.ts';
 import { ERRORS } from '../../_shared/constants/errors.constants.ts';
 import { Auth } from '../../_shared/types/middleware/authentication.types.ts';
 import usersRepository from './users.repository.ts';
@@ -63,7 +67,7 @@ class UsersService {
     };
 
     createProfile = async (auth: Auth, body: CreateProfileBody) => {
-        const parsed = profileSchema.safeParse(body);
+        const parsed = createProfileSchema.safeParse(body);
 
         if (!parsed.success) {
             throw new BadRequestError(
@@ -97,6 +101,25 @@ class UsersService {
         const client = getClient(auth.token);
 
         return usersRepository.getOne(client, id);
+    };
+
+    update = async (auth: Auth, body: UpdateProfileBody) => {
+        const parsed = updateProfileSchema.safeParse(body);
+
+        if (!parsed.success) {
+            throw new BadRequestError(
+                USERS_ERRORS.VALIDATION.AUTH,
+                z.treeifyError(parsed.error).properties
+            );
+        }
+
+        const client = getClient(auth.token);
+
+        await usersRepository.update(
+            client,
+            auth.user.id,
+            parsed.data
+        );
     };
 }
 

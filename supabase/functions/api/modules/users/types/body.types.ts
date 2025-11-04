@@ -6,3 +6,5 @@ export type AuthBody = Partial<authData>;
 export type CreateProfileData = Database['public']['Tables']['users']['Insert'];
 
 export type CreateProfileBody = Partial<CreateProfileData>;
+
+export type UpdateProfileBody = Database['public']['Tables']['users']['Update'];
