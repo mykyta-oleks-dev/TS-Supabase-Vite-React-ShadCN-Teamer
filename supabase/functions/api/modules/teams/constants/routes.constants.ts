@@ -1,4 +1,5 @@
 export const TEAMS_ROUTES = {
 	ROOT: '/',
-	DYNAMIC: '/:id'
+	DYNAMIC: '/:id',
+	JOIN: '/join'
 } as const;

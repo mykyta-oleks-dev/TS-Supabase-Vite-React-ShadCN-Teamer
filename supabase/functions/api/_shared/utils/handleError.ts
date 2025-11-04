@@ -66,6 +66,8 @@ const handlePostgrestError = (error: PostgrestError) => {
             throw new ForbiddenError(POSTGREST_ERRORS.RLS);
         case POSTGREST.BAD_REQUEST:
             throw new BadRequestError(POSTGREST_ERRORS.BAD_REQUEST);
+        case POSTGREST.RAISED_EXCEPTION:
+            throw new BadRequestError(error.message);
         default:
             throw new AppError(error.message, HTTP.INTERNAL, {
                 code: error.code,

@@ -1,15 +1,13 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-import { Auth } from '../../_shared/types/middleware/authentication.types.ts';
 import { TeamData } from './types/body.types.ts';
-import { Database } from '../../_shared/types/supabase/database.types.ts';
-import { TABLES } from '../../_shared/constants/tables.constants.ts';
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { AppError } from '../../_shared/types/middleware/error-handling.types.ts';
 import { Team } from './types/team.ts';
 import { TEAMS_ERRORS } from './constants/errors.constants.ts';
+import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.ts';
+import { TABLES } from '../../_shared/constants/tables.constants.ts';
 
 class TeamsRepository {
-    create = async (client: SupabaseClient<Database>, data: TeamData) => {
+    create = async (client: TypedSupabaseClient, data: TeamData) => {
         const response = await client.rpc('create_team_with_leader', {
             team_name: data.name,
             team_code: data.code,
@@ -27,6 +25,14 @@ class TeamsRepository {
         }
 
         return team;
+    };
+
+    join = async (client: TypedSupabaseClient, code: string) => {
+        const { error } = await client.rpc('join_team', {
+            p_code: code,
+        });
+
+        if (error) handleError(error);
     };
 }
 

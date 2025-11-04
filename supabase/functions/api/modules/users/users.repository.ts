@@ -1,14 +1,13 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-import { Database } from '../../_shared/types/supabase/database.types.ts';
-import { profileData } from './validation/schemas.ts';
 import { TABLES } from '../../_shared/constants/tables.constants.ts';
 import { AppError } from '../../_shared/types/middleware/error-handling.types.ts';
+import { TypedSupabaseClient } from "../../_shared/types/supabase/client.types.ts";
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from './constants/errors.constants.ts';
+import { profileData } from './validation/schemas.ts';
 
 class UsersRepository {
     createProfile = async (
-        client: SupabaseClient<Database>,
+        client: TypedSupabaseClient,
         id: string,
         data: profileData
     ) => {

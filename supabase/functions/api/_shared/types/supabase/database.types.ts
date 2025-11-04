@@ -129,6 +129,7 @@ export type Database = {
                     isSetofReturn: false;
                 };
             };
+            join_team: { Args: { p_code: string }; Returns: undefined };
         };
         Enums: {
             [_ in never]: never;

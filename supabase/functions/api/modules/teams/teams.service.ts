@@ -29,6 +29,15 @@ class TeamsService {
         return teamsRepository.create(client, teamData);
     };
 
+    join = (auth: Auth, code?: string) => {
+        if (!code?.trim() || code.length != 10)
+            throw new BadRequestError(TEAMS_ERRORS.BAD_REQ_CODE);
+
+        const client = getClient(auth.token);
+
+        return teamsRepository.join(client, code);
+    };
+
     private readonly _generateCode = () => {
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
         let code = '';

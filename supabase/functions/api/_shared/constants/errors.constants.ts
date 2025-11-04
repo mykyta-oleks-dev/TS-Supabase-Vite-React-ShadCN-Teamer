@@ -15,6 +15,7 @@ export const ERRORS_CODES = {
         CONFLICT: '23505',
         FORBIDDEN: '42501',
         BAD_REQUEST: '22P02',
+        RAISED_EXCEPTION: 'P0001',
     },
 } as const;
 

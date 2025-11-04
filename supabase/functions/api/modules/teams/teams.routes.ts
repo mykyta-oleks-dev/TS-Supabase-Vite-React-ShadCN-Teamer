@@ -6,5 +6,6 @@ import { TEAMS_ROUTES } from "./constants/routes.constants.ts";
 const teamsRouter = new Hono();
 
 teamsRouter.post(TEAMS_ROUTES.ROOT, requireAuth, teamsController.create);
+teamsRouter.post(TEAMS_ROUTES.JOIN, requireAuth, teamsController.join);
 
 export default teamsRouter;

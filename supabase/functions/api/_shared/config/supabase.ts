@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { SUPABASE } from '../constants/env.constants.ts';
 import type { Database } from '../types/supabase/database.types.ts';
-import { AppError } from "../types/middleware/error-handling.types.ts";
 
 const getClient = (token: string) => {
     if (!SUPABASE.URL || !SUPABASE.PUBLISHABLE_KEY)
