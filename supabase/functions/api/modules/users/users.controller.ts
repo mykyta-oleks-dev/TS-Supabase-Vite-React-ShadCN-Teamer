@@ -59,7 +59,9 @@ class UsersController {
     getAll = async (c: Context) => {
         const auth = getAuthOrThrow(c);
 
-        const users = await usersService.getAll(auth);
+        const withDeleted = c.req.query('withDeleted') === 'true';
+
+        const users = await usersService.getAll(auth, withDeleted);
 
         return c.json(
             {
@@ -95,6 +97,14 @@ class UsersController {
 
         return c.body(null, HTTP.NO_CONTENT);
     };
+
+    delete = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        await usersService.delete(auth);
+
+        return c.body(null, HTTP.NO_CONTENT);
+    }
 }
 
 const usersController = new UsersController();

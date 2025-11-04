@@ -32,8 +32,12 @@ class UsersRepository {
         return user;
     };
 
-    getAll = async (client: TypedSupabaseClient) => {
-        const { data: users, error } = await client.from(TABLES.USERS).select();
+    getAll = async (client: TypedSupabaseClient, withDeleted?: boolean) => {
+        let query = client.from(TABLES.USERS).select();
+
+        if (!withDeleted) query = query.eq('is_deleted', false);
+        
+        const { data: users, error } = await query;
 
         if (error) handleError(error);
 
@@ -65,6 +69,17 @@ class UsersRepository {
 
         if (error) handleError(error);
     };
+
+    delete = async (client: TypedSupabaseClient, id: string) => {
+        const { error } = await client
+            .from(TABLES.USERS)
+            .update({
+                is_deleted: true
+            })
+            .eq('id', id)
+        
+        if (error) handleError(error);
+    }
 }
 
 const usersRepository = new UsersRepository();

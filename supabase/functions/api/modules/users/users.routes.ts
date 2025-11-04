@@ -12,5 +12,6 @@ usersRouter.post(USERS_ROUTES.ROOT, requireAuth, usersController.createProfile);
 usersRouter.get(USERS_ROUTES.ROOT, requireAuth, usersController.getAll);
 usersRouter.get(USERS_ROUTES.DYNAMIC, requireAuth, usersController.getOne);
 usersRouter.patch(USERS_ROUTES.ROOT, requireAuth, usersController.update);
+usersRouter.delete(USERS_ROUTES.ROOT, requireAuth, usersController.delete);
 
 export default usersRouter;

@@ -87,10 +87,10 @@ class UsersService {
         return user;
     };
 
-    getAll = (auth: Auth) => {
+    getAll = (auth: Auth, withDeleted?: boolean) => {
         const client = getClient(auth.token);
 
-        return usersRepository.getAll(client);
+        return usersRepository.getAll(client, withDeleted);
     };
 
     getOne = (auth: Auth, id?: string) => {
@@ -121,6 +121,14 @@ class UsersService {
             parsed.data
         );
     };
+
+    delete = async (auth: Auth) => {
+        const superClient = getSuperClient();
+
+        await usersRepository.delete(superClient, auth.user.id);
+
+        await superClient.auth.admin.deleteUser(auth.user.id, true);
+    }
 }
 
 const usersService = new UsersService();
