@@ -40,6 +40,14 @@ class TeamsController {
 
         return c.body(null, HTTP.NO_CONTENT);
     };
+
+    delete = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        await teamsService.delete(auth);
+
+        return c.body(null, HTTP.NO_CONTENT);
+    }
 }
 
 const teamsController = new TeamsController();

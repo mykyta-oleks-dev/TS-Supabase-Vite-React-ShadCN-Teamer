@@ -31,7 +31,7 @@ class TeamsService {
 
         const client = getClient(auth.token);
 
-        return teamsRepository.create(client, teamData);
+        return teamsRepository.create(client, auth.user.id, teamData);
     };
 
     join = (auth: Auth, code?: string) => {
@@ -60,6 +60,12 @@ class TeamsService {
         const client = getClient(auth.token);
 
         return teamsRepository.update(client, auth.user.id, teamData);
+    };
+
+    delete = (auth: Auth) => {
+        const client = getClient(auth.token);
+
+        return teamsRepository.delete(client, auth.user.id);
     };
 
     private readonly _generateCode = () => {
