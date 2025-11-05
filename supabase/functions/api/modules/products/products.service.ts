@@ -6,13 +6,14 @@ import {
 } from '../../_shared/types/middleware/authentication.types.ts';
 import { BadRequestError } from '../../_shared/types/middleware/error-handling.types.ts';
 import { CreateTeamBody } from '../teams/types/request.types.ts';
+import { PRODUCTS_ERRORS } from './constants/errors.constants.ts';
 import productsRepository from './products.repository.ts';
+import { ProductQuery, UpdateProductBody } from './types/request.types.ts';
+import { isProductField, isStatus } from './utils/assertions.ts';
 import {
     productCreateSchema,
     productEditSchema,
 } from './validation/schemas.ts';
-import { PRODUCTS_ERRORS } from './constants/errors.constants.ts';
-import { UpdateProductBody } from './types/request.types.ts';
 
 class ProductsService {
     create = (auth: Auth, body: CreateTeamBody) => {
@@ -48,6 +49,16 @@ class ProductsService {
         return productsRepository.getOne(client, parsedId);
     };
 
+    getMany = (softAuth: AuthPartial, query: Record<string, string>) => {
+        const queryParsed = this._parseQuery(query);
+
+        const client = softAuth.token
+            ? getClient(softAuth.token)
+            : getAnonClient();
+
+        return productsRepository.getMany(client, queryParsed);
+    };
+
     update = (auth: Auth, id: string, body: UpdateProductBody) => {
         if (!id?.trim()) {
             throw new BadRequestError(PRODUCTS_ERRORS.NO_ID);
@@ -70,7 +81,45 @@ class ProductsService {
 
         const client = getClient(auth.token);
 
-        return productsRepository.update(client, auth.user.id, parsedId, parsed.data);
+        return productsRepository.update(
+            client,
+            auth.user.id,
+            parsedId,
+            parsed.data
+        );
+    };
+
+    private readonly _parseQuery = (
+        raw: Record<string, string>
+    ): ProductQuery => {
+        const query: ProductQuery = {};
+
+        if (raw.page) {
+            const page = Number.parseInt(raw.page);
+            if (!Number.isNaN(page) && page > 0) query.page = page;
+        }
+
+        if (raw.limit) {
+            const limit = Number.parseInt(raw.limit);
+            if (!Number.isNaN(limit) && limit > 0) query.limit = limit;
+        }
+
+        if (isProductField(raw.orderBy)) {
+            query.orderBy = raw.orderBy;
+        }
+
+        if (raw.orderByType || raw.orderBy) {
+            query.orderByType = raw.orderByType === 'desc' ? 'desc' : 'asc';
+        }
+
+        if (raw.text) query.text = raw.text;
+
+        if (raw.user_id) query.userId = raw.user_id;
+        else if (raw.userId) query.userId = raw.userId;
+
+        if (isStatus(raw.status)) query.status = raw.status;
+
+        return query;
     };
 }
 

@@ -3,7 +3,7 @@ import { HTTP } from '../../_shared/constants/http.constants.ts';
 import { getAuthOrThrow } from '../../_shared/utils/auth.ts';
 import { CreateTeamBody } from '../teams/types/request.types.ts';
 import productsService from './products.service.ts';
-import { UpdateProductBody } from "./types/request.types.ts";
+import { UpdateProductBody } from './types/request.types.ts';
 
 class ProductsController {
     create = async (c: Context) => {
@@ -38,6 +38,27 @@ class ProductsController {
         );
     };
 
+    getMany = async (c: Context) => {
+        const softAuth = c.get('auth');
+
+        const query = c.req.query();
+
+        const data = await productsService.getMany(softAuth, query);
+
+        const { products, count, limit, pages } = data;
+
+        return c.json(
+            {
+                message: 'Successfuly fetched products!',
+                products,
+                count,
+                limit,
+                pages,
+            },
+            HTTP.OK
+        );
+    };
+
     update = async (c: Context) => {
         const auth = getAuthOrThrow(c);
 
@@ -48,7 +69,7 @@ class ProductsController {
         await productsService.update(auth, id, body);
 
         return c.body(null, HTTP.NO_CONTENT);
-    }
+    };
 }
 
 const productsController = new ProductsController();

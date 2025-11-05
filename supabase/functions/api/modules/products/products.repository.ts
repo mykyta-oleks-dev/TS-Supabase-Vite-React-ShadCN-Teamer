@@ -8,6 +8,7 @@ import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.t
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from '../users/constants/errors.constants.ts';
 import { PRODUCTS_ERRORS } from './constants/errors.constants.ts';
+import { ProductQuery } from './types/request.types.ts';
 import { productCreateData, productEditData } from './validation/schemas.ts';
 
 class ProductsRepository {
@@ -49,6 +50,43 @@ class ProductsRepository {
         }
 
         return products[0];
+    };
+
+    getMany = async (client: TypedSupabaseClient, query: ProductQuery) => {
+        let dbQuery = client.from(TABLES.PRODUCTS).select();
+
+        const limit = Math.max(query.limit ?? 20, 1);
+        const page = Math.max(query.page ?? 1, 1);
+        dbQuery = dbQuery.range((page - 1) * limit, page * limit - 1);
+
+        if (query.orderBy || query.orderByType)
+            dbQuery = dbQuery.order(query.orderBy ?? 'id', {
+                ascending: query.orderByType === 'asc',
+            });
+
+        if (query.status) dbQuery = dbQuery.eq('status', query.status);
+
+        if (query.userId) dbQuery = dbQuery.eq('user_id', query.userId);
+
+        if (query.text) {
+            dbQuery = dbQuery.or(
+                `title.ilike.%${query.text}%,description.ilike.%${query.text}%`
+            );
+        }
+
+        const { data: products, error } = await dbQuery;
+
+        if (error) handleError(error);
+
+        const { count: queryCount } = await client
+            .from(TABLES.PRODUCTS)
+            .select('*', { count: 'exact' });
+
+        const total = queryCount ?? products?.length ?? 0;
+
+        const pages = Math.ceil(total / limit);
+
+        return { products: products ?? [], count: total, pages, limit };
     };
 
     update = async (

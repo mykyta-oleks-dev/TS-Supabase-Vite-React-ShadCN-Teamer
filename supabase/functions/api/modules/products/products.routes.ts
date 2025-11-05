@@ -11,6 +11,7 @@ productsRouter.post(
     productsController.create
 );
 productsRouter.get(PRODUCTS_ROUTES.DYNAMIC, productsController.getOne);
+productsRouter.get(PRODUCTS_ROUTES.ROOT, productsController.getMany);
 productsRouter.patch(
     PRODUCTS_ROUTES.DYNAMIC,
     requireAuth,
