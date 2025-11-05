@@ -1,5 +1,5 @@
 import { ZodSafeParseResult } from '@zod/zod';
-import { CreateTeamBody, CreateTeamData } from '../types/body.types.ts';
+import { CreateTeamBody, CreateTeamData } from '../types/request.types.ts';
 import { teamCreateData } from './schemas.ts';
 
 export const assertIsTeamData = (

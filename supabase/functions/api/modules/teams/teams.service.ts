@@ -6,7 +6,7 @@ import {
     CreateTeamData,
     UpdateTeamData,
     UpdateTeamBody,
-} from './types/body.types.ts';
+} from './types/request.types.ts';
 import { teamCreateSchema, teamEditSchema } from './validation/schemas.ts';
 import { TEAMS_ERRORS } from './constants/errors.constants.ts';
 import { CODE_LENGTH } from './constants/validation.constants.ts';

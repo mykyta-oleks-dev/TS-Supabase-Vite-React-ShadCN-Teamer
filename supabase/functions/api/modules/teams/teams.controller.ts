@@ -1,6 +1,6 @@
 import { Context } from '@hono/hono';
 import { HTTP } from '../../_shared/constants/http.constants.ts';
-import { CreateTeamBody, UpdateTeamBody } from './types/body.types.ts';
+import { CreateTeamBody, UpdateTeamBody } from './types/request.types.ts';
 import { getAuthOrThrow } from '../../_shared/utils/auth.ts';
 import teamsService from './teams.service.ts';
 

@@ -11,5 +11,10 @@ productsRouter.post(
     productsController.create
 );
 productsRouter.get(PRODUCTS_ROUTES.DYNAMIC, productsController.getOne);
+productsRouter.patch(
+    PRODUCTS_ROUTES.DYNAMIC,
+    requireAuth,
+    productsController.update
+);
 
 export default productsRouter;

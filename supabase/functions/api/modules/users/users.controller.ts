@@ -5,7 +5,7 @@ import {
     CreateProfileBody,
     UpdateProfileBody,
     AuthBody,
-} from './types/body.types.ts';
+} from './types/request.types.ts';
 import { assertIsAuth, getAuthOrThrow } from '../../_shared/utils/auth.ts';
 import { AppError } from '../../_shared/types/middleware/error-handling.types.ts';
 import { ERRORS } from '../../_shared/constants/errors.constants.ts';

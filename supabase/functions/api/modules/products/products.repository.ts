@@ -8,7 +8,7 @@ import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.t
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from '../users/constants/errors.constants.ts';
 import { PRODUCTS_ERRORS } from './constants/errors.constants.ts';
-import { productCreateData } from './validation/schemas.ts';
+import { productCreateData, productEditData } from './validation/schemas.ts';
 
 class ProductsRepository {
     create = async (
@@ -51,6 +51,26 @@ class ProductsRepository {
         return products[0];
     };
 
+    update = async (
+        client: TypedSupabaseClient,
+        userId: string,
+        id: number,
+        data: productEditData
+    ) => {
+        await this._checkAuthority(client, userId, id);
+
+        const { data: products, error } = await client
+            .from(TABLES.PRODUCTS)
+            .update(data)
+            .eq('id', id)
+            .select();
+
+        if (error) handleError(error);
+
+        if (!products?.length)
+            throw new ForbiddenError(PRODUCTS_ERRORS.NOT_UPDATED);
+    };
+
     private readonly _checkUser = async (
         client: TypedSupabaseClient,
         userId: string
@@ -67,6 +87,32 @@ class ProductsRepository {
         const userData = userDatas[0];
 
         return userData.team_id;
+    };
+
+    private readonly _checkAuthority = async (
+        client: TypedSupabaseClient,
+        userId: string,
+        id: number
+    ) => {
+        const team_id = await this._checkUser(client, userId);
+
+        if (!team_id)
+            throw new ForbiddenError(PRODUCTS_ERRORS.FORBIDDEN_UPDATE);
+
+        const { data: candidates, error: candidateError } = await client
+            .from(TABLES.PRODUCTS)
+            .select()
+            .eq('id', id);
+
+        if (candidateError) handleError(candidateError);
+
+        if (!candidates?.length)
+            throw new NotFoundError(PRODUCTS_ERRORS.NOT_FOUND);
+
+        const product = candidates[0];
+
+        if (product.team_id !== team_id)
+            throw new ForbiddenError(PRODUCTS_ERRORS.FORBIDDEN_UPDATE);
     };
 }
 

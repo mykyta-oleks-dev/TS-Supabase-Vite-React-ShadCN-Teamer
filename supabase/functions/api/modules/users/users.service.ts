@@ -8,7 +8,7 @@ import {
     CreateProfileBody,
     AuthBody,
     UpdateProfileBody,
-} from './types/body.types.ts';
+} from './types/request.types.ts';
 import { authSchema, createProfileSchema, updateProfileSchema } from './validation/schemas.ts';
 import { ERRORS } from '../../_shared/constants/errors.constants.ts';
 import { Auth } from '../../_shared/types/middleware/authentication.types.ts';

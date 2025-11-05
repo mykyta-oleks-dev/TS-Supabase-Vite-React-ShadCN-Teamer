@@ -1,5 +1,5 @@
 import { ZodSafeParseResult } from '@zod/zod';
-import { CreateProfileBody, CreateProfileData } from '../types/body.types.ts';
+import { CreateProfileBody, CreateProfileData } from '../types/request.types.ts';
 import { createProfileData } from './schemas.ts';
 
 export const assertIsProfileData = (

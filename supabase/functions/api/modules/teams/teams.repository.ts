@@ -8,8 +8,8 @@ import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.t
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from '../users/constants/errors.constants.ts';
 import { TEAMS_ERRORS } from './constants/errors.constants.ts';
-import { CreateTeamData, UpdateTeamData } from './types/body.types.ts';
-import { Team } from './types/team.ts';
+import { CreateTeamData, UpdateTeamData } from './types/request.types.ts';
+import { Team } from './types/team.types.ts';
 
 class TeamsRepository {
     create = async (

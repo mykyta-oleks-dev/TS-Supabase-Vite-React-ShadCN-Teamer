@@ -1,8 +1,9 @@
 import { Context } from '@hono/hono';
 import { HTTP } from '../../_shared/constants/http.constants.ts';
 import { getAuthOrThrow } from '../../_shared/utils/auth.ts';
-import { CreateTeamBody } from '../teams/types/body.types.ts';
+import { CreateTeamBody } from '../teams/types/request.types.ts';
 import productsService from './products.service.ts';
+import { UpdateProductBody } from "./types/request.types.ts";
 
 class ProductsController {
     create = async (c: Context) => {
@@ -36,6 +37,18 @@ class ProductsController {
             HTTP.OK
         );
     };
+
+    update = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const id = c.req.param('id');
+
+        const body = (await c.req.json()) as UpdateProductBody;
+
+        await productsService.update(auth, id, body);
+
+        return c.body(null, HTTP.NO_CONTENT);
+    }
 }
 
 const productsController = new ProductsController();
