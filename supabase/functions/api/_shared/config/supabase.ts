@@ -26,6 +26,18 @@ const getClient = (token: string) => {
     return supabaseClient;
 };
 
+export const getAnonClient = () => {
+    if (!SUPABASE.URL || !SUPABASE.PUBLISHABLE_KEY)
+        throw new Error('Env vars not set');
+
+    const supabaseClient = createClient<Database>(
+        SUPABASE.URL,
+        SUPABASE.PUBLISHABLE_KEY
+    );
+
+    return supabaseClient;
+}
+
 export const getSuperClient = () => {
     if (!SUPABASE.URL || !SUPABASE.SECRET_KEY)
         throw new Error('Env vars not set');

@@ -1,6 +1,10 @@
 export const PRODUCTS_ERRORS = {
     VALIDATION: 'Product data is invalid',
 
+    NO_ID: 'Product ID is not provided',
+
+    BAD_ID: 'Product ID should be a valid number',
+
     NOT_CREATED: 'Product was not created',
     NOT_UPDATED: 'Product was not updated',
 

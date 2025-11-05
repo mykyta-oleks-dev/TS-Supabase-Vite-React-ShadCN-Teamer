@@ -94,7 +94,7 @@ class UsersService {
     };
 
     getOne = (auth: Auth, id?: string) => {
-        if (!id?.length) {
+        if (!id?.trim()) {
             throw new BadRequestError(USERS_ERRORS.NO_ID);
         }
 

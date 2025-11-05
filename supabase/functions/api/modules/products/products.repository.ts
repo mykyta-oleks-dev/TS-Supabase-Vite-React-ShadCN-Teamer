@@ -36,6 +36,21 @@ class ProductsRepository {
         return products[0];
     };
 
+    getOne = async (client: TypedSupabaseClient, id: number) => {
+        const { data: products, error } = await client
+            .from(TABLES.PRODUCTS)
+            .select()
+            .eq('id', id);
+
+        if (error) handleError(error);
+
+        if (!products?.length) {
+            throw new NotFoundError(PRODUCTS_ERRORS.NOT_FOUND);
+        }
+
+        return products[0];
+    };
+
     private readonly _checkUser = async (
         client: TypedSupabaseClient,
         userId: string
