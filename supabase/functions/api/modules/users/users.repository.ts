@@ -1,7 +1,7 @@
 import { TABLES } from '../../_shared/constants/tables.constants.ts';
 import {
-  AppError,
-  NotFoundError,
+    AppError,
+    NotFoundError,
 } from '../../_shared/types/middleware/error-handling.types.ts';
 import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.ts';
 import { handleError } from '../../_shared/utils/handleError.ts';
@@ -36,7 +36,7 @@ class UsersRepository {
         let query = client.from(TABLES.USERS).select();
 
         if (!withDeleted) query = query.eq('is_deleted', false);
-        
+
         const { data: users, error } = await query;
 
         if (error) handleError(error);
@@ -74,12 +74,12 @@ class UsersRepository {
         const { error } = await client
             .from(TABLES.USERS)
             .update({
-                is_deleted: true
+                is_deleted: true,
             })
-            .eq('id', id)
-        
+            .eq('id', id);
+
         if (error) handleError(error);
-    }
+    };
 }
 
 const usersRepository = new UsersRepository();

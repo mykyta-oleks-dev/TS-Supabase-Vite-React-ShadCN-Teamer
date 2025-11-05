@@ -1,6 +1,9 @@
 export const ERRORS = {
     UNEXPECTED: 'Unexpected error',
-    AUTH: { REQUIRED: 'Authentication is required, provide valid JWT' },
+    AUTH: {
+        REQUIRED: 'Authentication is required, provide valid JWT',
+        VERIFIED: 'User is already verified',
+    },
 } as const;
 
 export const ERRORS_CODES = {

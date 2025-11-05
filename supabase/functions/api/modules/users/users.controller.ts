@@ -6,20 +6,20 @@ import {
     UpdateProfileBody,
     AuthBody,
 } from './types/request.types.ts';
-import { assertIsAuth, getAuthOrThrow } from '../../_shared/utils/auth.ts';
-import { AppError } from '../../_shared/types/middleware/error-handling.types.ts';
-import { ERRORS } from '../../_shared/constants/errors.constants.ts';
+import { getAuthOrThrow } from '../../_shared/utils/auth.ts';
 
 class UsersController {
     signUp = async (c: Context) => {
         const body = (await c.req.json()) as AuthBody;
 
-        const data = await usersService.signUp(body);
+        const redirectUrl = c.req.query('redirectUrl');
+
+        await usersService.signUp(body, redirectUrl);
 
         return c.json(
             {
-                message: 'Successful sign-up!',
-                token: data.session.access_token,
+                message:
+                    'Successful sign-up! Verify your account with the link sent to your email to continue.',
             },
             HTTP.CREATED
         );
@@ -37,6 +37,14 @@ class UsersController {
             },
             HTTP.OK
         );
+    };
+
+    resendVerification = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        await usersService.resendVerification(auth);
+
+        return c.body(null, HTTP.NO_CONTENT);
     };
 
     createProfile = async (c: Context) => {
@@ -104,7 +112,7 @@ class UsersController {
         await usersService.delete(auth);
 
         return c.body(null, HTTP.NO_CONTENT);
-    }
+    };
 }
 
 const usersController = new UsersController();

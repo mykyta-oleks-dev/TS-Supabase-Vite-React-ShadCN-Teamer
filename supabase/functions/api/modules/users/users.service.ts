@@ -9,7 +9,11 @@ import {
     AuthBody,
     UpdateProfileBody,
 } from './types/request.types.ts';
-import { authSchema, createProfileSchema, updateProfileSchema } from './validation/schemas.ts';
+import {
+    authSchema,
+    createProfileSchema,
+    updateProfileSchema,
+} from './validation/schemas.ts';
 import { ERRORS } from '../../_shared/constants/errors.constants.ts';
 import { Auth } from '../../_shared/types/middleware/authentication.types.ts';
 import usersRepository from './users.repository.ts';
@@ -17,7 +21,7 @@ import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from './constants/errors.constants.ts';
 
 class UsersService {
-    signUp = async (body: AuthBody) => {
+    signUp = async (body: AuthBody, redirectUrl?: string) => {
         const parsed = authSchema.safeParse(body);
 
         if (!parsed.success) {
@@ -29,15 +33,20 @@ class UsersService {
 
         const client = getSuperClient();
 
-        const { error, data } = await client.auth.signUp(parsed.data);
+        const { error, data } = await client.auth.signUp({
+            ...parsed.data,
+            options: {
+                emailRedirectTo: redirectUrl,
+            },
+        });
 
         if (error) handleError(error);
 
         const { user, session } = data;
 
-        if (!user || !session) throw new AppError(ERRORS.UNEXPECTED);
+        if (!user) throw new AppError(ERRORS.UNEXPECTED);
 
-        return { user, session };
+        return { user };
     };
 
     logIn = async (body: AuthBody) => {
@@ -64,6 +73,21 @@ class UsersService {
         if (!user || !session) throw new AppError(ERRORS.UNEXPECTED);
 
         return { user, session };
+    };
+
+    resendVerification = async (auth: Auth) => {
+        const client = getSuperClient();
+
+        if (!auth.user.email) throw new AppError(ERRORS.UNEXPECTED);
+
+        if (auth.user.email_confirmed_at) {
+            throw new BadRequestError(ERRORS.AUTH.VERIFIED);
+        }
+
+        await client.auth.resend({
+            type: 'signup',
+            email: auth.user.email,
+        });
     };
 
     createProfile = async (auth: Auth, body: CreateProfileBody) => {
@@ -115,11 +139,7 @@ class UsersService {
 
         const client = getClient(auth.token);
 
-        await usersRepository.update(
-            client,
-            auth.user.id,
-            parsed.data
-        );
+        await usersRepository.update(client, auth.user.id, parsed.data);
     };
 
     delete = async (auth: Auth) => {
@@ -128,7 +148,7 @@ class UsersService {
         await usersRepository.delete(superClient, auth.user.id);
 
         await superClient.auth.admin.deleteUser(auth.user.id, true);
-    }
+    };
 }
 
 const usersService = new UsersService();
