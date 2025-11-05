@@ -8,4 +8,5 @@ export const USERS_ERRORS = {
     NO_ID: 'No ID provided',
 
     NOT_FOUND: 'No user is found',
+    NOT_IN_TEAM: 'User has not joined team',
 } as const;

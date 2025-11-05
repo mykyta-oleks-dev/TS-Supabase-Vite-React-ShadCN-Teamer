@@ -10,7 +10,7 @@ import {
     notFoundPage,
 } from './_shared/middleware/error-handling.middleware.ts';
 import { AppError } from './_shared/types/middleware/error-handling.types.ts';
-import { usersRouter, teamsRouter } from './modules/index.ts';
+import { usersRouter, teamsRouter, productsRouter } from './modules/index.ts';
 
 const app = new Hono().basePath(`/api`);
 
@@ -29,6 +29,7 @@ app.all('error', (c) => {
 
 app.route('users', usersRouter);
 app.route('teams', teamsRouter);
+app.route('products', productsRouter);
 
 app.notFound(notFoundPage);
 

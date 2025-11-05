@@ -23,7 +23,7 @@ export const createProfileSchema = z.object({
 export type createProfileData = z.infer<typeof createProfileSchema>;
 
 export const updateProfileSchema = createProfileSchema.extend({
-    full_name: z.string(PROFILE.FULL_NAME.REQUIRED).optional(),
+    full_name: z.string(PROFILE.FULL_NAME.REQUIRED).trim().optional(),
     avatar: z
         .string(PROFILE.AVATAR.REQUIRED)
         .regex(urlRegex, PROFILE.AVATAR.INVALID)

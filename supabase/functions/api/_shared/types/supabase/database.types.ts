@@ -34,6 +34,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      products: {
+        Row: {
+          created_at: string
+          description: string
+          id: number
+          image: string
+          status: Database["public"]["Enums"]["Status"]
+          team_id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: number
+          image: string
+          status?: Database["public"]["Enums"]["Status"]
+          team_id: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: number
+          image?: string
+          status?: Database["public"]["Enums"]["Status"]
+          team_id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "products_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teams: {
         Row: {
           code: string
@@ -140,7 +191,7 @@ export type Database = {
       join_team: { Args: { p_code: string }; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      Status: "draft" | "active" | "deleted"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -270,6 +321,8 @@ export const Constants = {
     Enums: {},
   },
   public: {
-    Enums: {},
+    Enums: {
+      Status: ["draft", "active", "deleted"],
+    },
   },
 } as const
