@@ -4,6 +4,7 @@ export const PRODUCTS_ERRORS = {
     NO_ID: 'Product ID is not provided',
 
     BAD_ID: 'Product ID should be a valid number',
+    BAD_STATUS: 'Status can only be "draft", "active" or "deleted"',
 
     NOT_CREATED: 'Product was not created',
     NOT_UPDATED: 'Product was not updated',

@@ -14,6 +14,7 @@ import {
     productCreateSchema,
     productEditSchema,
 } from './validation/schemas.ts';
+import { Status } from "./types/product.types.ts";
 
 class ProductsService {
     create = (auth: Auth, body: CreateTeamBody) => {
@@ -88,6 +89,31 @@ class ProductsService {
             parsed.data
         );
     };
+
+    changeStatus = (auth: Auth, id: string, status?: string) => {
+        if (!id?.trim()) {
+            throw new BadRequestError(PRODUCTS_ERRORS.NO_ID);
+        }
+
+        const parsedId = +id;
+
+        if (Number.isNaN(parsedId)) {
+            throw new BadRequestError(PRODUCTS_ERRORS.BAD_ID);
+        }
+
+        if (!isStatus(status)) throw new BadRequestError(PRODUCTS_ERRORS.BAD_STATUS)
+
+        const client = getClient(auth.token);
+
+        return productsRepository.changeStatus(
+            client,
+            auth.user.id,
+            parsedId,
+            status,
+        );
+    };
+    
+    delete = (auth: Auth, id: string) => this.changeStatus(auth, id, 'deleted');
 
     private readonly _parseQuery = (
         raw: Record<string, string>

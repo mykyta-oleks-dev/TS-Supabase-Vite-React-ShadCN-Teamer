@@ -8,6 +8,7 @@ import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.t
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from '../users/constants/errors.constants.ts';
 import { PRODUCTS_ERRORS } from './constants/errors.constants.ts';
+import { Status } from "./types/product.types.ts";
 import { ProductQuery } from './types/request.types.ts';
 import { productCreateData, productEditData } from './validation/schemas.ts';
 
@@ -100,6 +101,28 @@ class ProductsRepository {
         const { data: products, error } = await client
             .from(TABLES.PRODUCTS)
             .update(data)
+            .eq('id', id)
+            .select();
+
+        if (error) handleError(error);
+
+        if (!products?.length)
+            throw new ForbiddenError(PRODUCTS_ERRORS.NOT_UPDATED);
+    };
+
+    changeStatus = async (
+        client: TypedSupabaseClient,
+        userId: string,
+        id: number,
+        status: Status
+    ) => {
+        await this._checkAuthority(client, userId, id);
+
+        const { data: products, error } = await client
+            .from(TABLES.PRODUCTS)
+            .update({
+                status,
+            })
             .eq('id', id)
             .select();
 

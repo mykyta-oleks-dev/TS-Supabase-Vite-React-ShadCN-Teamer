@@ -17,5 +17,15 @@ productsRouter.patch(
     requireAuth,
     productsController.update
 );
+productsRouter.patch(
+    PRODUCTS_ROUTES.DYNAMIC_CHANGE_STATUS,
+    requireAuth,
+    productsController.changeStatus
+);
+productsRouter.delete(
+    PRODUCTS_ROUTES.DYNAMIC,
+    requireAuth,
+    productsController.delete
+);
 
 export default productsRouter;

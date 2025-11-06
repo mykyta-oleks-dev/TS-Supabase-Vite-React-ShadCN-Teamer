@@ -70,6 +70,28 @@ class ProductsController {
 
         return c.body(null, HTTP.NO_CONTENT);
     };
+
+    changeStatus = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const id = c.req.param('id');
+
+        const { status } = (await c.req.json()) as { status?: string };
+
+        await productsService.changeStatus(auth, id, status);
+
+        return c.body(null, HTTP.NO_CONTENT);
+    };
+
+    delete = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const id = c.req.param('id');
+
+        await productsService.delete(auth, id);
+
+        return c.body(null, HTTP.NO_CONTENT);
+    };
 }
 
 const productsController = new ProductsController();
