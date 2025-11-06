@@ -75,7 +75,7 @@ class UsersService {
         return { user, session };
     };
 
-    resendVerification = async (auth: Auth) => {
+    resendVerification = async (auth: Auth, emailRedirectTo?: string) => {
         const client = getSuperClient();
 
         if (!auth.user.email) throw new AppError(ERRORS.UNEXPECTED);
@@ -87,6 +87,19 @@ class UsersService {
         await client.auth.resend({
             type: 'signup',
             email: auth.user.email,
+            options: {
+                emailRedirectTo,
+            },
+        });
+    };
+
+    resetPassword = async (auth: Auth, redirectTo?: string) => {
+        const client = getSuperClient();
+
+        if (!auth.user.email) throw new AppError(ERRORS.UNEXPECTED);
+        
+        await client.auth.resetPasswordForEmail(auth.user.email, {
+            redirectTo
         });
     };
 

@@ -42,7 +42,19 @@ class UsersController {
     resendVerification = async (c: Context) => {
         const auth = getAuthOrThrow(c);
 
-        await usersService.resendVerification(auth);
+        const redirectTo = c.req.query('redirectTo');
+
+        await usersService.resendVerification(auth, redirectTo);
+
+        return c.body(null, HTTP.NO_CONTENT);
+    };
+
+    resetPassword = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const redirectTo = c.req.query('redirectTo');
+
+        await usersService.resetPassword(auth, redirectTo);
 
         return c.body(null, HTTP.NO_CONTENT);
     };
