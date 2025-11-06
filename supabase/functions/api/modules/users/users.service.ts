@@ -5,14 +5,18 @@ import {
     BadRequestError,
 } from '../../_shared/types/middleware/error-handling.types.ts';
 import {
+    ChangePasswordBody,
     CreateProfileBody,
-    AuthBody,
+    LogInBody,
+    SignUpBody,
     UpdateProfileBody,
 } from './types/request.types.ts';
 import {
-    authSchema,
+    logInSchema,
     createProfileSchema,
     updateProfileSchema,
+    signUpSchema,
+    confirmPasswordSchema,
 } from './validation/schemas.ts';
 import { ERRORS } from '../../_shared/constants/errors.constants.ts';
 import { Auth } from '../../_shared/types/middleware/authentication.types.ts';
@@ -21,8 +25,8 @@ import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from './constants/errors.constants.ts';
 
 class UsersService {
-    signUp = async (body: AuthBody, redirectUrl?: string) => {
-        const parsed = authSchema.safeParse(body);
+    signUp = async (body: SignUpBody, redirectUrl?: string) => {
+        const parsed = signUpSchema.safeParse(body);
 
         if (!parsed.success) {
             throw new BadRequestError(
@@ -49,8 +53,8 @@ class UsersService {
         return { user };
     };
 
-    logIn = async (body: AuthBody) => {
-        const parsed = authSchema.safeParse(body);
+    logIn = async (body: LogInBody) => {
+        const parsed = logInSchema.safeParse(body);
 
         if (!parsed.success) {
             throw new BadRequestError(
@@ -75,6 +79,25 @@ class UsersService {
         return { user, session };
     };
 
+    changePassword = async (auth: Auth, body: ChangePasswordBody) => {
+        const parsed = confirmPasswordSchema.safeParse(body);
+
+        if (!parsed.success) {
+            throw new BadRequestError(
+                USERS_ERRORS.VALIDATION.AUTH,
+                z.treeifyError(parsed.error).properties
+            );
+        }
+
+        const client = getSuperClient();
+
+        const { error } = await client.auth.admin.updateUserById(auth.user.id, {
+            password: parsed.data.password,
+        });
+
+        if (error) handleError(error);
+    };
+
     resendVerification = async (auth: Auth, emailRedirectTo?: string) => {
         const client = getSuperClient();
 
@@ -84,23 +107,30 @@ class UsersService {
             throw new BadRequestError(ERRORS.AUTH.VERIFIED);
         }
 
-        await client.auth.resend({
+        const { error } = await client.auth.resend({
             type: 'signup',
             email: auth.user.email,
             options: {
                 emailRedirectTo,
             },
         });
+
+        if (error) handleError(error);
     };
 
     resetPassword = async (auth: Auth, redirectTo?: string) => {
         const client = getSuperClient();
 
         if (!auth.user.email) throw new AppError(ERRORS.UNEXPECTED);
-        
-        await client.auth.resetPasswordForEmail(auth.user.email, {
-            redirectTo
-        });
+
+        const { error } = await client.auth.resetPasswordForEmail(
+            auth.user.email,
+            {
+                redirectTo,
+            }
+        );
+
+        if (error) handleError(error);
     };
 
     createProfile = async (auth: Auth, body: CreateProfileBody) => {

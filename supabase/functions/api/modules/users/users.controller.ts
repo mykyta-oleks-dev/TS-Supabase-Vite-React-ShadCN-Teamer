@@ -4,13 +4,15 @@ import usersService from './users.service.ts';
 import {
     CreateProfileBody,
     UpdateProfileBody,
-    AuthBody,
+    LogInBody,
+    SignUpBody,
+    ChangePasswordBody,
 } from './types/request.types.ts';
 import { getAuthOrThrow } from '../../_shared/utils/auth.ts';
 
 class UsersController {
     signUp = async (c: Context) => {
-        const body = (await c.req.json()) as AuthBody;
+        const body = (await c.req.json()) as SignUpBody;
 
         const redirectUrl = c.req.query('redirectUrl');
 
@@ -26,7 +28,7 @@ class UsersController {
     };
 
     logIn = async (c: Context) => {
-        const body = (await c.req.json()) as AuthBody;
+        const body = (await c.req.json()) as LogInBody;
 
         const data = await usersService.logIn(body);
 
@@ -37,6 +39,16 @@ class UsersController {
             },
             HTTP.OK
         );
+    };
+
+    changePassword = async (c: Context) => {
+        const auth = getAuthOrThrow(c);
+
+        const body = (await c.req.json()) as ChangePasswordBody;
+
+        await usersService.changePassword(auth, body);
+
+        return c.body(null, HTTP.NO_CONTENT);
     };
 
     resendVerification = async (c: Context) => {

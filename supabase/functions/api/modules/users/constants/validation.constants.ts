@@ -11,6 +11,10 @@ export const SCHEMAS = {
             MIN: PSW_MIN,
             TOO_SHORT: `Password has to be at least ${PSW_MIN} characters long`,
         },
+        CONFIRM_PASSWORD: {
+            REQUIRED: 'Password confirmation is required',
+            DONT_MATCH: "Password don't match"
+        },
     },
 
     PROFILE: {

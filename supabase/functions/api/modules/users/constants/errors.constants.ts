@@ -1,6 +1,7 @@
 export const USERS_ERRORS = {
     VALIDATION: {
         AUTH: 'Authentication data is not valid',
+        PASSWORDS: 'Passwords are invalid',
         PROFILE: 'Profile data is not valid',
     },
 

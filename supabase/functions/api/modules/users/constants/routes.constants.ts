@@ -2,6 +2,7 @@ export const USERS_ROUTES = {
     ROOT: '/',
     SIGN_UP: 'sign-up',
     LOG_IN: 'log-in',
+    CHANGE_PASSWORD: 'change-password',
     VERIFICATION: 'resend-verification',
     RESET_PASSWORD: 'reset-password',
     DYNAMIC: ':id'
