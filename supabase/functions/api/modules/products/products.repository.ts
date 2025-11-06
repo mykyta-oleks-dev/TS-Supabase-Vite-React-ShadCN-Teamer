@@ -8,7 +8,7 @@ import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.t
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from '../users/constants/errors.constants.ts';
 import { PRODUCTS_ERRORS } from './constants/errors.constants.ts';
-import { Status } from "./types/product.types.ts";
+import { Status } from './types/product.types.ts';
 import { ProductQuery } from './types/request.types.ts';
 import { productCreateData, productEditData } from './validation/schemas.ts';
 
@@ -87,7 +87,24 @@ class ProductsRepository {
 
         const pages = Math.ceil(total / limit);
 
-        return { products: products ?? [], count: total, pages, limit };
+        const { count: countDeleted } = await client
+            .from(TABLES.PRODUCTS)
+            .select('*', { count: 'exact' })
+            .eq('status', 'deleted');
+
+        const { count: countDrafts } = await client
+            .from(TABLES.PRODUCTS)
+            .select('*', { count: 'exact' })
+            .eq('status', 'draft');
+
+        return {
+            products: products ?? [],
+            total,
+            pages,
+            limit,
+            totalDeleted: countDeleted ?? 0,
+            totalDrafts: countDrafts ?? 0,
+        };
     };
 
     update = async (

@@ -45,15 +45,10 @@ class ProductsController {
 
         const data = await productsService.getMany(softAuth, query);
 
-        const { products, count, limit, pages } = data;
-
         return c.json(
             {
                 message: 'Successfuly fetched products!',
-                products,
-                count,
-                limit,
-                pages,
+                ...data,
             },
             HTTP.OK
         );
