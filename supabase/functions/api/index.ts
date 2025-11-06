@@ -14,7 +14,7 @@ import { usersRouter, teamsRouter, productsRouter } from './modules/index.ts';
 
 const app = new Hono().basePath(`/api`);
 
-app.use('/*', cors());
+app.use('*', cors());
 app.use('*', softAuth);
 
 app.get('/', (c) => {
