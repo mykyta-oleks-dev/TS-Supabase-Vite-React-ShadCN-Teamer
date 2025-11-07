@@ -1,4 +1,5 @@
 import FieldBlock from '@/components/field-block';
+import Link from '@/components/link';
 import SubmitButton from '@/components/submit-button';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,45 +11,47 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { FIELDS } from '@/constants/fields.constants';
-import { handleLogin } from '@/handlers/auth.handlers';
-import { logInSchema, type logInData } from '@/schemas/user.schemas';
+import { ROUTES } from '@/constants/router.constants';
+import { handleSignup } from '@/handlers/auth.handlers';
+import { signUpSchema, type signUpData } from '@/schemas/user.schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
 const { USER } = FIELDS;
 
-const fields = [USER.EMAIL, USER.PASSWORD];
+const fields = [USER.EMAIL, USER.PASSWORD, USER.CONFIRM_PASSWORD];
 
-const LogInPage = () => {
+const SignUpPage = () => {
     const navigate = useNavigate();
     const {
         control,
         handleSubmit,
         formState: { isSubmitting },
-    } = useForm<logInData>({
-        resolver: zodResolver(logInSchema),
+    } = useForm<signUpData>({
+        resolver: zodResolver(signUpSchema),
         defaultValues: {
             email: '',
             password: '',
+            confirmPassword: '',
         },
     });
 
     return (
         <Card className="w-4/5 md:w-lg">
             <CardHeader>
-                <CardTitle className="text-2xl">Login</CardTitle>
+                <CardTitle className="text-2xl">Sign Up</CardTitle>
                 <CardDescription>
-                    Enter your email below to login to your account
+                    Enter your credentials below to create a new account
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <form
                     onSubmit={handleSubmit((data) =>
-                        handleLogin(data, navigate)
+                        handleSignup(data, navigate)
                     )}
                 >
-                    <div className="flex flex-col gap-6">
+                    <div className="flex flex-col gap-4">
                         {fields.map((f) => (
                             <FieldBlock
                                 key={f.NAME}
@@ -70,7 +73,7 @@ const LogInPage = () => {
                                 className="flex-1"
                                 isSubmitting={isSubmitting}
                             >
-                                Log In
+                                Sign Up
                             </SubmitButton>
                             <Button
                                 className="flex-1"
@@ -81,10 +84,14 @@ const LogInPage = () => {
                             </Button>
                         </div>
                     </div>
+                    <div className="mt-4 text-center text-sm">
+                        Already have an account?{' '}
+                        <Link to={ROUTES.AUTH.LOG_IN}>Log in</Link>
+                    </div>
                 </form>
             </CardContent>
         </Card>
     );
 };
 
-export default LogInPage;
+export default SignUpPage;

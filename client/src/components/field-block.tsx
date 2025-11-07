@@ -27,7 +27,7 @@ const FieldBlock = <TFieldValues extends FieldValues>({
             render={({ field, fieldState, formState }) => (
                 <Field
                     data-invalid={fieldState.invalid}
-                    className={cn(className)}
+                    className={cn('gap-2', className)}
                 >
                     {label && (
                         <FieldLabel htmlFor={props.name}>{label}</FieldLabel>

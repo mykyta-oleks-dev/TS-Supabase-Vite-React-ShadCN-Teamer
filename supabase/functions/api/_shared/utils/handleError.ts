@@ -52,6 +52,9 @@ const handleAuthError = (error: AuthError) => {
         case AUTH.INVALID_CREDENTIALS:
             throw new BadRequestError(AUTH_ERRORS.INVALID_CREDENTIALS);
 
+        case AUTH.NOT_CONFIRMED:
+            throw new ForbiddenError(AUTH_ERRORS.NOT_CONFIRMED);
+
         default:
             console.log(error.code);
             throw error;

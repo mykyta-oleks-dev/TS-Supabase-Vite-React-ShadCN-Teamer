@@ -13,6 +13,7 @@ export const ERRORS_CODES = {
         EMAIL_EXISTS: 'email_exists',
         USER_EXISTS: 'user_already_exists',
         INVALID_CREDENTIALS: 'invalid_credentials',
+        NOT_CONFIRMED: 'email_not_confirmed',
     },
     POSTGREST: {
         CONFLICT: '23505',
@@ -25,6 +26,7 @@ export const ERRORS_CODES = {
 export const AUTH_ERRORS = {
     USER_EXISTS: 'User by the specified credentials already exists',
     INVALID_CREDENTIALS: 'Invalid credentials provided for authentication',
+    NOT_CONFIRMED: 'Email address is not confirmed',
 } as const;
 
 export const POSTGREST_ERRORS = {

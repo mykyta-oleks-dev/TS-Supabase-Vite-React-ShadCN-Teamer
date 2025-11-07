@@ -35,7 +35,17 @@ export const logInSchema = emailSchema.extend(passwordSchema.shape);
 
 export type logInData = z.infer<typeof logInSchema>;
 
-export const signUpSchema = emailSchema.extend(confirmPasswordSchema.shape);
+export const signUpSchema = emailSchema
+    .extend(confirmPasswordSchema.shape)
+    .superRefine((val, ctx) => {
+        if (val.password !== val.confirmPassword) {
+            ctx.addIssue({
+                code: 'custom',
+                message: SIGN_UP.CONFIRM_PASSWORD.DONT_MATCH,
+                path: ['confirmPassword'],
+            });
+        }
+    });
 
 export type signUpData = z.infer<typeof signUpSchema>;
 

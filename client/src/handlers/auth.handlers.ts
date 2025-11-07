@@ -1,10 +1,11 @@
-import { logIn } from '@/api/users';
+import { logIn, signUp } from '@/api/users';
 import router from '@/config/router';
 import getSupabase from '@/config/supabase';
 import { ROUTES } from '@/constants/router.constants';
 import { handleError } from '@/lib/utils';
-import type { logInData } from '@/schemas/user.schemas';
+import type { logInData, signUpData } from '@/schemas/user.schemas';
 import type { NavigateFunction } from 'react-router';
+import { toast } from 'sonner';
 
 export const handleLogin = async (
     values: logInData,
@@ -30,6 +31,28 @@ export const handleLogin = async (
         navigate(ROUTES.ROOT);
     } else {
         router.navigate(ROUTES.ROOT);
+    }
+};
+
+export const handleSignup = async (
+    values: signUpData,
+    navigate?: NavigateFunction
+) => {
+    try {
+        const {
+            data,
+        } = await signUp(values);
+        
+        toast.success(data.message);
+    } catch (error) {
+        handleError(error as Error, true);
+        return;
+    }
+
+    if (navigate) {
+        navigate(ROUTES.AUTH.LOG_IN);
+    } else {
+        router.navigate(ROUTES.AUTH.LOG_IN);
     }
 };
 

@@ -14,9 +14,9 @@ class UsersController {
     signUp = async (c: Context) => {
         const body = (await c.req.json()) as SignUpBody;
 
-        const redirectUrl = c.req.query('redirectUrl');
+        const redirectTo = c.req.query('redirectTo');
 
-        await usersService.signUp(body, redirectUrl);
+        await usersService.signUp(body, redirectTo);
 
         return c.json(
             {

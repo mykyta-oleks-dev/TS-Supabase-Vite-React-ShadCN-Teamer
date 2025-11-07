@@ -41,6 +41,7 @@ export function handleError(
     success: false;
     error: string;
 } {
+    console.log(error);
     if (isAxiosError(error)) {
         return handleError(
             error.response?.data ?? 'API call failed',
