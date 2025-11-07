@@ -1,6 +1,6 @@
 import { ENV } from '@/constants/env.constants';
 import axios from 'axios';
-import supabase from './supabase';
+import getSupabase from './supabase';
 import { handleError } from '@/lib/utils';
 
 const axiosInstance = axios.create({
@@ -8,12 +8,12 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
-    const { data, error } = await supabase.auth.getSession();
+    const { data, error } = await getSupabase().auth.getSession();
 
     if (error) handleError(error, true);
 
-    if (data) {
-        const idToken = data.session?.access_token;
+    if (data.session) {
+        const idToken = data.session.access_token;
         config.headers.Authorization = `Bearer ${idToken}`;
     }
 

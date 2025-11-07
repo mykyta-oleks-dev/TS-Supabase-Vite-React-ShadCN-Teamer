@@ -1,4 +1,4 @@
-import type { ApiError } from '@/types/api.types';
+import type { ApiError } from '@/types/api';
 import type { ZodErrorProperties } from '@/types/zod.types';
 
 export const isZodErrors = (

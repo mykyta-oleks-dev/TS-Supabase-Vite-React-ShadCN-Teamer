@@ -1,4 +1,4 @@
-import { helloWorld } from '@/api/base';
+import { helloWorld } from '../api/hello-world.ts';
 import { handleError } from '@/lib/utils';
 import { toast } from 'sonner';
 
