@@ -1,6 +1,10 @@
-import axiosInstance from "@/config/axios";
-import { API } from "@/constants/api.constants";
-import type { OneUser } from "@/types/api";
+import axiosInstance from '@/config/axios';
+import { API } from '@/constants/api.constants';
+import type { logInData } from '@/schemas/user.schemas';
+import type { AuthToken, OneUser } from '@/types/api';
 
-export const getOneUser = (id: string) => 
-	axiosInstance.get<OneUser>(API.USERS.ONE(id));
+export const logIn = (values: logInData) =>
+    axiosInstance.post<AuthToken>(API.USERS.LOG_IN, values);
+
+export const getOneUser = (id: string) =>
+    axiosInstance.get<OneUser>(API.USERS.ONE(id));

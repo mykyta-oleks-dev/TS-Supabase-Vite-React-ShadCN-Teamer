@@ -23,6 +23,7 @@ import { Auth } from '../../_shared/types/middleware/authentication.types.ts';
 import usersRepository from './users.repository.ts';
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from './constants/errors.constants.ts';
+import { SCHEMAS } from "./constants/validation.constants.ts";
 
 class UsersService {
     signUp = async (body: SignUpBody, redirectUrl?: string) => {
@@ -118,17 +119,12 @@ class UsersService {
         if (error) handleError(error);
     };
 
-    resetPassword = async (auth: Auth, redirectTo?: string) => {
+    resetPassword = async (email?: string, redirectTo?: string) => {
+        if (!email?.trim()) throw new BadRequestError(SCHEMAS.SIGN_UP.EMAIL.REQUIRED);
+        
         const client = getSuperClient();
 
-        if (!auth.user.email) throw new AppError(ERRORS.UNEXPECTED);
-
-        const { error } = await client.auth.resetPasswordForEmail(
-            auth.user.email,
-            {
-                redirectTo,
-            }
-        );
+        const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
 
         if (error) handleError(error);
     };

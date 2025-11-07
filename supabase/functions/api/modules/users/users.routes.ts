@@ -9,7 +9,7 @@ usersRouter.post(USERS_ROUTES.SIGN_UP, usersController.signUp);
 usersRouter.post(USERS_ROUTES.LOG_IN, usersController.logIn);
 usersRouter.post(USERS_ROUTES.CHANGE_PASSWORD, requireAuth, usersController.changePassword);
 usersRouter.post(USERS_ROUTES.VERIFICATION, requireAuth, usersController.resendVerification);
-usersRouter.post(USERS_ROUTES.RESET_PASSWORD, requireAuth, usersController.resetPassword);
+usersRouter.post(USERS_ROUTES.RESET_PASSWORD, usersController.resetPassword);
 
 usersRouter.post(USERS_ROUTES.ROOT, requireAuth, usersController.createProfile);
 usersRouter.get(USERS_ROUTES.ROOT, requireAuth, usersController.getAll);

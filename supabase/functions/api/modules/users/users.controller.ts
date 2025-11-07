@@ -35,7 +35,8 @@ class UsersController {
         return c.json(
             {
                 message: 'Successful log-in!',
-                token: data.session.access_token,
+                access_token: data.session.access_token,
+                refresh_token: data.session.refresh_token,
             },
             HTTP.OK
         );
@@ -62,11 +63,11 @@ class UsersController {
     };
 
     resetPassword = async (c: Context) => {
-        const auth = getAuthOrThrow(c);
+        const { email } = (await c.req.json()) as { email?: string };
 
         const redirectTo = c.req.query('redirectTo');
 
-        await usersService.resetPassword(auth, redirectTo);
+        await usersService.resetPassword(email, redirectTo);
 
         return c.body(null, HTTP.NO_CONTENT);
     };
