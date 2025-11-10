@@ -48,4 +48,10 @@ export const TEAMS_FIELDS = {
         LABEL: 'Team Code',
         PLACEHOLDER: 'ABC123DE45',
     },
+
+    NAME: {
+        NAME: 'name',
+        LABEL: 'Team Name',
+        PLACEHOLDER: 'My Awesome Team',
+    },
 } as const;

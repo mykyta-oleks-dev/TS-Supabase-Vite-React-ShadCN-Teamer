@@ -1,9 +1,9 @@
 export interface APIObject {
-	createdAt: string;
-	updatedAt: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface ClientObject {
-	createdAt: Date;
-	updatedAt: Date;
+    created_at: Date;
+    updated_at: Date;
 }

@@ -1,3 +1,4 @@
+import type { TeamAPI } from '../models/team.types';
 import type { UserAPI } from '../models/user.types';
 
 export interface DefaultBody {
@@ -18,4 +19,8 @@ export interface AuthToken extends DefaultBody {
 
 export interface OneUser extends DefaultBody {
     user: UserAPI;
+}
+
+export interface OneTeam extends DefaultBody {
+    team: TeamAPI;
 }

@@ -15,12 +15,12 @@ export interface User extends UserPrimitives, ClientObject {}
 
 export const mapUserFromAPI = (user: UserAPI): User => ({
     ...user,
-    createdAt: new Date(user.createdAt),
-    updatedAt: new Date(user.updatedAt),
+    created_at: new Date(user.created_at),
+    updated_at: new Date(user.updated_at),
 });
 
 export const mapUserToAPI = (user: User): UserAPI => ({
     ...user,
-    createdAt: user.createdAt.toISOString(),
-    updatedAt: user.updatedAt.toISOString(),
+    created_at: user.created_at.toISOString(),
+    updated_at: user.updated_at.toISOString(),
 });
