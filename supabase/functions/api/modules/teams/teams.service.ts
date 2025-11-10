@@ -7,7 +7,7 @@ import {
     UpdateTeamData,
     UpdateTeamBody,
 } from './types/request.types.ts';
-import { teamCreateSchema, teamEditSchema } from './validation/schemas.ts';
+import { codeSchema, teamCreateSchema, teamEditSchema } from './validation/schemas.ts';
 import { TEAMS_ERRORS } from './constants/errors.constants.ts';
 import { CODE_LENGTH } from './constants/validation.constants.ts';
 import getClient from '../../_shared/config/supabase.ts';
@@ -35,12 +35,18 @@ class TeamsService {
     };
 
     join = (auth: Auth, code?: string) => {
-        if (!code?.trim() || code.length != 10)
-            throw new BadRequestError(TEAMS_ERRORS.BAD_REQ_CODE);
+        const parsed = codeSchema.safeParse({ code });
+
+        if (!parsed.success) {
+            throw new BadRequestError(
+                TEAMS_ERRORS.BAD_REQ_CODE,
+                z.treeifyError(parsed.error).properties
+            );
+        }
 
         const client = getClient(auth.token);
 
-        return teamsRepository.join(client, code);
+        return teamsRepository.join(client, parsed.data.code);
     };
 
     getOne = (auth: Auth, deep: boolean) => {

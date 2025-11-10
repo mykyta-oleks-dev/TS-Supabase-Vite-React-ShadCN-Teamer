@@ -1,4 +1,5 @@
 const ROOT_USERS = 'users';
+const ROOT_TEAMS = 'teams';
 
 export const API = {
     ROOT: '',
@@ -10,5 +11,10 @@ export const API = {
         VERIFICATION: `${ROOT_USERS}/resend-verification`,
         RESET_PASSWORD: `${ROOT_USERS}/reset-password`,
         ONE: (id: string) => `${ROOT_USERS}/${id}`,
+    },
+    TEAMS: {
+        ROOT: ROOT_TEAMS,
+        ONE: (id: string) => `${ROOT_TEAMS}/${id}`,
+        JOIN: `${ROOT_TEAMS}/join`,
     },
 } as const;

@@ -41,3 +41,11 @@ export const USERS_FIELDS = {
         TEXTAREA: true,
     },
 } as const;
+
+export const TEAMS_FIELDS = {
+    CODE: {
+        NAME: 'code',
+        LABEL: 'Team Code',
+        PLACEHOLDER: 'ABC123DE45',
+    },
+} as const;

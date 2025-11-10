@@ -1,24 +1,29 @@
 import z from '@zod/zod';
 import { SCHEMAS } from '../constants/validation.constants.ts';
 
-const codeSchema = z.object({
-    code: z
-        .string(SCHEMAS.CODE.REQUIRED)
-        .trim()
-        .length(SCHEMAS.CODE.LENGTH.VALUE, SCHEMAS.CODE.LENGTH.ERROR)
-        .regex(SCHEMAS.CODE.REGEX.VALUE, SCHEMAS.CODE.REGEX.ERROR)
-        .optional(),
-});
+const codeReq = z
+    .string(SCHEMAS.CODE.REQUIRED)
+    .trim()
+    .length(SCHEMAS.CODE.LENGTH.VALUE, SCHEMAS.CODE.LENGTH.ERROR)
+    .regex(SCHEMAS.CODE.REGEX.VALUE, SCHEMAS.CODE.REGEX.ERROR);
 
-export const teamCreateSchema = codeSchema.extend({
+const code = codeReq.optional();
+
+export const codeSchema = z.object({
+    code: codeReq
+})
+
+export const teamCreateSchema = z.object({
     name: z.string(SCHEMAS.NAME.REQUIRED).trim(),
+    code,
 });
 
 export type teamCreateData = z.infer<typeof teamCreateSchema>;
 
-export const teamEditSchema = codeSchema.extend({
+export const teamEditSchema = z.object({
     name: z.string(SCHEMAS.NAME.REQUIRED).trim().optional(),
-    leader_id: z.string().trim().optional()
+    leader_id: z.string().trim().optional(),
+    code,
 });
 
 export type teamEditData = z.infer<typeof teamEditSchema>;

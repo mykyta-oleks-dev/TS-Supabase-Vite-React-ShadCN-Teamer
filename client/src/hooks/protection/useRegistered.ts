@@ -4,7 +4,7 @@ import useCurrentUser from '../query/user/useCurrentUser';
 import { ROUTES } from '@/constants/router.constants';
 import { isCurrentUrl } from '@/lib/utils';
 
-const useRegistered = () => {
+const useRegistered = (teamCheck = true) => {
     const navigate = useNavigate();
 
     const {
@@ -24,10 +24,16 @@ const useRegistered = () => {
             const isCreateProfile = isCurrentUrl(ROUTES.AUTH.CREATE_PROFILE);
 
             if (!isCreateProfile) navigate(ROUTES.AUTH.CREATE_PROFILE);
+        } else if (teamCheck && !user?.team_id) {
+            const isJoinOrCreateTeam = isCurrentUrl(
+                ROUTES.AUTH.JOIN_OR_CREATE_TEAM
+            );
+
+            if (!isJoinOrCreateTeam) navigate(ROUTES.AUTH.JOIN_OR_CREATE_TEAM);
         } else {
             navigate(ROUTES.ROOT);
         }
-    }, [navigate, session, isLoading, isLoadingAuth, user]);
+    }, [navigate, session, isLoading, isLoadingAuth, user, teamCheck]);
 
     return { session };
 };

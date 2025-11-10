@@ -5,6 +5,7 @@ import LogInPage from '../pages/auth/log-in.page.tsx';
 import SignUpPage from '../pages/auth/sign-up.page.tsx';
 import { createBrowserRouter } from 'react-router';
 import CreateProfilePage from '@/pages/auth/create-profile.page.tsx';
+import JoinOrCreateTeamPage from '../pages/auth/join-or-create-team.page/index.tsx';
 
 const router = createBrowserRouter([
     {
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
                     {
                         path: ROUTER_KEYS.AUTH.CREATE_PROFILE,
                         element: <CreateProfilePage />,
+                    },
+                    {
+                        path: ROUTER_KEYS.AUTH.TEAM,
+                        element: <JoinOrCreateTeamPage />,
                     }
                 ],
             },
