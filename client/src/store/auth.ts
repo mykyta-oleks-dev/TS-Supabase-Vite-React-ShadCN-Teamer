@@ -1,31 +1,36 @@
-import type { Session } from "@supabase/supabase-js";
-import { create } from "zustand";
+import type { Session } from '@supabase/supabase-js';
+import { create } from 'zustand';
 
 interface AuthStore {
-	session: Session | null;
-	isLoading: boolean;
-	error: string | null;
+    session: Session | null;
+	hasProfile: boolean;
+    isLoadingAuth: boolean;
+    errorAuth: string | null;
 
-	reset: () => void;
-	setSession: (session: Session | null) => void;
-	setIsLoading: (isLoading: boolean) => void;
-	setError: (error: string | null) => void;
+    reset: () => void;
+    setSession: (session: Session | null) => void;
+    setHasProfile: (hasProfile: boolean) => void;
+    setIsLoadingAuth: (isLoading: boolean) => void;
+    setErrorAuth: (error: string | null) => void;
 }
 
 const useAuth = create<AuthStore>((set) => ({
-	session: null,
-	isLoading: false,
-	error: null,
+    session: null,
+	hasProfile: false,
+    isLoadingAuth: true,
+    errorAuth: null,
 
-	reset: () =>
-		set({
-			session: null,
-			isLoading: false,
-			error: null,
-		}),
-	setSession: (session) => set({ session }),
-	setIsLoading: (isLoading) => set({ isLoading }),
-	setError: (error) => set({ error }),
+    reset: () =>
+        set({
+            session: null,
+			hasProfile: false,
+            isLoadingAuth: false,
+            errorAuth: null,
+        }),
+    setSession: (session) => set({ session }),
+	setHasProfile: (hasProfile) => set({ hasProfile }),
+    setIsLoadingAuth: (isLoading) => set({ isLoadingAuth: isLoading }),
+    setErrorAuth: (error) => set({ errorAuth: error }),
 }));
 
 export default useAuth;

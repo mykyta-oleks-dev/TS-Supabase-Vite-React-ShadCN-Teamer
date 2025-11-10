@@ -1,41 +1,43 @@
 export const urlRegex =
     /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=,]*)$/;
 
+export const ACCEPTED_IMAGE_TYPES = new Set([
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/webp',
+]);
+
+export const getAcceptedImageTypesStr = () =>
+    Array.from(ACCEPTED_IMAGE_TYPES).join(',');
+
+export const VALIDATION_WRONG_FORMAT =
+    'Only .jpg, .jpeg, .png and .webp formats are supported.';
+
 const PSW_MIN = 6;
 
-export const USER_SCHEMAS = {
-    SIGN_UP: {
-        EMAIL: {
-            REQUIRED: 'Email is required',
-            INVALID: 'Email is invalid',
-        },
-        PASSWORD: {
-            REQUIRED: 'Password is required',
-            MIN: PSW_MIN,
-            TOO_SHORT: `Password has to be at least ${PSW_MIN} characters long`,
-        },
-        CONFIRM_PASSWORD: {
-            REQUIRED: 'Password confirmation is required',
-            DONT_MATCH: "Password don't match",
-        },
+export const AUTH_SCHEMAS = {
+    EMAIL: {
+        REQUIRED: 'Email is required',
+        INVALID: 'Email is invalid',
     },
-
-    PROFILE: {
-        FULL_NAME: {
-            REQUIRED: 'Full name is required',
-        },
-        AVATAR: {
-            REQUIRED: 'Avatar public URL is required',
-            INVALID: 'Avatar has to be a valid URL',
-        },
+    PASSWORD: {
+        REQUIRED: 'Password is required',
+        MIN: PSW_MIN,
+        TOO_SHORT: `Password has to be at least ${PSW_MIN} characters long`,
+    },
+    CONFIRM_PASSWORD: {
+        REQUIRED: 'Password confirmation is required',
+        DONT_MATCH: "Password don't match",
     },
 } as const;
 
-export const ACCEPTED_IMAGE_TYPES = new Set([
-	'image/jpeg',
-	'image/jpg',
-	'image/png',
-	'image/webp',
-]);
-
-export const VALIDATION_WRONG_FORMAT = 'Only .jpg, .jpeg, .png and .webp formats are supported.';
+export const PROFILE_SCHEMAS = {
+    FULL_NAME: {
+        REQUIRED: 'Full name is required',
+    },
+    AVATAR: {
+        REQUIRED: 'Avatar is required',
+        INVALID: VALIDATION_WRONG_FORMAT,
+    },
+} as const;

@@ -1,14 +1,20 @@
-import useAuth from '@/store/auth';
+import { ROUTES } from '@/constants/router.constants';
+import { handleLogout } from '@/handlers/auth.handlers';
+import useCurrentUser from '@/hooks/query/user/useCurrentUser';
+import { handleError } from '@/lib/utils';
+import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { handleHelloWorld } from '../handlers/api';
-import useUserProfile from '@/hooks/query/user/useUserProfile';
-import { Link } from 'react-router';
-import { handleLogout } from '@/handlers/auth.handlers';
-import { handleError } from '@/lib/utils';
+import useRegistered from '@/hooks/protection/useRegistered';
 
 function HomePage() {
-    const session = useAuth((s) => s.session);
-    const { data, isLoading, error } = useUserProfile(session?.user.id || '');
+    useRegistered();
+
+    const {
+        query: { data, error },
+        auth: { session },
+        isLoading,
+    } = useCurrentUser();
 
     if (isLoading) return <div>Loading...</div>;
     if (error) handleError(error);
@@ -19,10 +25,12 @@ function HomePage() {
         <div className="flex flex-col gap-4 items-center">
             <h1>Hello {data?.full_name ?? 'World'}!</h1>
             <Button onClick={handleHelloWorld}>Hello World</Button>
-            <Button asChild>
-                <Link to="/auth/log-in">Go to Log In</Link>
-            </Button>
-            <Button onClick={handleLogout}>Log Out</Button>
+            {!session && (
+                <Button asChild>
+                    <Link to={ROUTES.AUTH.LOG_IN}>Go to Log In</Link>
+                </Button>
+            )}
+            {session && <Button onClick={handleLogout}>Log Out</Button>}
         </div>
     );
 }

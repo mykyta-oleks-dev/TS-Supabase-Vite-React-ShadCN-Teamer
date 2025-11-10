@@ -4,6 +4,7 @@ import HomePage from '@/pages/home.page';
 import LogInPage from '../pages/auth/log-in.page.tsx';
 import SignUpPage from '../pages/auth/sign-up.page.tsx';
 import { createBrowserRouter } from 'react-router';
+import CreateProfilePage from '@/pages/auth/create-profile.page.tsx';
 
 const router = createBrowserRouter([
     {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
                         path: ROUTER_KEYS.AUTH.SIGN_UP,
                         element: <SignUpPage />,
                     },
+                    {
+                        path: ROUTER_KEYS.AUTH.CREATE_PROFILE,
+                        element: <CreateProfilePage />,
+                    }
                 ],
             },
         ],

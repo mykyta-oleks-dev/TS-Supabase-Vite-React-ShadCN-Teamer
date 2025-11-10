@@ -10,20 +10,21 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { FIELDS } from '@/constants/fields.constants';
+import { AUTH_FIELDS } from '@/constants/fields.constants';
 import { ROUTES } from '@/constants/router.constants';
 import { handleLogin } from '@/handlers/auth.handlers';
-import { logInSchema, type logInData } from '@/schemas/user.schemas';
+import useRegistered from '@/hooks/protection/useRegistered';
+import useHashError from '@/hooks/useHashError';
+import { logInSchema, type logInData } from '@/schemas/auth.schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
 
-const { USER } = FIELDS;
-
-const fields = [USER.EMAIL, USER.PASSWORD];
+const fields = [AUTH_FIELDS.EMAIL, AUTH_FIELDS.PASSWORD];
 
 const LogInPage = () => {
-    const navigate = useNavigate();
+    useRegistered();
+    useHashError();
+
     const {
         control,
         handleSubmit,
@@ -45,11 +46,7 @@ const LogInPage = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form
-                    onSubmit={handleSubmit((data) =>
-                        handleLogin(data, navigate)
-                    )}
-                >
+                <form onSubmit={handleSubmit((data) => handleLogin(data))}>
                     <div className="flex flex-col gap-4">
                         {fields.map((f) => (
                             <FieldBlock

@@ -4,24 +4,30 @@ import { useEffect } from 'react';
 
 const useAuthSubscribe = () => {
     const authState = useAuth();
+    const { setSession, setIsLoadingAuth, reset } = authState;
 
     const supabase = getSupabase();
 
     useEffect(() => {
+        setIsLoadingAuth(true);
+
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((event, session) => {
             if (event === 'SIGNED_IN' && session) {
-                authState.setSession(session);
+                console.log(session.user.id);
+                setSession(session);
             } else if (event === 'SIGNED_OUT') {
-                authState.reset();
+                reset();
             }
+
+            setIsLoadingAuth(false);
         });
 
         return () => {
             subscription.unsubscribe();
         };
-    }, [supabase, authState]);
+    }, [supabase, setSession, setIsLoadingAuth, reset]);
 };
 
 export default useAuthSubscribe;

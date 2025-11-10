@@ -81,3 +81,12 @@ export function handleError(
         error: message,
     };
 }
+
+export const getUrlToPath = (to: string) => {
+    const baseUrl = globalThis.location.origin;
+    if (!baseUrl) return to;
+    return `${baseUrl}${to}`;
+};
+
+export const isCurrentUrl = (to: string) =>
+    globalThis.location.href === getUrlToPath(to);

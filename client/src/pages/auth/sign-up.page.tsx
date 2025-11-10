@@ -10,19 +10,24 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { FIELDS } from '@/constants/fields.constants';
+import { AUTH_FIELDS } from '@/constants/fields.constants';
 import { ROUTES } from '@/constants/router.constants';
 import { handleSignup } from '@/handlers/auth.handlers';
-import { signUpSchema, type signUpData } from '@/schemas/user.schemas';
+import useNotAuthed from '@/hooks/protection/useNotAuthed';
+import { signUpSchema, type signUpData } from '@/schemas/auth.schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
-const { USER } = FIELDS;
-
-const fields = [USER.EMAIL, USER.PASSWORD, USER.CONFIRM_PASSWORD];
+const fields = [
+    AUTH_FIELDS.EMAIL,
+    AUTH_FIELDS.PASSWORD,
+    AUTH_FIELDS.CONFIRM_PASSWORD,
+];
 
 const SignUpPage = () => {
+    useNotAuthed();
+
     const navigate = useNavigate();
     const {
         control,
