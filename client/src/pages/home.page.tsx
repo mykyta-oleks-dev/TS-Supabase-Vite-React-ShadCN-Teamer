@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { handleHelloWorld } from '../handlers/api';
 import useRegistered from '@/hooks/protection/useRegistered';
+import useTeam from '@/hooks/query/team/useTeam';
 
 function HomePage() {
     useRegistered();
@@ -16,14 +17,15 @@ function HomePage() {
         isLoading,
     } = useCurrentUser();
 
+    const { data: team } = useTeam();
+
     if (isLoading) return <div>Loading...</div>;
     if (error) handleError(error);
-
-    console.log(data);
 
     return (
         <div className="flex flex-col gap-4 items-center">
             <h1>Hello {data?.full_name ?? 'World'}!</h1>
+            <h2>Your team: {team?.name ?? 'No team'}</h2>
             <Button onClick={handleHelloWorld}>Hello World</Button>
             {!session && (
                 <Button asChild>
