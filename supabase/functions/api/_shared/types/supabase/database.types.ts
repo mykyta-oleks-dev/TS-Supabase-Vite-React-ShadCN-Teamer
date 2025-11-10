@@ -188,6 +188,7 @@ export type Database = {
         }
       }
       get_team_id_for_current_user: { Args: never; Returns: string }
+      get_team_id_for_user: { Args: { user_uuid: string }; Returns: string }
       join_team: { Args: { p_code: string }; Returns: undefined }
     }
     Enums: {

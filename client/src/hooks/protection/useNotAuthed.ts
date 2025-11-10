@@ -16,6 +16,8 @@ const useNotAuthed = () => {
             navigate(ROUTES.ROOT);
         }
     }, [navigate, session, isLoadingAuth]);
+
+    return { session };
 };
 
 export default useNotAuthed;

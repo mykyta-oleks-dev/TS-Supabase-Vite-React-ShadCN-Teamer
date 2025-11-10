@@ -28,6 +28,8 @@ const useRegistered = () => {
             navigate(ROUTES.ROOT);
         }
     }, [navigate, session, isLoading, isLoadingAuth, user]);
+
+    return { session };
 };
 
 export default useRegistered;
