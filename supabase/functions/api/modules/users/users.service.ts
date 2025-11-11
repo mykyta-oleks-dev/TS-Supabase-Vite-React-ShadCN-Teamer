@@ -23,7 +23,7 @@ import { Auth } from '../../_shared/types/middleware/authentication.types.ts';
 import usersRepository from './users.repository.ts';
 import { handleError } from '../../_shared/utils/handleError.ts';
 import { USERS_ERRORS } from './constants/errors.constants.ts';
-import { SCHEMAS } from "./constants/validation.constants.ts";
+import { SCHEMAS } from './constants/validation.constants.ts';
 
 class UsersService {
     signUp = async (body: SignUpBody, redirectUrl?: string) => {
@@ -97,6 +97,22 @@ class UsersService {
         });
 
         if (error) handleError(error);
+
+        await client.auth.admin.signOut(auth.user.id);
+
+        const { data, error: reauthError } =
+            await client.auth.signInWithPassword({
+                email: auth.user.email!,
+                password: parsed.data.password,
+            });
+
+        if (reauthError) handleError(reauthError);
+
+        if (!data.session) throw new AppError(ERRORS.UNEXPECTED);
+
+        const { access_token, refresh_token } = data.session;
+
+        return { access_token, refresh_token };
     };
 
     resendVerification = async (auth: Auth, emailRedirectTo?: string) => {
@@ -120,11 +136,14 @@ class UsersService {
     };
 
     resetPassword = async (email?: string, redirectTo?: string) => {
-        if (!email?.trim()) throw new BadRequestError(SCHEMAS.SIGN_UP.EMAIL.REQUIRED);
-        
+        if (!email?.trim())
+            throw new BadRequestError(SCHEMAS.SIGN_UP.EMAIL.REQUIRED);
+
         const client = getSuperClient();
 
-        const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
+        const { error } = await client.auth.resetPasswordForEmail(email, {
+            redirectTo,
+        });
 
         if (error) handleError(error);
     };

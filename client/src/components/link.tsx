@@ -5,7 +5,7 @@ const Link = ({ className, ...props }: LinkProps & { className?: string }) => {
     return (
         <RouterLink
             {...props}
-            className={cn('cursor-pointer text-primary', className)}
+            className={cn('cursor-pointer text-primary no-underline hover:underline', className)}
         />
     );
 };

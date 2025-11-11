@@ -54,6 +54,13 @@ const LogInPage = () => {
                                 control={control}
                                 name={f.NAME}
                                 label={f.LABEL}
+                                description={
+                                    f.NAME === 'password' ? (
+                                        <Link to={ROUTES.AUTH.RESET_PASSWORD}>
+                                            Forgot your password?
+                                        </Link>
+                                    ) : undefined
+                                }
                                 render={({ field }) => (
                                     <Input
                                         {...field}

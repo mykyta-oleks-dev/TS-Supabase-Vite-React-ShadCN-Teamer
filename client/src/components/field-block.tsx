@@ -5,11 +5,12 @@ import {
 } from 'react-hook-form';
 import { Field, FieldDescription, FieldError, FieldLabel } from './ui/field';
 import { cn } from '@/lib/utils';
+import type { ReactNode } from 'react';
 
 interface FieldBlockProps<TFieldValues extends FieldValues>
     extends Omit<ControllerProps<TFieldValues>, 'render'> {
     label?: string;
-    description?: string;
+    description?: string | ReactNode;
     render: ControllerProps<TFieldValues>['render'];
     className?: string;
 }

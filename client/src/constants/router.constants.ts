@@ -6,6 +6,7 @@ export const ROUTER_KEYS = {
 		SIGN_UP: 'sign-up',
 		CREATE_PROFILE: 'create-profile',
 		TEAM: 'team',
+		RESET_PASSWORD: 'reset-password',
 	},
 } as const;
 
@@ -19,5 +20,6 @@ export const ROUTES = {
 		SIGN_UP: `/${AUTH.ROOT}/${AUTH.SIGN_UP}`,
 		CREATE_PROFILE: `/${AUTH.ROOT}/${AUTH.CREATE_PROFILE}`,
 		JOIN_OR_CREATE_TEAM: `/${AUTH.ROOT}/${AUTH.TEAM}`,
+		RESET_PASSWORD: `/${AUTH.ROOT}/${AUTH.RESET_PASSWORD}`,
 	},
 } as const;

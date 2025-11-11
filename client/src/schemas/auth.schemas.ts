@@ -7,6 +7,8 @@ export const emailSchema = z.object({
     email: z.email(AUTH_SCHEMAS.EMAIL.INVALID).nonempty(AUTH_SCHEMAS.EMAIL.REQUIRED),
 });
 
+export type emailData = z.infer<typeof emailSchema>;
+
 const passwordSchema = z.object({
     password: z
         .string(AUTH_SCHEMAS.PASSWORD.REQUIRED)

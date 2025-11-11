@@ -10,6 +10,7 @@ import {
   BadRequestError,
   ConflictError,
   ForbiddenError,
+  UnauthorizedError,
 } from '../types/middleware/error-handling.types.ts';
 
 export const handleError = (error: unknown) => {
@@ -44,6 +45,10 @@ export const handleError = (error: unknown) => {
 const { AUTH, POSTGREST } = ERRORS_CODES;
 
 const handleAuthError = (error: AuthError) => {
+    if (error.name === 'AuthSessionMissingError') {
+        throw new UnauthorizedError(AUTH_ERRORS.NO_SESSION);
+    }
+    
     switch (error.code) {
         case AUTH.EMAIL_EXISTS:
         case AUTH.USER_EXISTS:
@@ -56,7 +61,7 @@ const handleAuthError = (error: AuthError) => {
             throw new ForbiddenError(AUTH_ERRORS.NOT_CONFIRMED);
 
         default:
-            console.log(error.code);
+            console.log('handleAuthError', error);
             throw error;
     }
 };

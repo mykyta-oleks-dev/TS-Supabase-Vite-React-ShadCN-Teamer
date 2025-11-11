@@ -24,6 +24,7 @@ export const ERRORS_CODES = {
 } as const;
 
 export const AUTH_ERRORS = {
+    NO_SESSION: 'Could not initialize session with provided token',
     USER_EXISTS: 'User by the specified credentials already exists',
     INVALID_CREDENTIALS: 'Invalid credentials provided for authentication',
     NOT_CONFIRMED: 'Email address is not confirmed',

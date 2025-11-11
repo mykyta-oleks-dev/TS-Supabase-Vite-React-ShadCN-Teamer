@@ -47,9 +47,12 @@ class UsersController {
 
         const body = (await c.req.json()) as ChangePasswordBody;
 
-        await usersService.changePassword(auth, body);
+        const tokens = await usersService.changePassword(auth, body);
 
-        return c.body(null, HTTP.NO_CONTENT);
+        return c.json({
+            message: 'Passwords changed successfuly!',
+            ...tokens,
+        }, HTTP.OK);
     };
 
     resendVerification = async (c: Context) => {
