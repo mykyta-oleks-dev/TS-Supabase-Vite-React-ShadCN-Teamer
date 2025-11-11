@@ -7,6 +7,7 @@ import { createBrowserRouter } from 'react-router';
 import CreateProfilePage from '@/pages/auth/create-profile.page';
 import JoinOrCreateTeamPage from '../pages/auth/join-or-create-team.page';
 import ResetPassword from '@/pages/auth/reset-password.page';
+import Layout from '@/components/layout';
 
 const router = createBrowserRouter([
     {
@@ -14,8 +15,13 @@ const router = createBrowserRouter([
         element: <PagesWrapper />,
         children: [
             {
-                index: true,
-                element: <HomePage />,
+                element: <Layout />,
+                children: [
+                    {
+                        index: true,
+                        element: <HomePage />,
+                    },
+                ],
             },
             {
                 path: ROUTER_KEYS.AUTH.ROOT,
@@ -42,8 +48,8 @@ const router = createBrowserRouter([
                     },
                     {
                         path: ROUTER_KEYS.AUTH.RESET_PASSWORD,
-                        element: <ResetPassword />
-                    }
+                        element: <ResetPassword />,
+                    },
                 ],
             },
         ],

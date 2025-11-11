@@ -9,7 +9,7 @@ const PagesWrapper = () => {
     const { isLoading } = useCurrentUser();
 
     return (
-        <div className="min-h-screen w-full flex justify-around items-center">
+        <div className="min-h-screen w-full relative flex justify-around items-center">
             {isLoading && <PagesLoader />}
             <Outlet />
         </div>

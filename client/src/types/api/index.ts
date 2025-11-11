@@ -14,7 +14,7 @@ export interface ApiError extends DefaultBody {
 
 export interface AuthToken extends DefaultBody {
     access_token: string;
-	refresh_token: string;
+    refresh_token: string;
 }
 
 export interface OneUser extends DefaultBody {
@@ -23,4 +23,19 @@ export interface OneUser extends DefaultBody {
 
 export interface OneTeam extends DefaultBody {
     team: TeamAPI;
+    users: unknown;
 }
+
+export interface OneTeamCount extends OneTeam {
+    users: number;
+}
+
+export interface OneTeamArray extends OneTeam {
+    users: UserAPI[];
+}
+
+export const isWithCount = (res: OneTeam): res is OneTeamCount =>
+    typeof res.users === 'number';
+
+export const isWithArray = (res: OneTeam): res is OneTeamArray =>
+    Array.isArray(res);
