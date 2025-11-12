@@ -60,6 +60,7 @@ const CreateProfilePage = () => {
                                 <AvatarImage
                                     src={avatarPreview || '/default-avatar.png'}
                                     alt="Avatar Preview"
+                                    className='object-cover'
                                 />
                             </Avatar>
 

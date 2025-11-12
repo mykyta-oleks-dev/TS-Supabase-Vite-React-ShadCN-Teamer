@@ -1,4 +1,5 @@
 import FieldBlock from '@/components/field-block';
+import GoogleAuthButton from '@/components/google-auth-button';
 import Link from '@/components/link';
 import SubmitButton from '@/components/submit-button';
 import { Button } from '@/components/ui/button';
@@ -88,10 +89,12 @@ const SignUpPage = () => {
                                 Reset
                             </Button>
                         </div>
-                    </div>
-                    <div className="mt-4 text-center text-sm">
-                        Already have an account?{' '}
-                        <Link to={ROUTES.AUTH.LOG_IN}>Log in</Link>
+                        <hr />
+                        <div className="text-center text-sm">
+                            Already have an account?{' '}
+                            <Link to={ROUTES.AUTH.LOG_IN}>Log in</Link>
+                        </div>
+                        <GoogleAuthButton />
                     </div>
                 </form>
             </CardContent>

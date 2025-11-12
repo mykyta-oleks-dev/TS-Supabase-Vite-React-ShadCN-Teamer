@@ -1,36 +1,32 @@
-import { ROUTES } from '@/constants/router.constants';
-import { handleLogout } from '@/handlers/auth.handlers';
+import PageTitle from '@/components/page-title';
 import useTeam from '@/hooks/query/team/useTeam';
 import useCurrentUser from '@/hooks/query/user/useCurrentUser';
 import { handleError } from '@/lib/utils';
-import { Link } from 'react-router';
-import { Button } from '../components/ui/button';
-import { handleHelloWorld } from '../handlers/api';
 
 function HomePage() {
-
     const {
-        query: { data: userData, error },
-        auth: { session },
+        query: { data: user, error: userError },
         isLoading,
     } = useCurrentUser();
 
-    const { data: teamData } = useTeam();
+    const { data: teamData, error: teamError } = useTeam();
+
+    const error = userError ?? teamError;
 
     if (isLoading) return <div>Loading...</div>;
     if (error) handleError(error);
 
+    if (!user || !teamData)
+        return <p>Unexpected error reading user and team data</p>;
+
+    const { team, users, usersIsArray, products } = teamData;
+
     return (
-        <div className="flex flex-col gap-4 items-center">
-            <h1>Hello {userData?.full_name ?? 'World'}!</h1>
-            <h2>Your team: {teamData?.team.name ?? 'No team'}</h2>
-            <Button onClick={handleHelloWorld}>Hello World</Button>
-            {!session && (
-                <Button asChild>
-                    <Link to={ROUTES.AUTH.LOG_IN}>Go to Log In</Link>
-                </Button>
-            )}
-            {session && <Button onClick={handleLogout}>Log Out</Button>}
+        <div>
+            <PageTitle title={`Team "${team.name}" home page`} />
+            <h3 className="text-xl">Hello, {user.full_name}!</h3>
+            <p>Total team members: {usersIsArray ? users.length : users}</p>
+            <p>Total products: {products}</p>
         </div>
     );
 }

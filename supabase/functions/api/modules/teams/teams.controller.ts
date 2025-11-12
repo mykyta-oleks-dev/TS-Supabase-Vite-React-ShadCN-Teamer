@@ -36,10 +36,10 @@ class TeamsController {
 
         const deep = c.req.query('deep') === 'true';
 
-        const { team, users } = await teamsService.getOne(auth, deep);
+        const data = await teamsService.getOne(auth, deep);
 
         return c.json(
-            { message: 'Team fetched successfuly!', team, users },
+            { message: 'Team fetched successfuly!', ...data },
             HTTP.OK
         );
     };

@@ -24,6 +24,7 @@ export interface OneUser extends DefaultBody {
 export interface OneTeam extends DefaultBody {
     team: TeamAPI;
     users: unknown;
+    products: number;
 }
 
 export interface OneTeamCount extends OneTeam {

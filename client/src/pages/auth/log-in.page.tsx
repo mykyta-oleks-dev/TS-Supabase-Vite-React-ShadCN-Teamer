@@ -1,4 +1,5 @@
 import FieldBlock from '@/components/field-block';
+import GoogleAuthButton from '@/components/google-auth-button';
 import Link from '@/components/link';
 import SubmitButton from '@/components/submit-button';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ import { AUTH_FIELDS } from '@/constants/fields.constants';
 import { ROUTES } from '@/constants/router.constants';
 import { handleLogin } from '@/handlers/auth.handlers';
 import useRegistered from '@/hooks/protection/useRegistered';
-import useHashError from '@/hooks/useHashError';
+import useHash from '@/hooks/useHash';
 import { logInSchema, type logInData } from '@/schemas/auth.schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -23,7 +24,7 @@ const fields = [AUTH_FIELDS.EMAIL, AUTH_FIELDS.PASSWORD];
 
 const LogInPage = () => {
     useRegistered();
-    useHashError();
+    useHash();
 
     const {
         control,
@@ -46,7 +47,7 @@ const LogInPage = () => {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit((data) => handleLogin(data))}>
+                <form onSubmit={handleSubmit(handleLogin)}>
                     <div className="flex flex-col gap-4">
                         {fields.map((f) => (
                             <FieldBlock
@@ -86,10 +87,12 @@ const LogInPage = () => {
                                 Reset
                             </Button>
                         </div>
-                    </div>
-                    <div className="mt-4 text-center text-sm">
-                        Don&apos;t have an account?{' '}
-                        <Link to={ROUTES.AUTH.SIGN_UP}>Sign up</Link>
+                        <hr />
+                        <div className="text-center text-sm">
+                            Don&apos;t have an account?{' '}
+                            <Link to={ROUTES.AUTH.SIGN_UP}>Sign up</Link>
+                        </div>
+                        <GoogleAuthButton />
                     </div>
                 </form>
             </CardContent>

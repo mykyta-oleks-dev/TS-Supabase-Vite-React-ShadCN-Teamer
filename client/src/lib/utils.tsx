@@ -6,6 +6,7 @@ import { ENV } from '@/constants/env.constants';
 import { toast } from 'sonner';
 import { getErrorPayload } from './api';
 import { isZodErrors } from './assertions';
+import getSupabase from '@/config/supabase';
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -90,3 +91,27 @@ export const getUrlToPath = (to: string) => {
 
 export const isCurrentUrl = (to: string) =>
     globalThis.location.href === getUrlToPath(to);
+
+export const setSessionFromHash = async (hash?: string) => {
+    if (!hash) return;
+
+    const hashObj = hash
+        .substring(1)
+        .split('&')
+        .reduce((prev, curr) => {
+            const [key, value] = curr.split('=');
+            return {
+                ...prev,
+                [key]: value,
+            };
+        }, {} as Record<string, string>);
+
+    if (!('access_token' in hashObj) || !('refresh_token' in hashObj)) return;
+
+    const { error } = await getSupabase().auth.setSession({
+        access_token: hashObj.access_token,
+        refresh_token: hashObj.refresh_token,
+    });
+
+    if (error) handleError(error, true);
+};

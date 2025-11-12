@@ -1,7 +1,7 @@
 import { logIn, changePassword, sendResetPassword, signUp } from '@/api/auth';
 import getSupabase from '@/config/supabase';
 import { ROUTES } from '@/constants/router.constants';
-import { handleError } from '@/lib/utils';
+import { getUrlToPath, handleError } from '@/lib/utils';
 import type {
     confirmPasswordData,
     logInData,
@@ -10,10 +10,7 @@ import type {
 import type { NavigateFunction } from 'react-router';
 import { toast } from 'sonner';
 
-export const handleLogin = async (
-    values: logInData,
-    navigate?: NavigateFunction
-) => {
+export const handleLogin = async (values: logInData) => {
     try {
         const { data } = await logIn(values);
 
@@ -24,11 +21,9 @@ export const handleLogin = async (
 
         if (error) throw error;
     } catch (error) {
-        handleError(error as Error, true);
+        handleError(error, true);
         return;
     }
-
-    navigate?.(ROUTES.ROOT);
 };
 
 export const handleSignup = async (
@@ -40,11 +35,28 @@ export const handleSignup = async (
 
         toast.success(data.message);
     } catch (error) {
-        handleError(error as Error, true);
+        handleError(error, true);
         return;
     }
 
     navigate?.(ROUTES.AUTH.LOG_IN);
+};
+
+export const handleGoogleAuth = async () => {
+    try {
+        const supabase = getSupabase();
+
+        const { error } = await supabase.auth.signInWithOAuth({
+            provider: 'google',
+
+            options: {
+                redirectTo: getUrlToPath(ROUTES.AUTH.LOG_IN),
+            },
+        });
+        if (error) throw error;
+    } catch (error) {
+        handleError(error, true);
+    }
 };
 
 export const handleLogout = async () => {
@@ -76,14 +88,12 @@ export const handleResetPassword = async (
     try {
         const res = await changePassword(values);
 
-        const {access_token, refresh_token} = res.data;
+        const { access_token, refresh_token } = res.data;
 
-        toast.success(
-            'Your password was updated!'
-        );
+        toast.success('Your password was updated!');
 
         const { error } = await getSupabase().auth.setSession({
-            access_token, 
+            access_token,
             refresh_token,
         });
 

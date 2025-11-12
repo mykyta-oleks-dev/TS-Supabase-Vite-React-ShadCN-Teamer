@@ -366,6 +366,6 @@ entrypoint = "./functions/api/index.ts"
 
 [auth.external.google]
 enabled = true
-client_id = "env(AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
-secret = "env(AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET)"
+client_id = "803515928045-ghgjbvd8am9ug47vqvp88ji3bqcnslts.apps.googleusercontent.com"
+secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_SECRET)"
 skip_nonce_check = false

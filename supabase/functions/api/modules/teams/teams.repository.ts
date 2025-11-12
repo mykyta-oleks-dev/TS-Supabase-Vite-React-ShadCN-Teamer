@@ -64,10 +64,13 @@ class TeamsRepository {
         if (!data || data === null)
             throw new NotFoundError(TEAMS_ERRORS.NOT_FOUND);
 
-        const { users, ...team } = data;
+        const { users, products, ...team } = data;
 
-        if ('count' in users[0]) return { team, users: users[0].count };
-        return { team, users };
+        return {
+            team,
+            users: 'count' in users[0] ? users[0].count : users,
+            products: products[0].count,
+        };
     };
 
     update = async (
@@ -113,7 +116,8 @@ class TeamsRepository {
             .select(
                 `
                 *,
-                users:users!users_team_id_fkey (*)
+                users:users!users_team_id_fkey (*),
+                products:products!products_team_id_fkey (count)
             `
             )
             .eq('id', teamId)
@@ -129,7 +133,8 @@ class TeamsRepository {
             .select(
                 `
                 *,
-                users:users!users_team_id_fkey (count)
+                users:users!users_team_id_fkey (count),
+                products:products!products_team_id_fkey (count)
             `
             )
             .eq('id', teamId)
