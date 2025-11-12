@@ -1,6 +1,6 @@
 import type { APIObject, ClientObject } from './common.types';
 
-const statuses = ['draft', 'active', 'deleted'] as const;
+export const statuses = ['draft', 'active', 'deleted'] as const;
 
 export type Status = (typeof statuses)[number];
 

@@ -62,4 +62,8 @@ export const PRODUCTS_FILTER_FIELDS = {
         LABEL: 'Search text',
         PLACEHOLDER: 'Succulent chineese meal...',
     },
+    STATUS: {
+        NAME: 'status',
+        LABEL: 'Products status',
+    }
 } as const;

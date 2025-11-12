@@ -29,10 +29,13 @@ const ViewProducts = () => {
 
     const handleFiltersSave = (data: productsFiltersData) => {        
         setSearchParams((prev) => {
-            const { text } = data;
+            const { text, status } = data;
 
             if (text) prev.set('text', text);
             else prev.delete('text');
+            
+            if (status) prev.set('status', status);
+            else prev.delete('status');
 
             return prev;
         });

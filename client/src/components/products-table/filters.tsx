@@ -15,6 +15,15 @@ import FieldBlock from '../field-block';
 import { PRODUCTS_FILTER_FIELDS } from '@/constants/fields.constants';
 import { Input } from '../ui/input';
 import SubmitButton from '../submit-button';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '../ui/select';
+import { statuses } from '@/types/models/product.types';
+import { Button } from '../ui/button';
 
 interface ProductsFiltersProps {
     params: GetProductQueryParams;
@@ -33,6 +42,7 @@ const ProductsFilters = ({
         resolver: zodResolver(productsFiltersSchema),
         defaultValues: {
             text: params.text ?? '',
+            status: undefined,
         },
     });
 
@@ -49,9 +59,10 @@ const ProductsFilters = ({
                 <AccordionContent className="p-2">
                     <form
                         onSubmit={handleSubmit(handleFiltersSave)}
-                        className="grid gap-3"
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3 gap-3"
                     >
                         <FieldBlock
+                            className="col-span-full"
                             control={control}
                             name={PRODUCTS_FILTER_FIELDS.TEXT.NAME}
                             label={PRODUCTS_FILTER_FIELDS.TEXT.LABEL}
@@ -65,9 +76,57 @@ const ProductsFilters = ({
                                 />
                             )}
                         />
-                        <SubmitButton isSubmitting={isSubmitting}>
-                            Filter
-                        </SubmitButton>
+
+                        <FieldBlock
+                            control={control}
+                            name={PRODUCTS_FILTER_FIELDS.STATUS.NAME}
+                            label={PRODUCTS_FILTER_FIELDS.STATUS.LABEL}
+                            render={({ field, fieldState }) => (
+                                <Select
+                                    name={field.name}
+                                    value={field.value ? field.value : 'all'}
+                                    onValueChange={(value) =>
+                                        field.onChange(
+                                            value === 'all' ? undefined : value
+                                        )
+                                    }
+                                >
+                                    <SelectTrigger
+                                        id={PRODUCTS_FILTER_FIELDS.STATUS.NAME}
+                                        aria-invalid={fieldState.invalid}
+                                    >
+                                        <SelectValue
+                                            placeholder="Select"
+                                            className="capitalize"
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent position="popper">
+                                        <SelectItem value="all">All</SelectItem>
+                                        {statuses.map((s) => (
+                                            <SelectItem key={s} value={s}>
+                                                {s}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+
+                        <div className="col-span-full flex gap-3">
+                            <SubmitButton
+                                className="flex-1"
+                                isSubmitting={isSubmitting}
+                            >
+                                Filter
+                            </SubmitButton>
+                            <Button
+                                className="flex-1"
+                                type="reset"
+                                variant="outline"
+                            >
+                                Reset
+                            </Button>
+                        </div>
                     </form>
                 </AccordionContent>
             </AccordionItem>
