@@ -19,6 +19,9 @@ type Filters = {
     text?: string;
     userId?: string;
     status?: Status;
+    dateFrom?: Date;
+    dateTo?: Date;
+    dateType?: 'created_at' | 'updated_at'
 };
 
 export type ProductQuery = GetManyQuery<Product> & Filters;

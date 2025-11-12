@@ -14,7 +14,7 @@ import {
     productCreateSchema,
     productEditSchema,
 } from './validation/schemas.ts';
-import { Status } from "./types/product.types.ts";
+import { Status } from './types/product.types.ts';
 
 class ProductsService {
     create = (auth: Auth, body: CreateTeamBody) => {
@@ -101,7 +101,8 @@ class ProductsService {
             throw new BadRequestError(PRODUCTS_ERRORS.BAD_ID);
         }
 
-        if (!isStatus(status)) throw new BadRequestError(PRODUCTS_ERRORS.BAD_STATUS)
+        if (!isStatus(status))
+            throw new BadRequestError(PRODUCTS_ERRORS.BAD_STATUS);
 
         const client = getClient(auth.token);
 
@@ -109,10 +110,10 @@ class ProductsService {
             client,
             auth.user.id,
             parsedId,
-            status,
+            status
         );
     };
-    
+
     delete = (auth: Auth, id: string) => this.changeStatus(auth, id, 'deleted');
 
     private readonly _parseQuery = (
@@ -144,6 +145,25 @@ class ProductsService {
         else if (raw.userId) query.userId = raw.userId;
 
         if (isStatus(raw.status)) query.status = raw.status;
+
+        if (raw.dateFrom) {
+            const dateFrom = new Date(raw.dateFrom);
+
+            if (!Number.isNaN(dateFrom.getTime())) query.dateFrom = dateFrom;
+        }
+
+        if (raw.dateTo) {
+            const dateTo = new Date(raw.dateTo);
+
+            if (!Number.isNaN(dateTo.getTime())) query.dateTo = dateTo;
+        }
+
+        if (
+            raw.dateType &&
+            (raw.dateType === 'created_at' || raw.dateType === 'updated_at')
+        ) {
+            query.dateType = raw.dateType;
+        }
 
         return query;
     };

@@ -75,6 +75,14 @@ class ProductsRepository {
             );
         }
 
+        if (query.dateFrom) {
+            dbQuery = dbQuery.gte(query.dateType ?? 'created_at', query.dateFrom.toISOString())
+        }
+
+        if (query.dateTo) {
+            dbQuery = dbQuery.lte(query.dateType ?? 'created_at', query.dateTo.toISOString())
+        }
+
         const { data: products, error } = await dbQuery;
 
         if (error) handleError(error);
