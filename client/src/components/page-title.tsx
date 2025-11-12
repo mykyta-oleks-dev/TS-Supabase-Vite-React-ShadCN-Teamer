@@ -9,7 +9,7 @@ const PageTitle = ({
 	className,
 }: PropsWithChildren<{ title: string; sub?: string; className?: ClassValue }>) => {
 	return (
-		<div className={cn('flex justify-between mb-5', className)}>
+		<div className={cn('flex justify-between mb-5 w-full', className)}>
 			<div>
 				<h2 className="text-2xl font-semibold capitalize">{title}</h2>
 				{sub && <p className='text-sm font-semibold text-gray-500'>{sub}</p>}

@@ -6,7 +6,7 @@ import useCurrentUser from '../user/useCurrentUser';
 import { isWithArray } from '@/types/api';
 import { mapUserFromAPI, type User } from '@/types/models/user.types';
 
-const useTeam = () => {
+const useTeam = (deep?: boolean) => {
     const {
         query: { data },
     } = useCurrentUser();
@@ -14,7 +14,7 @@ const useTeam = () => {
     const id = data?.team_id;
 
     return useQuery({
-        queryKey: KEYS.TEAM_BY_ID(id),
+        queryKey: [...KEYS.TEAM_BY_ID(id), { deep }],
         queryFn: async (): Promise<
             | {
                   team: Team;
@@ -32,7 +32,7 @@ const useTeam = () => {
         > => {
             if (!id) return null;
 
-            const res = await getOwnTeam();
+            const res = await getOwnTeam(deep);
 
             const teamApi = res.data.team;
 

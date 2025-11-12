@@ -39,4 +39,4 @@ export const isWithCount = (res: OneTeam): res is OneTeamCount =>
     typeof res.users === 'number';
 
 export const isWithArray = (res: OneTeam): res is OneTeamArray =>
-    Array.isArray(res);
+    Array.isArray(res.users);

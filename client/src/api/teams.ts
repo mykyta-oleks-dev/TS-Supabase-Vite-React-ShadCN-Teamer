@@ -9,5 +9,7 @@ export const joinTeam = (code: string) =>
 export const createTeam = (values: teamCreateData) =>
     axiosInstance.post<OneTeam>(API.TEAMS.ROOT, values);
 
-export const getOwnTeam = () =>
-    axiosInstance.get<OneTeam>(API.TEAMS.ROOT);
+export const getOwnTeam = (deep?: boolean) =>
+    axiosInstance.get<OneTeam>(API.TEAMS.ROOT, {
+        params: { deep }
+    });
