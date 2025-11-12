@@ -1,6 +1,6 @@
 import axiosInstance from "@/config/axios";
 import { API } from "@/constants/api.constants";
-import { type ManyProducts } from "@/types/api";
+import { type GetProductQueryParams, type ManyProducts } from "@/types/api";
 
-export const getManyProducts = () =>
-	axiosInstance.get<ManyProducts>(API.PRODUCTS.ROOT);
+export const getManyProducts = (params?: GetProductQueryParams) =>
+	axiosInstance.get<ManyProducts>(API.PRODUCTS.ROOT, { params });

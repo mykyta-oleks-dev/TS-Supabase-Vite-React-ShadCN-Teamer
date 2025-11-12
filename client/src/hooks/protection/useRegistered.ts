@@ -4,6 +4,14 @@ import useCurrentUser from '../query/user/useCurrentUser';
 import { ROUTES } from '@/constants/router.constants';
 import { isCurrentUrl } from '@/lib/utils';
 
+const unauthedRoutes = [
+    ROUTES.AUTH.ROOT,
+    ROUTES.AUTH.LOG_IN,
+    ROUTES.AUTH.SIGN_UP,
+    ROUTES.AUTH.CREATE_PROFILE,
+    ROUTES.AUTH.JOIN_OR_CREATE_TEAM,
+];
+
 const useRegistered = () => {
     const navigate = useNavigate();
 
@@ -30,6 +38,8 @@ const useRegistered = () => {
             );
 
             if (!isJoinOrCreateTeam) navigate(ROUTES.AUTH.JOIN_OR_CREATE_TEAM);
+        } else if (unauthedRoutes.some((route) => isCurrentUrl(route))) {
+            navigate(ROUTES.ROOT);
         }
     }, [navigate, session, isLoading, isLoadingAuth, user]);
 

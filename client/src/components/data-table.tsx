@@ -2,6 +2,7 @@ import {
     type ColumnDef,
     flexRender,
     getCoreRowModel,
+    type PaginationState,
     useReactTable,
 } from '@tanstack/react-table';
 
@@ -13,24 +14,49 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
+import { DataTablePagination } from './products-table/pagination';
+import type { GetQueryParams } from '@/types/api';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
+    pages: number;
+    params: GetQueryParams;
+    onPaginationChange: (newState: PaginationState) => void;
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
-}: DataTableProps<TData, TValue>) {
+    pages,
+    params,
+    onPaginationChange: handlePaginationChange
+}: Readonly<DataTableProps<TData, TValue>>) {
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        manualPagination: true,
+        pageCount: pages,
+        state: {
+            pagination: {
+                pageIndex: params.page - 1,
+                pageSize: params.limit,
+            },
+        },
+        onPaginationChange: (updater) => {
+            if (typeof updater !== 'function') return;
+
+            const old = table.getState().pagination;
+
+            const newPagination = updater(old);
+
+            handlePaginationChange(newPagination);
+        },
     });
 
     return (
-        <div className="overflow-hidden rounded-md border">
+        <div className="overflow-hidden rounded-md border pb-2">
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -80,6 +106,7 @@ export function DataTable<TData, TValue>({
                     )}
                 </TableBody>
             </Table>
+            <DataTablePagination table={table} />
         </div>
     );
 }

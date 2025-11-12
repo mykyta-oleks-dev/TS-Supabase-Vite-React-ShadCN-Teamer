@@ -51,6 +51,7 @@ export const productsColumns: ColumnDef<Product>[] = [
                 </span>
             );
         },
+        header: 'Status',
     },
     {
         id: 'actions',

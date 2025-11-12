@@ -1,4 +1,4 @@
-import type { ProductAPI } from '../models/product.types';
+import { isStatus, type ProductAPI, type Status } from '../models/product.types';
 import type { TeamAPI } from '../models/team.types';
 import type { UserAPI } from '../models/user.types';
 
@@ -50,3 +50,67 @@ export interface ManyProducts extends DefaultBody {
     totalDeleted: number;
     totalDrafts: number;
 }
+
+export interface GetQueryParams {
+    page: number;
+    limit: number;
+    orderBy?: string;
+    orderByType?: 'desc' | 'asc';
+}
+
+export interface GetProductQueryParams extends GetQueryParams {
+    text?: string;
+    userId?: string;
+    status?: Status;
+}
+
+export const parseSearchParams = (searchParams: URLSearchParams) => {
+    const page = Number.parseInt(searchParams.get('page') ?? '1');
+    const limit = Math.max(
+        Number.parseInt(searchParams.get('limit') ?? '10'),
+        1
+    );
+
+    const queryParams: GetQueryParams = { page, limit };
+
+    const orderBy = searchParams.get('orderBy');
+
+    if (orderBy) {
+        queryParams.orderBy = orderBy;
+    }
+
+    const orderByType = searchParams.get('orderByType');
+
+    if (orderByType === 'asc' || orderByType === 'desc') {
+        queryParams.orderByType = orderByType;
+    }
+
+    return queryParams;
+};
+
+export const parseProductSearchParams = (
+    searchParams: URLSearchParams
+): GetProductQueryParams => {
+    const productQueryParams: GetProductQueryParams =
+        parseSearchParams(searchParams);
+
+    const text = searchParams.get('text') ?? searchParams.get('search');
+
+    if (text) {
+        productQueryParams.text = text;
+    }
+
+    const userId = searchParams.get('userId');
+
+    if (userId) {
+        productQueryParams.userId = userId;
+    }
+
+    const status = searchParams.get('status');
+
+    if (isStatus(status)) {
+        productQueryParams.status = status;
+    }
+
+    return productQueryParams;
+};

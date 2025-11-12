@@ -89,7 +89,7 @@ export const getUrlToPath = (to: string) => {
     return `${baseUrl}${to}`;
 };
 
-export const isCurrentUrl = (to: string) =>
+export const isCurrentUrl = (to: string): boolean =>
     globalThis.location.href === getUrlToPath(to);
 
 export const setSessionFromHash = async (hash?: string) => {
