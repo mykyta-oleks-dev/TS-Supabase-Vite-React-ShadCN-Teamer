@@ -1,3 +1,4 @@
+import type { ProductAPI } from '../models/product.types';
 import type { TeamAPI } from '../models/team.types';
 import type { UserAPI } from '../models/user.types';
 
@@ -40,3 +41,12 @@ export const isWithCount = (res: OneTeam): res is OneTeamCount =>
 
 export const isWithArray = (res: OneTeam): res is OneTeamArray =>
     Array.isArray(res.users);
+
+export interface ManyProducts extends DefaultBody {
+    products: ProductAPI[];
+    total: number;
+    pages: number;
+    limit: number;
+    totalDeleted: number;
+    totalDrafts: number;
+}

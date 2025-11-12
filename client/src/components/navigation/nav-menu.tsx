@@ -1,6 +1,7 @@
 import { ROUTES } from '@/constants/router.constants';
 import NavLink from '../nav-link';
-import { MdHome } from 'react-icons/md';
+import { MdHome as MdHomeIcon } from 'react-icons/md';
+import { AiFillProduct as AiFillProductIcon } from 'react-icons/ai';
 import type { IconType } from 'react-icons/lib';
 import { Button } from '../ui/button';
 import { handleLogout } from '@/handlers/auth.handlers';
@@ -9,7 +10,10 @@ const links: {
     to: string;
     label: string;
     icon: IconType;
-}[] = [{ to: ROUTES.ROOT, label: 'Home', icon: MdHome }];
+}[] = [
+    { to: ROUTES.ROOT, label: 'Home', icon: MdHomeIcon },
+    { to: ROUTES.PRODUCTS.ROOT, label: 'Products', icon: AiFillProductIcon },
+];
 
 const NavMenu = () => {
     return (
@@ -17,9 +21,11 @@ const NavMenu = () => {
             <nav>
                 <ul className="flex flex-col gap-3">
                     {links.map((l) => (
-                        <NavLink key={l.to} to={l.to}>
-                            <l.icon size={20} /> {l.label}
-                        </NavLink>
+                        <li key={l.to}>
+                            <NavLink to={l.to}>
+                                <l.icon size={20} /> {l.label}
+                            </NavLink>
+                        </li>
                     ))}
                 </ul>
             </nav>

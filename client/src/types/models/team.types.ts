@@ -18,7 +18,7 @@ export const mapTeamFromAPI = (user: TeamAPI): Team => ({
     updated_at: new Date(user.updated_at),
 });
 
-export const mapUserToAPI = (user: Team): TeamAPI => ({
+export const mapTeamToAPI = (user: Team): TeamAPI => ({
     ...user,
     created_at: user.created_at.toISOString(),
     updated_at: user.updated_at.toISOString(),

@@ -1,3 +1,5 @@
+export const DYNAMIC = ':id';
+
 export const ROUTER_KEYS = {
 	ROOT: '/',
 	AUTH: {
@@ -8,9 +10,12 @@ export const ROUTER_KEYS = {
 		TEAM: 'team',
 		RESET_PASSWORD: 'reset-password',
 	},
+	PRODUCTS: {
+		ROOT: 'products',
+	}
 } as const;
 
-const { AUTH } = ROUTER_KEYS;
+const { AUTH, PRODUCTS } = ROUTER_KEYS;
 
 export const ROUTES = {
 	ROOT: '/',
@@ -22,4 +27,8 @@ export const ROUTES = {
 		JOIN_OR_CREATE_TEAM: `/${AUTH.ROOT}/${AUTH.TEAM}`,
 		RESET_PASSWORD: `/${AUTH.ROOT}/${AUTH.RESET_PASSWORD}`,
 	},
+	PRODUCTS: {
+		ROOT: `/${PRODUCTS.ROOT}`,
+		ONE: (id: number) => `/${PRODUCTS.ROOT}/${id}`,
+	}
 } as const;

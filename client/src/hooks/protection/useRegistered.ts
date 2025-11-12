@@ -30,8 +30,6 @@ const useRegistered = () => {
             );
 
             if (!isJoinOrCreateTeam) navigate(ROUTES.AUTH.JOIN_OR_CREATE_TEAM);
-        } else {
-            navigate(ROUTES.ROOT);
         }
     }, [navigate, session, isLoading, isLoadingAuth, user]);
 

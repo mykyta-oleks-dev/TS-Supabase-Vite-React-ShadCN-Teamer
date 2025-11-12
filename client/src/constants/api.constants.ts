@@ -1,5 +1,6 @@
 const ROOT_USERS = 'users';
 const ROOT_TEAMS = 'teams';
+const ROOT_PRODUCTS = 'products';
 
 export const API = {
     ROOT: '',
@@ -17,4 +18,8 @@ export const API = {
         ONE: (id: string) => `${ROOT_TEAMS}/${id}`,
         JOIN: `${ROOT_TEAMS}/join`,
     },
+    PRODUCTS: {
+        ROOT: ROOT_PRODUCTS,
+        ONE: (id: string) => `${ROOT_PRODUCTS}/${id}`,
+    }
 } as const;

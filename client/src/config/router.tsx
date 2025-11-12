@@ -8,6 +8,7 @@ import CreateProfilePage from '@/pages/auth/create-profile.page';
 import JoinOrCreateTeamPage from '../pages/auth/join-or-create-team.page';
 import ResetPassword from '@/pages/auth/reset-password.page';
 import Layout from '@/components/layout';
+import ViewProducts from '@/pages/products/view.page';
 
 const router = createBrowserRouter([
     {
@@ -20,6 +21,15 @@ const router = createBrowserRouter([
                     {
                         index: true,
                         element: <HomePage />,
+                    },
+                    {
+                        path: ROUTER_KEYS.PRODUCTS.ROOT,
+                        children: [
+                            {
+                                index: true,
+                                element: <ViewProducts />,
+                            },
+                        ],
                     },
                 ],
             },
