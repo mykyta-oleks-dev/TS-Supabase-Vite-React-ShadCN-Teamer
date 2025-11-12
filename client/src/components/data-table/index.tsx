@@ -14,7 +14,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table';
-import { DataTablePagination } from './products-table/pagination';
+import { DataTablePagination } from './pagination';
 import type { GetQueryParams } from '@/types/api';
 
 interface DataTableProps<TData, TValue> {
@@ -30,7 +30,7 @@ export function DataTable<TData, TValue>({
     data,
     pages,
     params,
-    onPaginationChange: handlePaginationChange
+    onPaginationChange: handlePaginationChange,
 }: Readonly<DataTableProps<TData, TValue>>) {
     const table = useReactTable({
         data,

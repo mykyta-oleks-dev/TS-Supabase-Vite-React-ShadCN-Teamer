@@ -55,3 +55,11 @@ export const TEAMS_FIELDS = {
         PLACEHOLDER: 'My Awesome Team',
     },
 } as const;
+
+export const PRODUCTS_FILTER_FIELDS = {
+    TEXT: {
+        NAME: 'text',
+        LABEL: 'Search text',
+        PLACEHOLDER: 'Succulent chineese meal...',
+    },
+} as const;

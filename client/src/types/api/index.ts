@@ -1,4 +1,9 @@
-import { isStatus, type ProductAPI, type Status } from '../models/product.types';
+import { validateDateString } from '@/lib/validation';
+import {
+    isStatus,
+    type ProductAPI,
+    type Status,
+} from '../models/product.types';
 import type { TeamAPI } from '../models/team.types';
 import type { UserAPI } from '../models/user.types';
 
@@ -56,6 +61,9 @@ export interface GetQueryParams {
     limit: number;
     orderBy?: string;
     orderByType?: 'desc' | 'asc';
+    dateFrom?: Date;
+    dateTo?: Date;
+    dateType?: 'created_at' | 'updated_at';
 }
 
 export interface GetProductQueryParams extends GetQueryParams {
@@ -83,6 +91,25 @@ export const parseSearchParams = (searchParams: URLSearchParams) => {
 
     if (orderByType === 'asc' || orderByType === 'desc') {
         queryParams.orderByType = orderByType;
+    }
+
+    const dateFrom = validateDateString(searchParams.get('dateFrom'));
+    const dateTo = validateDateString(searchParams.get('dateTo'));
+    const dateType = searchParams.get('dateType');
+
+    if (dateFrom) {
+        queryParams.dateFrom = dateFrom;
+    }
+
+    if (dateTo) {
+        queryParams.dateTo = dateTo;
+    }
+
+    if (dateFrom || dateTo) {
+        queryParams.dateType =
+            dateType === 'created_at' || dateType === 'updated_at'
+                ? dateType
+                : 'created_at';
     }
 
     return queryParams;

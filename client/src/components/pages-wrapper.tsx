@@ -10,7 +10,7 @@ const PagesWrapper = () => {
 
     return (
         <div className="min-h-screen w-full relative flex justify-around items-center">
-            {isLoading && <PagesLoader />}
+            {isLoading && <PagesLoader className='z-50' />}
             <Outlet />
         </div>
     );
