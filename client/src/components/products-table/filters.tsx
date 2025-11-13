@@ -8,6 +8,7 @@ import { PRODUCTS_FILTER_FIELDS } from '@/constants/fields.constants';
 import useUsers from '@/hooks/query/user/useUsers';
 import { handleError } from '@/lib/utils';
 import {
+    DATE_FIELDS,
     productsFiltersSchema,
     type productsFiltersData,
 } from '@/schemas/products.schemas';
@@ -21,14 +22,14 @@ import FieldBlock from '../field-block';
 import SubmitButton from '../submit-button';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import SelectBlock from '../ui/select-bloc';
+import SelectBlock from '../ui/select-block';
 
 interface ProductsFiltersProps {
     params: GetProductQueryParams;
     onFiltersSave: (values: productsFiltersData) => void;
 }
 
-const { TEXT, STATUS, USER, DATES } = PRODUCTS_FILTER_FIELDS;
+const { TEXT, STATUS, USER, DATES, DATE } = PRODUCTS_FILTER_FIELDS;
 
 const ProductsFilters = ({
     params,
@@ -48,6 +49,7 @@ const ProductsFilters = ({
                 from: params.dateFrom,
                 to: params.dateTo,
             },
+            date: 'created_at'
         },
     });
 
@@ -95,6 +97,7 @@ const ProductsFilters = ({
                             label={STATUS.LABEL}
                             render={({ field, fieldState }) => (
                                 <SelectBlock
+                                    withAll
                                     name={field.name}
                                     value={field.value}
                                     onChange={field.onChange}
@@ -115,6 +118,7 @@ const ProductsFilters = ({
                             label={USER.LABEL}
                             render={({ field, fieldState }) => (
                                 <SelectBlock
+                                    withAll
                                     name={field.name}
                                     value={field.value}
                                     onChange={field.onChange}
@@ -144,6 +148,24 @@ const ProductsFilters = ({
                                     }
                                     onChange={field.onChange}
                                     placeholder={DATES.PLACEHOLDER}
+                                />
+                            )}
+                        />
+
+                        <FieldBlock
+                            control={control}
+                            name={DATE.NAME}
+                            label={DATE.LABEL}
+                            render={({ field, fieldState }) => (
+                                <SelectBlock
+                                    name={field.name}
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    id={DATE.NAME}
+                                    isInvalid={fieldState.invalid}
+                                    isLoading={isLoading}
+                                    placeholder={DATE.PLACEHOLDER}
+                                    options={DATE_FIELDS.map((d) => d)}
                                 />
                             )}
                         />

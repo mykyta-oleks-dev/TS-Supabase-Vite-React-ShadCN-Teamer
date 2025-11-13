@@ -1,17 +1,25 @@
+import { GET_PARAMS } from '@/constants/search-params-keys.constants';
 import { statuses } from '@/types/models/product.types';
 import z from 'zod';
 
+export const DATE_FIELDS = [
+    { value: 'created_at', label: 'Created At' },
+    { value: 'updated_at', label: 'Updated At' },
+] as const;
+
 export const productsFiltersSchema = z.object({
-    text: z.string().trim().optional(),
-    status: z.enum(statuses).optional(),
-    user_id: z.string().trim().optional(),
-    dates: z
+    [GET_PARAMS.PRODUCT.TEXT]: z.string().trim().optional(),
+    [GET_PARAMS.PRODUCT.STATUS]: z.enum(statuses).optional(),
+    [GET_PARAMS.PRODUCT.USER_ID]: z.string().trim().optional(),
+    [GET_PARAMS.DATES]: z
         .object({
-            to: z.date().optional(),
-            from: z.date().optional(),
+            [GET_PARAMS.TO]: z.date().optional(),
+            [GET_PARAMS.FROM]: z.date().optional(),
         })
         .optional(),
-    dateType: z.enum(['created_at', 'updated_at']).optional(),
+    [GET_PARAMS.DATE_TYPE]: z
+        .enum(DATE_FIELDS.map((obj) => obj.value))
+        .optional(),
 });
 
 export type productsFiltersData = z.infer<typeof productsFiltersSchema>;

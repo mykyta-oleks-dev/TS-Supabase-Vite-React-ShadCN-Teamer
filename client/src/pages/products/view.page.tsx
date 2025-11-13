@@ -30,28 +30,33 @@ const ViewProducts = () => {
 
     const handleFiltersSave = (data: productsFiltersData) => {
         setSearchParams((prev) => {
-            const { text, status, user_id, dates } = data;
+            const newParams = new URLSearchParams(prev);
 
-            if (text) prev.set(GET_PARAMS.PRODUCT.TEXT, text);
-            else prev.delete(GET_PARAMS.PRODUCT.TEXT);
+            const { text, status, user_id, dates, date } = data;
 
-            if (status) prev.set(GET_PARAMS.PRODUCT.STATUS, status);
-            else prev.delete(GET_PARAMS.PRODUCT.STATUS);
+            if (text) newParams.set(GET_PARAMS.PRODUCT.TEXT, text);
+            else newParams.delete(GET_PARAMS.PRODUCT.TEXT);
 
-            if (user_id) prev.set(GET_PARAMS.PRODUCT.USER_ID, user_id);
-            else prev.delete(GET_PARAMS.PRODUCT.USER_ID);
+            if (status) newParams.set(GET_PARAMS.PRODUCT.STATUS, status);
+            else newParams.delete(GET_PARAMS.PRODUCT.STATUS);
+
+            if (user_id) newParams.set(GET_PARAMS.PRODUCT.USER_ID, user_id);
+            else newParams.delete(GET_PARAMS.PRODUCT.USER_ID);
 
             if (dates?.from) {
                 dates.from.setHours(0, 0, 0, 0);
-                prev.set(GET_PARAMS.DATE_FROM, dates.from.toISOString());
-            } else prev.delete(GET_PARAMS.DATE_FROM);
+                newParams.set(GET_PARAMS.DATE_FROM, dates.from.toISOString());
+            } else newParams.delete(GET_PARAMS.DATE_FROM);
 
             if (dates?.to) {
                 dates.to.setHours(23, 59, 59, 999);
-                prev.set(GET_PARAMS.DATE_TO, dates.to.toISOString());
-            } else prev.delete(GET_PARAMS.DATE_TO);
+                newParams.set(GET_PARAMS.DATE_TO, dates.to.toISOString());
+            } else newParams.delete(GET_PARAMS.DATE_TO);
 
-            return prev;
+            if (date) newParams.set(GET_PARAMS.DATE_TYPE, date);
+            else newParams.delete(GET_PARAMS.DATE_TYPE);
+
+            return newParams;
         });
     };
 

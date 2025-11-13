@@ -89,13 +89,13 @@ export const parseSearchParams = (searchParams: URLSearchParams) => {
     const orderBy = searchParams.get(GET_PARAMS.ORDER_BY);
 
     if (orderBy) {
-        queryParams.orderBy = orderBy;
+        queryParams[GET_PARAMS.ORDER_BY] = orderBy;
     }
 
     const orderByType = searchParams.get(GET_PARAMS.ORDER_BY_TYPE);
 
     if (orderByType === 'asc' || orderByType === 'desc') {
-        queryParams.orderByType = orderByType;
+        queryParams[GET_PARAMS.ORDER_BY_TYPE] = orderByType;
     }
 
     const dateFrom = validateDateString(searchParams.get(GET_PARAMS.DATE_FROM));
@@ -103,15 +103,15 @@ export const parseSearchParams = (searchParams: URLSearchParams) => {
     const dateType = searchParams.get(GET_PARAMS.DATE_TYPE);
 
     if (dateFrom) {
-        queryParams.dateFrom = dateFrom;
+        queryParams[GET_PARAMS.DATE_FROM] = dateFrom;
     }
 
     if (dateTo) {
-        queryParams.dateTo = dateTo;
+        queryParams[GET_PARAMS.DATE_TO] = dateTo;
     }
 
     if (dateFrom || dateTo) {
-        queryParams.dateType =
+        queryParams[GET_PARAMS.DATE_TYPE] =
             dateType === 'created_at' || dateType === 'updated_at'
                 ? dateType
                 : 'created_at';
@@ -126,25 +126,27 @@ export const parseProductSearchParams = (
     const productQueryParams: GetProductQueryParams =
         parseSearchParams(searchParams);
 
-    const text = searchParams.get(GET_PARAMS.PRODUCT.TEXT) ?? searchParams.get(GET_PARAMS.PRODUCT.SEARCH);
+    const text =
+        searchParams.get(GET_PARAMS.PRODUCT.TEXT) ??
+        searchParams.get(GET_PARAMS.PRODUCT.SEARCH);
 
     if (text) {
-        productQueryParams.text = text;
+        productQueryParams[GET_PARAMS.PRODUCT.TEXT] = text;
     }
 
     const user_id = searchParams.get(GET_PARAMS.PRODUCT.USER_ID);
     const userId = searchParams.get(GET_PARAMS.PRODUCT.USERID);
 
     if (user_id) {
-        productQueryParams.user_id = user_id;
+        productQueryParams[GET_PARAMS.PRODUCT.USER_ID] = user_id;
     } else if (userId) {
-        productQueryParams.user_id = userId;
+        productQueryParams[GET_PARAMS.PRODUCT.USER_ID] = userId;
     }
 
     const status = searchParams.get('status');
 
     if (isStatus(status)) {
-        productQueryParams.status = status;
+        productQueryParams[GET_PARAMS.PRODUCT.STATUS] = status;
     }
 
     return productQueryParams;

@@ -159,10 +159,10 @@ class ProductsService {
         }
 
         if (
-            raw.dateType &&
-            (raw.dateType === 'created_at' || raw.dateType === 'updated_at')
+            raw.date &&
+            (raw.date === 'created_at' || raw.date === 'updated_at')
         ) {
-            query.dateType = raw.dateType;
+            query.date = raw.date;
         }
 
         return query;

@@ -5,7 +5,11 @@ export const GET_PARAMS = {
     ORDER_BY_TYPE: 'orderByType',
     DATE_FROM: 'dateFrom',
     DATE_TO: 'dateTo',
-    DATE_TYPE: 'dateType',
+    DATE_TYPE: 'date',
+
+	DATES: 'dates',
+	TO: 'to',
+	FROM: 'from',
 
     PRODUCT: {
         TEXT: 'text',

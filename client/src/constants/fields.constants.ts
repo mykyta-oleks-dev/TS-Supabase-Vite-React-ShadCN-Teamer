@@ -1,3 +1,4 @@
+import { GET_PARAMS } from './search-params-keys.constants';
 import { getAcceptedImageTypesStr } from './validation.constants';
 
 export const AUTH_FIELDS = {
@@ -58,23 +59,28 @@ export const TEAMS_FIELDS = {
 
 export const PRODUCTS_FILTER_FIELDS = {
     TEXT: {
-        NAME: 'text',
+        NAME: GET_PARAMS.PRODUCT.TEXT,
         LABEL: 'Search text',
         PLACEHOLDER: 'Succulent chineese meal...',
     },
     STATUS: {
-        NAME: 'status',
+        NAME: GET_PARAMS.PRODUCT.STATUS,
         LABEL: 'Products status',
         PLACEHOLDER: 'Select status',
     },
     USER: {
-        NAME: 'user_id',
+        NAME: GET_PARAMS.PRODUCT.USER_ID,
         LABEL: 'User',
         PLACEHOLDER: 'Select user',
     },
     DATES: {
-        NAME: 'dates',
+        NAME: GET_PARAMS.DATES,
         LABEL: 'Dates range',
         PLACEHOLDER: 'Select the range of dates',
+    },
+    DATE: {
+        NAME: GET_PARAMS.DATE_TYPE,
+        LABEL: "Date",
+        PLACEHOLDER: 'Select the date to filter by',
     },
 } as const;

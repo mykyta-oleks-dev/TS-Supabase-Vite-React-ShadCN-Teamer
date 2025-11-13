@@ -6,13 +6,11 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '../ui/select';
+} from './select';
 
-interface SelectBlockProps {
+type SelectBlockProps = {
     id: string;
     name: string;
-    value: unknown | undefined;
-    onChange: (value: unknown | undefined) => void;
     placeholder: string;
     isInvalid: boolean | undefined;
     isLoading?: boolean;
@@ -23,7 +21,18 @@ interface SelectBlockProps {
           }[]
         | undefined
         | null;
-}
+} & (
+    | {
+          withAll: true;
+          value: unknown | undefined;
+          onChange: (value: unknown | undefined) => void;
+      }
+    | {
+          withAll?: false;
+          value: unknown;
+          onChange: (value: unknown) => void;
+      }
+);
 
 const SelectBlock = ({
     name,
@@ -34,13 +43,14 @@ const SelectBlock = ({
     isLoading,
     placeholder,
     options,
+    withAll,
 }: SelectBlockProps) => {
     return (
         <Select
             name={name}
             value={typeof value === 'string' ? value : 'all'}
             onValueChange={(value) =>
-                onChange(value === 'all' ? undefined : value)
+                onChange(withAll && value === 'all' ? undefined : value)
             }
         >
             <SelectTrigger
@@ -52,7 +62,7 @@ const SelectBlock = ({
                 <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent position="popper">
-                <SelectItem value="all">All</SelectItem>
+                {withAll && <SelectItem value="all">All</SelectItem>}
                 {options?.map((o) => (
                     <SelectItem key={o.value} value={o.value}>
                         {o.label}
