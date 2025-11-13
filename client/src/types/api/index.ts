@@ -6,6 +6,7 @@ import {
 } from '../models/product.types';
 import type { TeamAPI } from '../models/team.types';
 import type { UserAPI } from '../models/user.types';
+import { GET_PARAMS } from '@/constants/search-params-keys.constants';
 
 export interface DefaultBody {
     message: string;
@@ -61,45 +62,45 @@ export interface ManyProducts extends DefaultBody {
 }
 
 export interface GetQueryParams {
-    page: number;
-    limit: number;
-    orderBy?: string;
-    orderByType?: 'desc' | 'asc';
-    dateFrom?: Date;
-    dateTo?: Date;
-    dateType?: 'created_at' | 'updated_at';
+    [GET_PARAMS.PAGE]: number;
+    [GET_PARAMS.LIMIT]: number;
+    [GET_PARAMS.ORDER_BY]?: string;
+    [GET_PARAMS.ORDER_BY_TYPE]?: 'desc' | 'asc';
+    [GET_PARAMS.DATE_FROM]?: Date;
+    [GET_PARAMS.DATE_TO]?: Date;
+    [GET_PARAMS.DATE_TYPE]?: 'created_at' | 'updated_at';
 }
 
 export interface GetProductQueryParams extends GetQueryParams {
-    text?: string;
-    userId?: string;
-    status?: Status;
+    [GET_PARAMS.PRODUCT.TEXT]?: string;
+    [GET_PARAMS.PRODUCT.USER_ID]?: string;
+    [GET_PARAMS.PRODUCT.STATUS]?: Status;
 }
 
 export const parseSearchParams = (searchParams: URLSearchParams) => {
-    const page = Number.parseInt(searchParams.get('page') ?? '1');
+    const page = Number.parseInt(searchParams.get(GET_PARAMS.PAGE) ?? '1');
     const limit = Math.max(
-        Number.parseInt(searchParams.get('limit') ?? '10'),
+        Number.parseInt(searchParams.get(GET_PARAMS.LIMIT) ?? '10'),
         1
     );
 
     const queryParams: GetQueryParams = { page, limit };
 
-    const orderBy = searchParams.get('orderBy');
+    const orderBy = searchParams.get(GET_PARAMS.ORDER_BY);
 
     if (orderBy) {
         queryParams.orderBy = orderBy;
     }
 
-    const orderByType = searchParams.get('orderByType');
+    const orderByType = searchParams.get(GET_PARAMS.ORDER_BY_TYPE);
 
     if (orderByType === 'asc' || orderByType === 'desc') {
         queryParams.orderByType = orderByType;
     }
 
-    const dateFrom = validateDateString(searchParams.get('dateFrom'));
-    const dateTo = validateDateString(searchParams.get('dateTo'));
-    const dateType = searchParams.get('dateType');
+    const dateFrom = validateDateString(searchParams.get(GET_PARAMS.DATE_FROM));
+    const dateTo = validateDateString(searchParams.get(GET_PARAMS.DATE_TO));
+    const dateType = searchParams.get(GET_PARAMS.DATE_TYPE);
 
     if (dateFrom) {
         queryParams.dateFrom = dateFrom;
@@ -125,19 +126,19 @@ export const parseProductSearchParams = (
     const productQueryParams: GetProductQueryParams =
         parseSearchParams(searchParams);
 
-    const text = searchParams.get('text') ?? searchParams.get('search');
+    const text = searchParams.get(GET_PARAMS.PRODUCT.TEXT) ?? searchParams.get(GET_PARAMS.PRODUCT.SEARCH);
 
     if (text) {
         productQueryParams.text = text;
     }
 
-    const user_id = searchParams.get('user_id');
-    const userId = searchParams.get('userId');
+    const user_id = searchParams.get(GET_PARAMS.PRODUCT.USER_ID);
+    const userId = searchParams.get(GET_PARAMS.PRODUCT.USERID);
 
     if (user_id) {
-        productQueryParams.userId = user_id;
+        productQueryParams.user_id = user_id;
     } else if (userId) {
-        productQueryParams.userId = userId;
+        productQueryParams.user_id = userId;
     }
 
     const status = searchParams.get('status');

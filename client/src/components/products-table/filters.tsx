@@ -4,34 +4,31 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion';
+import { PRODUCTS_FILTER_FIELDS } from '@/constants/fields.constants';
+import useUsers from '@/hooks/query/user/useUsers';
+import { handleError } from '@/lib/utils';
 import {
     productsFiltersSchema,
     type productsFiltersData,
 } from '@/schemas/products.schemas';
 import type { GetProductQueryParams } from '@/types/api';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import FieldBlock from '../field-block';
-import { PRODUCTS_FILTER_FIELDS } from '@/constants/fields.constants';
-import { Input } from '../ui/input';
-import SubmitButton from '../submit-button';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '../ui/select';
 import { statuses } from '@/types/models/product.types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { isDateRange } from 'react-day-picker';
+import { useForm } from 'react-hook-form';
+import DatePickerRange from '../date-picker-range';
+import FieldBlock from '../field-block';
+import SubmitButton from '../submit-button';
 import { Button } from '../ui/button';
-import useUsers from '@/hooks/query/user/useUsers';
-import { handleError } from '@/lib/utils';
-import PagesLoader from '../pages-loader';
+import { Input } from '../ui/input';
+import SelectBlock from '../ui/select-bloc';
 
 interface ProductsFiltersProps {
     params: GetProductQueryParams;
     onFiltersSave: (values: productsFiltersData) => void;
 }
+
+const { TEXT, STATUS, USER, DATES } = PRODUCTS_FILTER_FIELDS;
 
 const ProductsFilters = ({
     params,
@@ -45,7 +42,12 @@ const ProductsFilters = ({
         resolver: zodResolver(productsFiltersSchema),
         defaultValues: {
             text: params.text ?? '',
-            status: undefined,
+            status: params.status,
+            user_id: params.user_id,
+            dates: {
+                from: params.dateFrom,
+                to: params.dateTo,
+            },
         },
     });
 
@@ -66,99 +68,83 @@ const ProductsFilters = ({
                 <AccordionContent className="p-2">
                     <form
                         onSubmit={handleSubmit(handleFiltersSave)}
-                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-3 gap-3"
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-4 gap-3"
                     >
                         <FieldBlock
                             className="col-span-full"
                             control={control}
-                            name={PRODUCTS_FILTER_FIELDS.TEXT.NAME}
-                            label={PRODUCTS_FILTER_FIELDS.TEXT.LABEL}
+                            name={TEXT.NAME}
+                            label={TEXT.LABEL}
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={PRODUCTS_FILTER_FIELDS.TEXT.NAME}
-                                    placeholder={
-                                        PRODUCTS_FILTER_FIELDS.TEXT.PLACEHOLDER
+                                    value={
+                                        typeof field.value === 'string'
+                                            ? field.value
+                                            : ''
                                     }
+                                    id={TEXT.NAME}
+                                    placeholder={TEXT.PLACEHOLDER}
                                 />
                             )}
                         />
 
                         <FieldBlock
                             control={control}
-                            name={PRODUCTS_FILTER_FIELDS.STATUS.NAME}
-                            label={PRODUCTS_FILTER_FIELDS.STATUS.LABEL}
+                            name={STATUS.NAME}
+                            label={STATUS.LABEL}
                             render={({ field, fieldState }) => (
-                                <Select
+                                <SelectBlock
                                     name={field.name}
-                                    value={field.value ? field.value : 'all'}
-                                    onValueChange={(value) =>
-                                        field.onChange(
-                                            value === 'all' ? undefined : value
-                                        )
-                                    }
-                                >
-                                    <SelectTrigger
-                                        id={PRODUCTS_FILTER_FIELDS.STATUS.NAME}
-                                        aria-invalid={fieldState.invalid}
-                                    >
-                                        <SelectValue
-                                            placeholder={
-                                                PRODUCTS_FILTER_FIELDS.STATUS
-                                                    .PLACEHOLDER
-                                            }
-                                            className="capitalize"
-                                        />
-                                    </SelectTrigger>
-                                    <SelectContent position="popper">
-                                        <SelectItem value="all">All</SelectItem>
-                                        {statuses.map((s) => (
-                                            <SelectItem key={s} value={s}>
-                                                {s[0].toUpperCase() + s.slice(1)}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    id={STATUS.NAME}
+                                    isInvalid={fieldState.invalid}
+                                    placeholder={STATUS.PLACEHOLDER}
+                                    options={statuses?.map((s) => ({
+                                        label: s[0].toUpperCase() + s.slice(1),
+                                        value: s,
+                                    }))}
+                                />
                             )}
                         />
 
                         <FieldBlock
                             control={control}
-                            name={PRODUCTS_FILTER_FIELDS.USER.NAME}
-                            label={PRODUCTS_FILTER_FIELDS.USER.LABEL}
+                            name={USER.NAME}
+                            label={USER.LABEL}
                             render={({ field, fieldState }) => (
-                                <Select
+                                <SelectBlock
                                     name={field.name}
-                                    value={field.value ? field.value : 'all'}
-                                    onValueChange={(value) =>
-                                        field.onChange(
-                                            value === 'all' ? undefined : value
-                                        )
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    id={USER.NAME}
+                                    isInvalid={fieldState.invalid}
+                                    isLoading={isLoading}
+                                    placeholder={USER.PLACEHOLDER}
+                                    options={users?.map((u) => ({
+                                        label: u.full_name,
+                                        value: u.id,
+                                    }))}
+                                />
+                            )}
+                        />
+
+                        <FieldBlock
+                            control={control}
+                            name={DATES.NAME}
+                            label={DATES.LABEL}
+                            render={({ field }) => (
+                                <DatePickerRange
+                                    id={DATES.NAME}
+                                    value={
+                                        isDateRange(field.value)
+                                            ? field.value
+                                            : undefined
                                     }
-                                >
-                                    <SelectTrigger
-                                        id={PRODUCTS_FILTER_FIELDS.USER.NAME}
-                                        aria-invalid={fieldState.invalid}
-                                        className='relative'
-                                    >
-                                        {isLoading && <PagesLoader />}
-                                        <SelectValue
-                                            placeholder={
-                                                PRODUCTS_FILTER_FIELDS.USER
-                                                    .PLACEHOLDER
-                                            }
-                                            className="capitalize"
-                                        />
-                                    </SelectTrigger>
-                                    <SelectContent position="popper">
-                                        <SelectItem value="all">All</SelectItem>
-                                        {users?.map((u) => (
-                                            <SelectItem key={u.id} value={u.id}>
-                                                {u.full_name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                    onChange={field.onChange}
+                                    placeholder={DATES.PLACEHOLDER}
+                                />
                             )}
                         />
 

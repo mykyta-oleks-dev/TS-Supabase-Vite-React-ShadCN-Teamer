@@ -71,5 +71,10 @@ export const PRODUCTS_FILTER_FIELDS = {
         NAME: 'user_id',
         LABEL: 'User',
         PLACEHOLDER: 'Select user',
-    }
+    },
+    DATES: {
+        NAME: 'dates',
+        LABEL: 'Dates range',
+        PLACEHOLDER: 'Select the range of dates',
+    },
 } as const;

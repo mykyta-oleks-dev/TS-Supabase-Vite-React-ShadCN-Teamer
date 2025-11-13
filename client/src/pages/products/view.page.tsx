@@ -3,6 +3,7 @@ import PageTitle from '@/components/page-title';
 import PagesLoader from '@/components/pages-loader';
 import { productsColumns } from '@/components/products-table/columns';
 import ProductsFilters from '@/components/products-table/filters';
+import { GET_PARAMS } from '@/constants/search-params-keys.constants';
 import useProducts from '@/hooks/query/products/useProducts';
 import useProductPaginationParams from '@/hooks/usePaginationSearchParams';
 import { handleError } from '@/lib/utils';
@@ -20,25 +21,35 @@ const ViewProducts = () => {
         setSearchParams((prev) => {
             const { pageIndex, pageSize } = newState;
 
-            prev.set('page', pageIndex + 1 + '');
-            prev.set('limit', pageSize + '');
+            prev.set(GET_PARAMS.PAGE, pageIndex + 1 + '');
+            prev.set(GET_PARAMS.LIMIT, pageSize + '');
 
             return prev;
         });
     };
 
-    const handleFiltersSave = (data: productsFiltersData) => {        
+    const handleFiltersSave = (data: productsFiltersData) => {
         setSearchParams((prev) => {
-            const { text, status, user_id } = data;
+            const { text, status, user_id, dates } = data;
 
-            if (text) prev.set('text', text);
-            else prev.delete('text');
-            
-            if (status) prev.set('status', status);
-            else prev.delete('status');
-            
-            if (user_id) prev.set('user_id', user_id);
-            else prev.delete('user_id');
+            if (text) prev.set(GET_PARAMS.PRODUCT.TEXT, text);
+            else prev.delete(GET_PARAMS.PRODUCT.TEXT);
+
+            if (status) prev.set(GET_PARAMS.PRODUCT.STATUS, status);
+            else prev.delete(GET_PARAMS.PRODUCT.STATUS);
+
+            if (user_id) prev.set(GET_PARAMS.PRODUCT.USER_ID, user_id);
+            else prev.delete(GET_PARAMS.PRODUCT.USER_ID);
+
+            if (dates?.from) {
+                dates.from.setHours(0, 0, 0, 0);
+                prev.set(GET_PARAMS.DATE_FROM, dates.from.toISOString());
+            } else prev.delete(GET_PARAMS.DATE_FROM);
+
+            if (dates?.to) {
+                dates.to.setHours(23, 59, 59, 999);
+                prev.set(GET_PARAMS.DATE_TO, dates.to.toISOString());
+            } else prev.delete(GET_PARAMS.DATE_TO);
 
             return prev;
         });
