@@ -6,5 +6,5 @@ export const KEYS = {
 	TEAMS: ['teams'],
 	TEAM_BY_ID: (id?: string | null) => ['teams', id],
 	PRODUCTS: (params?: GetProductQueryParams) => ['products', params],
-	PRODUCT_BY_ID: (id?: string | null) => ['products', id],
+	PRODUCT_BY_ID: (id?: number | null) => ['products', id],
 } as const;

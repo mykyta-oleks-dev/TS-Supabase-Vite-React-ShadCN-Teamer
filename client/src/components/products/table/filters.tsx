@@ -17,12 +17,12 @@ import { statuses } from '@/types/models/product.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { isDateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
-import DatePickerRange from '../date-picker-range';
-import FieldBlock from '../field-block';
-import SubmitButton from '../submit-button';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import SelectBlock from '../ui/select-block';
+import DatePickerRange from '../../date-picker-range';
+import FieldBlock from '../../field-block';
+import SubmitButton from '../../submit-button';
+import { Button } from '../../ui/button';
+import { Input } from '../../ui/input';
+import SelectBlock from '../../ui/select-block';
 
 interface ProductsFiltersProps {
     params: GetProductQueryParams;
@@ -49,7 +49,7 @@ const ProductsFilters = ({
                 from: params.dateFrom,
                 to: params.dateTo,
             },
-            date: 'created_at'
+            date: 'created_at',
         },
     });
 

@@ -25,13 +25,13 @@ interface DataTableProps<TData, TValue> {
     onPaginationChange: (newState: PaginationState) => void;
 }
 
-export function DataTable<TData, TValue>({
+const DataTable = <TData, TValue>({
     columns,
     data,
     pages,
     params,
     onPaginationChange: handlePaginationChange,
-}: Readonly<DataTableProps<TData, TValue>>) {
+}: Readonly<DataTableProps<TData, TValue>>) => {
     const table = useReactTable({
         data,
         columns,
@@ -110,3 +110,5 @@ export function DataTable<TData, TValue>({
         </div>
     );
 }
+
+export default DataTable;

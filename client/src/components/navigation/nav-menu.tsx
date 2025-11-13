@@ -18,7 +18,7 @@ const links: {
 const NavMenu = () => {
     return (
         <div className="flex flex-col gap-3 h-full">
-            <nav>
+            <nav className='mb-5'>
                 <ul className="flex flex-col gap-3">
                     {links.map((l) => (
                         <li key={l.to}>

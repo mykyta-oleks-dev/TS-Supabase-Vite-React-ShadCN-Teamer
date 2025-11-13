@@ -8,7 +8,7 @@ const Layout = () => {
     return (
         <div className="w-full md:container md:p-3 min-h-screen grid grid-cols-1 grid-rows-[auto_1fr] md:grid-cols-[180px_1fr] md:grid-rows-1 gap-5">
             <Navigation />
-            <main className="px-5 md:p-0">
+            <main className="px-5 md:p-0 w-full min-h-full">
                 <Outlet />
             </main>
         </div>

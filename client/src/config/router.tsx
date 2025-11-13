@@ -8,7 +8,8 @@ import CreateProfilePage from '@/pages/auth/create-profile.page';
 import JoinOrCreateTeamPage from '../pages/auth/join-or-create-team.page';
 import ResetPassword from '@/pages/auth/reset-password.page';
 import Layout from '@/components/layout';
-import ViewProducts from '@/pages/products/view.page';
+import ProductsTablePage from '@/pages/products/table.page';
+import ProductDetailsPage from '@/pages/products/details.page';
 
 const router = createBrowserRouter([
     {
@@ -27,8 +28,17 @@ const router = createBrowserRouter([
                         children: [
                             {
                                 index: true,
-                                element: <ViewProducts />,
+                                element: <ProductsTablePage />,
                             },
+                            {
+                                path: ROUTER_KEYS.DYNAMIC,
+                                children: [
+                                    {
+                                        index: true,
+                                        element: <ProductDetailsPage />
+                                    }
+                                ]
+                            }
                         ],
                     },
                 ],

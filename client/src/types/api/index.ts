@@ -53,6 +53,14 @@ export const isWithCount = (res: OneTeam): res is OneTeamCount =>
 export const isWithArray = (res: OneTeam): res is OneTeamArray =>
     Array.isArray(res.users);
 
+export interface OneProduct extends DefaultBody {
+    product: ProductAPI;
+}
+
+export interface OneProductParsed extends DefaultBody {
+    product: Product;
+}
+
 interface ManyProductsBase extends DefaultBody {
     total: number;
     pages: number;

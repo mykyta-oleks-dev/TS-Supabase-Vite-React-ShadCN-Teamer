@@ -16,16 +16,19 @@ import useProductPaginationParams from '@/hooks/useProductPaginationParams';
 import DeleteAction from './delete';
 import PagesLoader from '@/components/pages-loader';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { ROUTES } from '@/constants/router.constants';
 
 const ActionsCell = ({ product }: { product: Product }) => {
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
 
     const { productQuery } = useProductPaginationParams();
 
     const { mutateAsync, isPending } = useProductStatusMutation(productQuery);
 
     const { id, status } = product;
-    
+
     const handleChangeStatus = async (status: Status) => {
         setOpen(false);
 
@@ -48,7 +51,8 @@ const ActionsCell = ({ product }: { product: Product }) => {
                 {isPending && <PagesLoader />}
 
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => console.log(product.title)}>
+
+                <DropdownMenuItem onClick={() => navigate(ROUTES.PRODUCTS.ONE(id))}>
                     View Details
                 </DropdownMenuItem>
                 <DropdownMenuItem disabled={status !== 'draft'}>

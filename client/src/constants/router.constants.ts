@@ -1,7 +1,6 @@
-export const DYNAMIC = ':id';
-
 export const ROUTER_KEYS = {
 	ROOT: '/',
+	DYNAMIC: ':id',
 	AUTH: {
 		ROOT: 'auth',
 		LOG_IN: 'log-in',

@@ -4,7 +4,7 @@ import type { GetProductQueryParams, ManyProductsParsed } from '@/types/api';
 import { mapProductFromAPI } from '@/types/models/product.types';
 import { useQuery } from '@tanstack/react-query';
 
-const useProducts = (params?: GetProductQueryParams) => {
+const useManyProducts = (params?: GetProductQueryParams) => {
     return useQuery({
         queryKey: KEYS.PRODUCTS(params),
         queryFn: async () => {
@@ -17,8 +17,8 @@ const useProducts = (params?: GetProductQueryParams) => {
 
             return data;
         },
-        placeholderData: (previousData) => previousData
+        placeholderData: (previousData) => previousData,
     });
 };
 
-export default useProducts;
+export default useManyProducts;
