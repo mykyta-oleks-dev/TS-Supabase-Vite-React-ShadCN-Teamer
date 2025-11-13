@@ -24,6 +24,9 @@ import {
 } from '../ui/select';
 import { statuses } from '@/types/models/product.types';
 import { Button } from '../ui/button';
+import useUsers from '@/hooks/query/user/useUsers';
+import { handleError } from '@/lib/utils';
+import PagesLoader from '../pages-loader';
 
 interface ProductsFiltersProps {
     params: GetProductQueryParams;
@@ -45,6 +48,10 @@ const ProductsFilters = ({
             status: undefined,
         },
     });
+
+    const { data: users, isLoading, error } = useUsers();
+
+    if (error) handleError(error, true);
 
     return (
         <Accordion
@@ -96,7 +103,10 @@ const ProductsFilters = ({
                                         aria-invalid={fieldState.invalid}
                                     >
                                         <SelectValue
-                                            placeholder="Select"
+                                            placeholder={
+                                                PRODUCTS_FILTER_FIELDS.STATUS
+                                                    .PLACEHOLDER
+                                            }
                                             className="capitalize"
                                         />
                                     </SelectTrigger>
@@ -104,7 +114,47 @@ const ProductsFilters = ({
                                         <SelectItem value="all">All</SelectItem>
                                         {statuses.map((s) => (
                                             <SelectItem key={s} value={s}>
-                                                {s}
+                                                {s[0].toUpperCase() + s.slice(1)}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+
+                        <FieldBlock
+                            control={control}
+                            name={PRODUCTS_FILTER_FIELDS.USER.NAME}
+                            label={PRODUCTS_FILTER_FIELDS.USER.LABEL}
+                            render={({ field, fieldState }) => (
+                                <Select
+                                    name={field.name}
+                                    value={field.value ? field.value : 'all'}
+                                    onValueChange={(value) =>
+                                        field.onChange(
+                                            value === 'all' ? undefined : value
+                                        )
+                                    }
+                                >
+                                    <SelectTrigger
+                                        id={PRODUCTS_FILTER_FIELDS.USER.NAME}
+                                        aria-invalid={fieldState.invalid}
+                                        className='relative'
+                                    >
+                                        {isLoading && <PagesLoader />}
+                                        <SelectValue
+                                            placeholder={
+                                                PRODUCTS_FILTER_FIELDS.USER
+                                                    .PLACEHOLDER
+                                            }
+                                            className="capitalize"
+                                        />
+                                    </SelectTrigger>
+                                    <SelectContent position="popper">
+                                        <SelectItem value="all">All</SelectItem>
+                                        {users?.map((u) => (
+                                            <SelectItem key={u.id} value={u.id}>
+                                                {u.full_name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>

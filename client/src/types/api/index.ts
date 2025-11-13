@@ -27,6 +27,10 @@ export interface OneUser extends DefaultBody {
     user: UserAPI;
 }
 
+export interface ManyUsers extends DefaultBody {
+    users: UserAPI[];
+}
+
 export interface OneTeam extends DefaultBody {
     team: TeamAPI;
     users: unknown;
@@ -127,9 +131,12 @@ export const parseProductSearchParams = (
         productQueryParams.text = text;
     }
 
+    const user_id = searchParams.get('user_id');
     const userId = searchParams.get('userId');
 
-    if (userId) {
+    if (user_id) {
+        productQueryParams.userId = user_id;
+    } else if (userId) {
         productQueryParams.userId = userId;
     }
 

@@ -65,5 +65,11 @@ export const PRODUCTS_FILTER_FIELDS = {
     STATUS: {
         NAME: 'status',
         LABEL: 'Products status',
+        PLACEHOLDER: 'Select status',
+    },
+    USER: {
+        NAME: 'user_id',
+        LABEL: 'User',
+        PLACEHOLDER: 'Select user',
     }
 } as const;

@@ -55,21 +55,16 @@ class TeamsRepository {
 
         if (!teamId) throw new NotFoundError(TEAMS_ERRORS.NOT_FOUND);
 
-        const { data, error } = deep
-            ? await this._getOnePopulated(client, teamId)
-            : await this._getOne(client, teamId);
+        const team = await this._getOne(client, teamId);
 
-        if (error) handleError(error);
+        const users = await this._getTeamUsers(client, teamId, deep);
 
-        if (!data || data === null)
-            throw new NotFoundError(TEAMS_ERRORS.NOT_FOUND);
-
-        const { users, products, ...team } = data;
+        const products = await this._getTeamProductsCount(client, teamId);
 
         return {
             team,
             users: 'count' in users[0] ? users[0].count : users,
-            products: products[0].count,
+            products,
         };
     };
 
@@ -107,38 +102,56 @@ class TeamsRepository {
         if (!teams?.length) throw new ForbiddenError(TEAMS_ERRORS.NOT_UPDATED);
     };
 
-    private readonly _getOnePopulated = async (
-        client: TypedSupabaseClient,
-        teamId: string
-    ) => {
-        return await client
-            .from(TABLES.TEAMS)
-            .select(
-                `
-                *,
-                users:users!users_team_id_fkey (*),
-                products:products!products_team_id_fkey (count)
-            `
-            )
-            .eq('id', teamId)
-            .single();
-    };
-
     private readonly _getOne = async (
         client: TypedSupabaseClient,
         teamId: string
     ) => {
-        return await client
+        const { data: team, error } = await client
             .from(TABLES.TEAMS)
-            .select(
-                `
-                *,
-                users:users!users_team_id_fkey (count),
-                products:products!products_team_id_fkey (count)
-            `
-            )
+            .select('*')
             .eq('id', teamId)
             .single();
+
+        if (error) handleError(error);
+
+        if (!team || team === null)
+            throw new NotFoundError(TEAMS_ERRORS.NOT_FOUND);
+
+        return team;
+    };
+
+    private readonly _getTeamUsers = async (
+        client: TypedSupabaseClient,
+        teamId: string,
+        deep?: boolean
+    ) => {
+        const { data: usersData, error: usersError } = await client
+            .from(TABLES.USERS)
+            .select(deep ? '*' : 'count', deep ? {} : { head: false })
+            .eq('team_id', teamId)
+            .eq('is_deleted', false);
+
+        if (usersError) handleError(usersError);
+
+        const users = usersData ?? [];
+
+        return users;
+    };
+
+    private readonly _getTeamProductsCount = async (
+        client: TypedSupabaseClient,
+        teamId: string
+    ) => {
+        const { data: productsData, error: productsError } = await client
+            .from(TABLES.PRODUCTS)
+            .select('count', { head: false })
+            .eq('team_id', teamId);
+
+        if (productsError) handleError(productsError);
+
+        const products = productsData?.[0].count ?? 0;
+
+        return products;
     };
 
     private readonly _checkUser = async (

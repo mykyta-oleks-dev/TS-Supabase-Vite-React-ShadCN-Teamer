@@ -40,7 +40,7 @@ function HomePage() {
             </PageTitle>
             <h3 className="text-2xl">Hello, {user.full_name}!</h3>
             <p className="text-xl">
-                Total team members: {usersIsArray ? users.length : users}
+                Total active team members: {usersIsArray ? users.length : users}
             </p>
             <p className="text-xl">Total products: {products}</p>
             <Button onClick={() => setDeep((prev) => !prev)}>
