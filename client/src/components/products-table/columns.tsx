@@ -2,20 +2,9 @@ import { cn } from '@/lib/utils';
 import type { Product } from '@/types/models/product.types';
 import { type ColumnDef } from '@tanstack/react-table';
 
-import { MoreHorizontal } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-
 import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import ActionsCell from './actions-cell';
 
 dayjs.extend(localizedFormat);
 
@@ -55,37 +44,8 @@ export const productsColumns: ColumnDef<Product>[] = [
     },
     {
         id: 'actions',
-        cell: ({ row: { original: product } }) => {
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => console.log(product.title)}
-                        >
-                            View Details
-                        </DropdownMenuItem>
-                        <DropdownMenuItem disabled={product.status !== 'draft'}>
-                            Edit
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            disabled={product.status === 'deleted'}
-                        >
-                            Delete
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>
-                            {product.status === 'draft' ? 'Publish' : 'Hide'}
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            );
-        },
+        cell: ({ row: { original: product } }) => (
+            <ActionsCell product={product} />
+        ),
     },
 ];

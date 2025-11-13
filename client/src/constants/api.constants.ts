@@ -20,6 +20,7 @@ export const API = {
     },
     PRODUCTS: {
         ROOT: ROOT_PRODUCTS,
-        ONE: (id: string) => `${ROOT_PRODUCTS}/${id}`,
+        ONE: (id: number) => `${ROOT_PRODUCTS}/${id}`,
+        CHANGE_STATUS: (id: number) => `${ROOT_PRODUCTS}/${id}/change-status`,
     }
 } as const;

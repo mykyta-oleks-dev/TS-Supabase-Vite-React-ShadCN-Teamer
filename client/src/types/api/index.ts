@@ -1,6 +1,7 @@
 import { validateDateString } from '@/lib/validation';
 import {
     isStatus,
+    type Product,
     type ProductAPI,
     type Status,
 } from '../models/product.types';
@@ -52,13 +53,20 @@ export const isWithCount = (res: OneTeam): res is OneTeamCount =>
 export const isWithArray = (res: OneTeam): res is OneTeamArray =>
     Array.isArray(res.users);
 
-export interface ManyProducts extends DefaultBody {
-    products: ProductAPI[];
+interface ManyProductsBase extends DefaultBody {
     total: number;
     pages: number;
     limit: number;
     totalDeleted: number;
     totalDrafts: number;
+}
+
+export interface ManyProducts extends ManyProductsBase {
+    products: ProductAPI[];
+}
+
+export interface ManyProductsParsed extends ManyProductsBase {
+    products: Product[];
 }
 
 export interface GetQueryParams {

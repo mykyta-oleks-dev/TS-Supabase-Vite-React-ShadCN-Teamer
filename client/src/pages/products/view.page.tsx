@@ -5,7 +5,7 @@ import { productsColumns } from '@/components/products-table/columns';
 import ProductsFilters from '@/components/products-table/filters';
 import { GET_PARAMS } from '@/constants/search-params-keys.constants';
 import useProducts from '@/hooks/query/products/useProducts';
-import useProductPaginationParams from '@/hooks/usePaginationSearchParams';
+import useProductPaginationParams from '@/hooks/useProductPaginationParams';
 import { handleError } from '@/lib/utils';
 import type { productsFiltersData } from '@/schemas/products.schemas';
 import type { PaginationState } from '@tanstack/react-table';
