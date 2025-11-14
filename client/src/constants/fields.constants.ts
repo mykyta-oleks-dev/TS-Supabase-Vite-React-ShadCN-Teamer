@@ -84,3 +84,20 @@ export const PRODUCTS_FILTER_FIELDS = {
         PLACEHOLDER: 'Select the date to filter by',
     },
 } as const;
+
+export const PRODUCTS_FORM_FIELDS = {
+    TITLE: {
+        NAME: 'title',
+        LABEL: 'Product title',
+        PLACEHOLDER: 'Air Fryer 3000...'
+    },
+    DESCRIPTION: {
+        NAME: 'description',
+        LABEL: 'Product description',
+        PLACEHOLDER: 'The best deal on the market, this air fryer is...',
+    },
+    IMAGE: {
+        NAME: 'image',
+        LABEL: 'Product image',
+    }
+} as const;

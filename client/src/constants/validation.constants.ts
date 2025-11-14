@@ -60,3 +60,16 @@ export const TEAMS_SCHEMAS = {
         },
     },
 } as const;
+
+export const PRODUCTS_SCHEMAS = {
+    TITLE: {
+        REQUIRED: 'Product title is required',
+    },
+    DESCRIPTION: {
+        REQUIRED: 'Product description is required',
+    },
+    IMAGE: {
+        REQUIRED: 'Image is required',
+        INVALID: VALIDATION_WRONG_FORMAT,
+    },
+} as const;

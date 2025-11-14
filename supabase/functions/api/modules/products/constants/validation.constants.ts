@@ -1,5 +1,3 @@
-export const CODE_LENGTH = 10;
-
 export const SCHEMAS = {
     TITLE: {
         REQUIRED: 'Product title is required',

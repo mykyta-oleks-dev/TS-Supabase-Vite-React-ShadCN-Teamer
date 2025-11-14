@@ -1,4 +1,8 @@
 import { GET_PARAMS } from '@/constants/search-params-keys.constants';
+import {
+    ACCEPTED_IMAGE_TYPES,
+    PRODUCTS_SCHEMAS,
+} from '@/constants/validation.constants';
 import { statuses } from '@/types/models/product.types';
 import z from 'zod';
 
@@ -23,3 +27,34 @@ export const productsFiltersSchema = z.object({
 });
 
 export type productsFiltersData = z.infer<typeof productsFiltersSchema>;
+
+export const createProductSchema = z.object({
+    title: z.string(PRODUCTS_SCHEMAS.TITLE.REQUIRED).trim(),
+    description: z.string(PRODUCTS_SCHEMAS.DESCRIPTION.REQUIRED).trim(),
+    image: z
+        .instanceof(File)
+        .refine(
+            (file) => ACCEPTED_IMAGE_TYPES.has(file.type),
+            PRODUCTS_SCHEMAS.IMAGE.INVALID
+        )
+        .nonoptional(PRODUCTS_SCHEMAS.IMAGE.REQUIRED),
+});
+
+export type createProductData = z.infer<typeof createProductSchema>;
+
+export const editProductSchema = z.object({
+    title: z.string(PRODUCTS_SCHEMAS.TITLE.REQUIRED).trim().optional(),
+    description: z
+        .string(PRODUCTS_SCHEMAS.DESCRIPTION.REQUIRED)
+        .trim()
+        .optional(),
+    image: z
+        .instanceof(File)
+        .refine(
+            (file) => ACCEPTED_IMAGE_TYPES.has(file.type),
+            PRODUCTS_SCHEMAS.IMAGE.INVALID
+        )
+        .optional(),
+});
+
+export type editProductData = z.infer<typeof editProductSchema>;

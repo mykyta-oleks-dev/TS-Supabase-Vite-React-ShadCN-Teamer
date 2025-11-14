@@ -11,6 +11,7 @@ import Layout from '@/components/layout';
 import ProductsTablePage from '@/pages/products/table.page';
 import ProductDetailsPage from '@/pages/products/details.page';
 import ProductEditPage from '@/pages/products/edit.page';
+import ProductNewPage from '@/pages/products/new.page';
 
 const router = createBrowserRouter([
     {
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
                                     },
                                 ],
                             },
+                            {
+                                path: ROUTER_KEYS.CREATE,
+                                element: <ProductNewPage />
+                            }
                         ],
                     },
                 ],

@@ -32,7 +32,7 @@ const ProductDetailsPage = () => {
         data?.product.description
             .split('\n')
             .map((p, idx) => <p key={`desc-p-${idx}_${Date.now()}`}>{p}</p>) ??
-        [];
+        null;
 
     const handleStatusChange = async (status: Status) => {
         await mutateAsync(status);
