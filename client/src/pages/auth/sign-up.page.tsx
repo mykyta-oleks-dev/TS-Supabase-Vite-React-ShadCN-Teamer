@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { AUTH_FIELDS } from '@/constants/fields.constants';
 import { ROUTES } from '@/constants/router.constants';
 import { handleSignup } from '@/handlers/auth.handlers';
-import useNotAuthed from '@/hooks/protection/useNotAuthed';
+import useNotAuthed from '@/hooks/protection/auth/useNotAuthed';
 import { signUpSchema, type signUpData } from '@/schemas/auth.schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -34,6 +34,7 @@ const SignUpPage = () => {
         control,
         handleSubmit,
         formState: { isSubmitting },
+        reset,
     } = useForm<signUpData>({
         resolver: zodResolver(signUpSchema),
         defaultValues: {
@@ -85,6 +86,7 @@ const SignUpPage = () => {
                                 className="flex-1"
                                 type="reset"
                                 variant="outline"
+                                onClick={() => reset()}
                             >
                                 Reset
                             </Button>

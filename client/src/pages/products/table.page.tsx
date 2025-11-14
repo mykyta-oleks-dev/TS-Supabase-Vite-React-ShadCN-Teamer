@@ -56,7 +56,7 @@ const ProductsTablePage = () => {
                 newParams.set(GET_PARAMS.DATE_TO, dates.to.toISOString());
             } else newParams.delete(GET_PARAMS.DATE_TO);
 
-            if (date) newParams.set(GET_PARAMS.DATE_TYPE, date);
+            if ((dates?.from || dates?.to) && date) newParams.set(GET_PARAMS.DATE_TYPE, date);
             else newParams.delete(GET_PARAMS.DATE_TYPE);
 
             return newParams;

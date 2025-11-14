@@ -10,6 +10,7 @@ import ResetPassword from '@/pages/auth/reset-password.page';
 import Layout from '@/components/layout';
 import ProductsTablePage from '@/pages/products/table.page';
 import ProductDetailsPage from '@/pages/products/details.page';
+import ProductEditPage from '@/pages/products/edit.page';
 
 const router = createBrowserRouter([
     {
@@ -35,10 +36,14 @@ const router = createBrowserRouter([
                                 children: [
                                     {
                                         index: true,
-                                        element: <ProductDetailsPage />
-                                    }
-                                ]
-                            }
+                                        element: <ProductDetailsPage />,
+                                    },
+                                    {
+                                        path: ROUTER_KEYS.EDIT,
+                                        element: <ProductEditPage />,
+                                    },
+                                ],
+                            },
                         ],
                     },
                 ],

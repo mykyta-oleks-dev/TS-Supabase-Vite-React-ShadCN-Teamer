@@ -14,7 +14,7 @@ import { Input } from '@/components/ui/input';
 import { AUTH_FIELDS } from '@/constants/fields.constants';
 import { ROUTES } from '@/constants/router.constants';
 import { handleLogin } from '@/handlers/auth.handlers';
-import useRegistered from '@/hooks/protection/useRegistered';
+import useRegistered from '@/hooks/protection/auth/useRegistered';
 import useHash from '@/hooks/useHash';
 import { logInSchema, type logInData } from '@/schemas/auth.schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,6 +30,7 @@ const LogInPage = () => {
         control,
         handleSubmit,
         formState: { isSubmitting },
+        reset,
     } = useForm<logInData>({
         resolver: zodResolver(logInSchema),
         defaultValues: {
@@ -83,6 +84,7 @@ const LogInPage = () => {
                                 className="flex-1"
                                 type="reset"
                                 variant="outline"
+                                onClick={() => reset()}
                             >
                                 Reset
                             </Button>

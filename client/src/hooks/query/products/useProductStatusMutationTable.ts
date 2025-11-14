@@ -5,7 +5,7 @@ import type { GetProductQueryParams, ManyProductsParsed } from '@/types/api';
 import type { Status } from '@/types/models/product.types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-const useProductStatusMutation = (params?: GetProductQueryParams) => {
+const useProductStatusMutationTable = (params?: GetProductQueryParams) => {
     const queryClient = useQueryClient();
 
     const key = KEYS.PRODUCTS(params);
@@ -84,4 +84,4 @@ const useProductStatusMutation = (params?: GetProductQueryParams) => {
     });
 };
 
-export default useProductStatusMutation;
+export default useProductStatusMutationTable;

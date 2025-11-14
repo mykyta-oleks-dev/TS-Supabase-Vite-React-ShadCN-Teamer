@@ -55,7 +55,7 @@ const NewPassword = () => {
                 ))}
 
                 <SubmitButton className="flex-1" isSubmitting={isSubmitting}>
-                    Reset
+                    Submit
                 </SubmitButton>
 
                 <Button asChild variant="secondary">

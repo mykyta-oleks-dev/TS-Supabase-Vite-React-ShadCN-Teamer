@@ -8,7 +8,7 @@ const useOneProduct = (id: number | undefined) => {
 	return useQuery({
 		queryKey: KEYS.PRODUCT_BY_ID(id),
 		queryFn: async () => {
-			if (!id) return null;
+			if (!id) return;
 			
 			const res = await getOneProduct(id);
 

@@ -23,6 +23,7 @@ import SubmitButton from '../../submit-button';
 import { Button } from '../../ui/button';
 import { Input } from '../../ui/input';
 import SelectBlock from '../../ui/select-block';
+import { GET_PARAMS } from '@/constants/search-params-keys.constants';
 
 interface ProductsFiltersProps {
     params: GetProductQueryParams;
@@ -39,17 +40,18 @@ const ProductsFilters = ({
         control,
         handleSubmit,
         formState: { isSubmitting },
+        reset,
     } = useForm<productsFiltersData>({
         resolver: zodResolver(productsFiltersSchema),
         defaultValues: {
-            text: params.text ?? '',
-            status: params.status,
-            user_id: params.user_id,
-            dates: {
-                from: params.dateFrom,
-                to: params.dateTo,
+            [GET_PARAMS.PRODUCT.TEXT]: params[GET_PARAMS.PRODUCT.TEXT] ?? '',
+            [GET_PARAMS.PRODUCT.STATUS]: params[GET_PARAMS.PRODUCT.STATUS],
+            [GET_PARAMS.PRODUCT.USER_ID]: params[GET_PARAMS.PRODUCT.USER_ID],
+            [GET_PARAMS.DATES]: {
+                [GET_PARAMS.FROM]: params[GET_PARAMS.DATE_FROM],
+                [GET_PARAMS.TO]: params[GET_PARAMS.DATE_TO],
             },
-            date: 'created_at',
+            [GET_PARAMS.DATE_TYPE]: 'created_at',
         },
     });
 
@@ -181,6 +183,7 @@ const ProductsFilters = ({
                                 className="flex-1"
                                 type="reset"
                                 variant="outline"
+                                onClick={() => reset()}
                             >
                                 Reset
                             </Button>

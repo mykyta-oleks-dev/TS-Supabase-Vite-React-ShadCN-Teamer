@@ -1,7 +1,7 @@
 import { ROUTES } from '@/constants/router.constants';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import useCurrentUser from '../query/user/useCurrentUser';
+import useCurrentUser from '../../query/user/useCurrentUser';
 
 const useNotRegistered = () => {
     const navigate = useNavigate();

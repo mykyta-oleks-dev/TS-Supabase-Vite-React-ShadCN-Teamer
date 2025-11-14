@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import useCurrentUser from '../query/user/useCurrentUser';
+import useCurrentUser from '../../query/user/useCurrentUser';
 import { ROUTES } from '@/constants/router.constants';
 import { isCurrentUrl } from '@/lib/utils';
 

@@ -1,4 +1,4 @@
-import useRegistered from '@/hooks/protection/useRegistered';
+import useRegistered from '@/hooks/protection/auth/useRegistered';
 import { Outlet } from 'react-router';
 import Navigation from './navigation';
 

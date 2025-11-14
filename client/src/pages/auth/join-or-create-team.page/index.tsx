@@ -5,7 +5,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import useRegistered from '@/hooks/protection/useRegistered';
+import useRegistered from '@/hooks/protection/auth/useRegistered';
 import JoinTeam from './join';
 import CreateTeam from './create';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -16,7 +16,9 @@ const JoinOrCreateTeamPage = () => {
     return (
         <Card className="w-4/5 md:w-lg">
             <CardHeader>
-                <CardTitle className="text-2xl">Join or Create a team</CardTitle>
+                <CardTitle className="text-2xl">
+                    Join or Create a team
+                </CardTitle>
                 <CardDescription>
                     You need to be part of a team to continue
                 </CardDescription>

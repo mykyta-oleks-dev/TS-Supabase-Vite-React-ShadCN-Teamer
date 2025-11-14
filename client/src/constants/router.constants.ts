@@ -11,7 +11,8 @@ export const ROUTER_KEYS = {
 	},
 	PRODUCTS: {
 		ROOT: 'products',
-	}
+	},
+	EDIT: 'edit'
 } as const;
 
 const { AUTH, PRODUCTS } = ROUTER_KEYS;
@@ -29,5 +30,6 @@ export const ROUTES = {
 	PRODUCTS: {
 		ROOT: `/${PRODUCTS.ROOT}`,
 		ONE: (id: number) => `/${PRODUCTS.ROOT}/${id}`,
+		ONE_EDIT: (id: number) => `/${PRODUCTS.ROOT}/${id}/${ROUTER_KEYS.EDIT}`,
 	}
 } as const;

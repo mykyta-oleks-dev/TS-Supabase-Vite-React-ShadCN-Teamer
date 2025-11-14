@@ -1,34 +1,27 @@
 import {
     AlertDialog,
-    AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import type { Status } from '@/types/models/product.types';
 
-const DeleteAction = ({
-    status,
-    onChangeStatus,
+const DeleteDialog = ({
+    onAccept,
     isPending,
+    open,
+    onOpenChange,
 }: {
-    status: Status;
-    onChangeStatus: (status: Status) => Promise<void>;
+    onAccept: () => Promise<void>;
     isPending: boolean;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
 }) => {
     return (
-        <AlertDialog>
-            <AlertDialogTrigger asChild>
-                <DropdownMenuItem disabled={status === 'deleted'}>
-                    Delete
-                </DropdownMenuItem>
-            </AlertDialogTrigger>
+        <AlertDialog open={open} onOpenChange={onOpenChange}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -41,19 +34,18 @@ const DeleteAction = ({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction asChild>
-                        <Button
-                            variant="destructive"
-                            onClick={() => onChangeStatus('deleted')}
-                            disabled={isPending}
-                        >
-                            Continue
-                        </Button>
-                    </AlertDialogAction>
+
+                    <Button
+                        variant="destructive"
+                        onClick={onAccept}
+                        disabled={isPending}
+                    >
+                        Continue
+                    </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
     );
 };
 
-export default DeleteAction;
+export default DeleteDialog;

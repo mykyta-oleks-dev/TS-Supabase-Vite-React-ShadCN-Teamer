@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { USERS_FIELDS } from '@/constants/fields.constants';
 import { handleCreateProfile } from '@/handlers/users.handlers';
-import useNotRegistered from '@/hooks/protection/useNotRegistered';
+import useNotRegistered from '@/hooks/protection/auth/useNotRegistered';
 import {
     createProfileSchema,
     type createProfileData,
@@ -29,6 +29,7 @@ const CreateProfilePage = () => {
         control,
         handleSubmit,
         formState: { isSubmitting },
+        reset,
     } = useForm<createProfileData>({
         resolver: zodResolver(createProfileSchema),
         defaultValues: {
@@ -60,7 +61,7 @@ const CreateProfilePage = () => {
                                 <AvatarImage
                                     src={avatarPreview || '/default-avatar.png'}
                                     alt="Avatar Preview"
-                                    className='object-cover'
+                                    className="object-cover"
                                 />
                             </Avatar>
 
@@ -152,6 +153,7 @@ const CreateProfilePage = () => {
                                 className="flex-1"
                                 type="reset"
                                 variant="outline"
+                                onClick={() => reset()}
                             >
                                 Reset
                             </Button>
