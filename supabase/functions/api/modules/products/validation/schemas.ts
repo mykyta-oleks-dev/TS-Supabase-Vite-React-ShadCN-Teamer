@@ -3,7 +3,7 @@ import { SCHEMAS } from '../constants/validation.constants.ts';
 import { urlRegex } from '../../../_shared/utils/validation.ts';
 
 export const productCreateSchema = z.object({
-    title: z.string(SCHEMAS.TITLE.REQUIRED).trim(),
+    title: z.string(SCHEMAS.TITLE.REQUIRED).trim().nonempty(SCHEMAS.TITLE.REQUIRED),
     description: z.string(SCHEMAS.DESCRIPTION.REQUIRED).trim(),
     image: z
         .string(SCHEMAS.IMAGE.REQUIRED)

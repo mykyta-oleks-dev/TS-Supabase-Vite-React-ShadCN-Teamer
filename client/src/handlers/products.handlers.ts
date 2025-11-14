@@ -1,13 +1,15 @@
-import { createProduct } from '@/api/products';
+import { createProduct, updateProduct } from '@/api/products';
 import queryClient from '@/config/query';
 import { KEYS } from '@/constants/query.constants';
 import { GET_PARAMS } from '@/constants/search-params-keys.constants';
 import { handleError } from '@/lib/utils';
 import type {
     createProductData,
+    editProductData,
     productsFiltersData,
 } from '@/schemas/products.schemas';
 import { uploadFile } from '@/storage';
+import type { OneProductParsed } from '@/types/api';
 import { mapProductFromAPI } from '@/types/models/product.types';
 import type { PaginationState } from '@tanstack/react-table';
 import type { SetURLSearchParams } from 'react-router';
@@ -77,6 +79,32 @@ export const handleCreateProduct = async (values: createProductData) => {
         queryClient.setQueryData(KEYS.PRODUCT_BY_ID(product.id), product);
 
 		return product.id;
+    } catch (error) {
+        handleError(error, true);
+    }
+};
+
+export const handleUpdateProduct = async (id: number, values: editProductData) => {
+    try {
+        const publicUrl = values.image && await uploadFile('products', values.image);
+
+        await updateProduct(id, values, publicUrl);
+
+        queryClient.setQueryData<OneProductParsed>(KEYS.PRODUCT_BY_ID(id), (old) => {
+            if (!old) return old;
+
+            return {
+                ...old,
+                product: {
+                    ...old.product,
+                    title: values.title ?? old.product.title,
+                    description: values.description ?? old.product.description,
+                    image: publicUrl ?? old.product.image,
+                }
+            }
+        });
+
+		return id;
     } catch (error) {
         handleError(error, true);
     }

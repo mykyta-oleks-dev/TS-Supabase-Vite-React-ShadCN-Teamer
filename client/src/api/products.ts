@@ -1,6 +1,6 @@
 import axiosInstance from '@/config/axios';
 import { API } from '@/constants/api.constants';
-import type { createProductData } from '@/schemas/products.schemas';
+import type { createProductData, editProductData } from '@/schemas/products.schemas';
 import {
     type GetProductQueryParams,
     type ManyProducts,
@@ -19,3 +19,6 @@ export const patchProductStatus = (id: number, status: Status) =>
 
 export const createProduct = (values: createProductData, image: string) =>
     axiosInstance.post<OneProduct>(API.PRODUCTS.ROOT, { ...values, image });
+
+export const updateProduct = (id: number, values: editProductData, image?: string) =>
+    axiosInstance.patch(API.PRODUCTS.ONE(id), { ...values, image });

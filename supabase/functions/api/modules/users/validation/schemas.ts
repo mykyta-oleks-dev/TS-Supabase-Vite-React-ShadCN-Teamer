@@ -51,7 +51,10 @@ export const signUpSchema = emailSchema
 export type signUpData = z.infer<typeof signUpSchema>;
 
 export const createProfileSchema = z.object({
-    full_name: z.string(PROFILE.FULL_NAME.REQUIRED).trim(),
+    full_name: z
+        .string(PROFILE.FULL_NAME.REQUIRED)
+        .trim()
+        .nonempty(PROFILE.FULL_NAME.REQUIRED),
     avatar: z
         .string(PROFILE.AVATAR.REQUIRED)
         .regex(urlRegex, PROFILE.AVATAR.INVALID),

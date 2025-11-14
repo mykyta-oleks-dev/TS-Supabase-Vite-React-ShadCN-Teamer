@@ -10,11 +10,14 @@ const codeReq = z
 const code = codeReq.optional();
 
 export const codeSchema = z.object({
-    code: codeReq
-})
+    code: codeReq,
+});
 
 export const teamCreateSchema = z.object({
-    name: z.string(SCHEMAS.NAME.REQUIRED).trim(),
+    name: z
+        .string(SCHEMAS.NAME.REQUIRED)
+        .trim()
+        .nonempty(SCHEMAS.NAME.REQUIRED),
     code,
 });
 

@@ -5,9 +5,14 @@ import {
 import z from 'zod';
 
 export const createProfileSchema = z.object({
-    full_name: z.string(PROFILE_SCHEMAS.FULL_NAME.REQUIRED).trim(),
+    full_name: z
+        .string(PROFILE_SCHEMAS.FULL_NAME.REQUIRED)
+        .trim()
+        .nonempty(PROFILE_SCHEMAS.FULL_NAME.REQUIRED),
     avatar: z
-        .instanceof(File)
+        .instanceof(File, {
+            error: PROFILE_SCHEMAS.AVATAR.REQUIRED
+        })
         .refine(
             (file) => ACCEPTED_IMAGE_TYPES.has(file.type),
             PROFILE_SCHEMAS.AVATAR.INVALID
@@ -21,7 +26,9 @@ export type createProfileData = z.infer<typeof createProfileSchema>;
 export const updateProfileSchema = createProfileSchema.extend({
     full_name: z.string(PROFILE_SCHEMAS.FULL_NAME.REQUIRED).trim().optional(),
     avatar: z
-        .instanceof(File)
+        .instanceof(File, {
+            error: PROFILE_SCHEMAS.AVATAR.REQUIRED
+        })
         .refine(
             (file) => ACCEPTED_IMAGE_TYPES.has(file.type),
             PROFILE_SCHEMAS.AVATAR.INVALID

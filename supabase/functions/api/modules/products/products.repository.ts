@@ -129,6 +129,19 @@ class ProductsRepository {
     ) => {
         await this._checkAuthority(client, userId, id);
 
+        const {data: oldProducts, error: oldProductsError } = await client
+            .from(TABLES.PRODUCTS)
+            .select()
+            .eq('id', id);
+        
+        if (oldProductsError) handleError(oldProductsError);
+
+        if (!oldProducts?.length) {
+            throw new ForbiddenError(PRODUCTS_ERRORS.NOT_UPDATED);
+        }
+
+        const old = oldProducts[0];
+
         const { data: products, error } = await client
             .from(TABLES.PRODUCTS)
             .update(data)
@@ -139,6 +152,10 @@ class ProductsRepository {
 
         if (!products?.length)
             throw new ForbiddenError(PRODUCTS_ERRORS.NOT_UPDATED);
+
+        const oldImage = old.image.split(`${TABLES.PRODUCTS}/`)[1];
+
+        if (oldImage) client.storage.from(TABLES.PRODUCTS).remove([oldImage]);
     };
 
     changeStatus = async (

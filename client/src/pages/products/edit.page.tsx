@@ -1,17 +1,28 @@
 import PageTitle from '@/components/page-title';
-import PagesLoader from '@/components/pages-loader';
-import StatusDisplay from '@/components/products/status';
+import ProductUpdateForm from '@/components/products/form/update';
 import { Spinner } from '@/components/ui/spinner';
-import useProductAuthorization from '@/hooks/protection/product/useProductAuthorization';
+import { PRODUCTS_ERRORS } from '@/constants/errors.constants';
+import { ROUTES } from '@/constants/router.constants';
+import useProductUpdateProtection from '@/hooks/protection/product/useProductUpdateProtection';
+import useProductUpdateMutation from '@/hooks/query/products/useProductUpdateMutation';
 import { handleError } from '@/lib/utils';
-import { useParams } from 'react-router';
+import type { editProductData } from '@/schemas/products.schemas';
+import { useLocation, useNavigate, useParams } from 'react-router';
 
 const ProductEditPage = () => {
     const { id: rawId } = useParams();
 
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const isNotDefaultLocation = location.key !== 'default';
+
     const id = rawId ? Number.parseInt(rawId) : undefined;
 
-    const { data, error, isLoading } = useProductAuthorization(id);
+    const { data, error, isLoading, isAuthorized } =
+        useProductUpdateProtection(id);
+
+    const { mutateAsync } = useProductUpdateMutation(id);
 
     if (isLoading) {
         return (
@@ -23,41 +34,33 @@ const ProductEditPage = () => {
 
     if (error) handleError(error, true);
 
-    const descriptionElements =
-        data?.product.description
-            .split('\n')
-            .map((p, idx) => <p key={`desc-p-${idx}_${Date.now()}`}>{p}</p>) ??
-        [];
+    if (!data) {
+        handleError(PRODUCTS_ERRORS.NOT_FOUND, true);
+
+        if (isNotDefaultLocation) navigate(-1);
+        else navigate(ROUTES.PRODUCTS.ROOT);
+
+        return null;
+    }
+
+    if (!isAuthorized) {
+        if (isNotDefaultLocation) navigate(-1);
+        else navigate(ROUTES.PRODUCTS.ROOT);
+
+        return null;
+    }
+
+    const handleUpdate = async (values: editProductData) => {
+        await mutateAsync(values);
+
+        if (id) navigate(ROUTES.PRODUCTS.ONE(id));
+    };
 
     return (
-        <div className="relative">
-            {isLoading && <PagesLoader />}
-            <PageTitle title={`Product "${data?.product.title}"`} />
-            {data && (
-                <div className="flex flex-col gap-3">
-                    <div className="flex flex-col md:flex-row gap-3">
-                        <div className="md:flex-1 w-full">
-                            <img
-                                src={data.product.image}
-                                alt={data.product.title}
-                                className="object-contain"
-                            />
-                        </div>
-                        <div className="md:flex-1 lg:flex-2">
-                            <h3 className="mb-3">
-                                <span className="text-lg font-semibold">
-                                    Status:{' '}
-                                </span>
-                                <StatusDisplay status={data.product.status} />
-                            </h3>
-                            <h3 className="text-lg font-semibold mb-3">
-                                Description:
-                            </h3>
-                            <div>{descriptionElements}</div>
-                        </div>
-                    </div>
-                </div>
-            )}
+        <div>
+            <PageTitle title="Create new product" />
+
+            <ProductUpdateForm product={data.product} onSubmit={handleUpdate} />
         </div>
     );
 };

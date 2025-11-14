@@ -29,10 +29,18 @@ export const productsFiltersSchema = z.object({
 export type productsFiltersData = z.infer<typeof productsFiltersSchema>;
 
 export const createProductSchema = z.object({
-    title: z.string(PRODUCTS_SCHEMAS.TITLE.REQUIRED).trim(),
-    description: z.string(PRODUCTS_SCHEMAS.DESCRIPTION.REQUIRED).trim(),
+    title: z
+        .string(PRODUCTS_SCHEMAS.TITLE.REQUIRED)
+        .trim()
+        .nonempty(PRODUCTS_SCHEMAS.TITLE.REQUIRED),
+    description: z
+        .string(PRODUCTS_SCHEMAS.DESCRIPTION.REQUIRED)
+        .trim()
+        .nonempty(PRODUCTS_SCHEMAS.DESCRIPTION.REQUIRED),
     image: z
-        .instanceof(File)
+        .instanceof(File, {
+            error: PRODUCTS_SCHEMAS.IMAGE.REQUIRED,
+        })
         .refine(
             (file) => ACCEPTED_IMAGE_TYPES.has(file.type),
             PRODUCTS_SCHEMAS.IMAGE.INVALID
@@ -49,7 +57,9 @@ export const editProductSchema = z.object({
         .trim()
         .optional(),
     image: z
-        .instanceof(File)
+        .instanceof(File, {
+            error: PRODUCTS_SCHEMAS.IMAGE.REQUIRED,
+        })
         .refine(
             (file) => ACCEPTED_IMAGE_TYPES.has(file.type),
             PRODUCTS_SCHEMAS.IMAGE.INVALID

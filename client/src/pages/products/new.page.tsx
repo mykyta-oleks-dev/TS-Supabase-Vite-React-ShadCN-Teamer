@@ -9,6 +9,8 @@ const ProductNewPage = () => {
     const navigate = useNavigate();
     
     const handleCreation = async (values: createProductData) => {
+        console.log(values);
+
         const id = await handleCreateProduct(values);
 
         if (id) navigate(ROUTES.PRODUCTS.ONE(id));

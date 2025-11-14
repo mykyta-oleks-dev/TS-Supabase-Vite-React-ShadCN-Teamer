@@ -6,9 +6,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { PRODUCTS_FORM_FIELDS } from '@/constants/fields.constants';
 import { getAcceptedImageTypesStr } from '@/constants/validation.constants';
 import {
-    createProductSchema,
-    type createProductData,
+    editProductSchema,
+    type editProductData,
 } from '@/schemas/products.schemas';
+import type { Product } from '@/types/models/product.types';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -16,10 +17,12 @@ import { useNavigate } from 'react-router';
 
 const { IMAGE, TITLE, DESCRIPTION } = PRODUCTS_FORM_FIELDS;
 
-const ProductCreateForm = ({
+const ProductUpdateForm = ({
     onSubmit: handleCreate,
+    product,
 }: {
-    onSubmit: (data: createProductData) => void;
+    onSubmit: (data: editProductData) => void;
+    product: Product;
 }) => {
     const navigate = useNavigate();
 
@@ -30,11 +33,11 @@ const ProductCreateForm = ({
         handleSubmit,
         formState: { isSubmitting },
         reset,
-    } = useForm<createProductData>({
-        resolver: zodResolver(createProductSchema),
+    } = useForm<editProductData>({
+        resolver: zodResolver(editProductSchema),
         defaultValues: {
-            title: '',
-            description: '',
+            title: product.title,
+            description: product.description,
             image: undefined,
         },
     });
@@ -46,8 +49,8 @@ const ProductCreateForm = ({
         >
             <div className="flex flex-col gap-3">
                 <img
-                    src={imagePreview ?? '/placeholder-image.png'}
-                    alt="New product's image preview"
+                    src={imagePreview ?? product.image}
+                    alt="Product's image preview"
                 />
 
                 <FieldBlock
@@ -129,7 +132,7 @@ const ProductCreateForm = ({
                 </Button>
 
                 <SubmitButton className="flex-1" isSubmitting={isSubmitting}>
-                    Create
+                    Update
                 </SubmitButton>
 
                 <Button
@@ -148,4 +151,4 @@ const ProductCreateForm = ({
     );
 };
 
-export default ProductCreateForm;
+export default ProductUpdateForm;
