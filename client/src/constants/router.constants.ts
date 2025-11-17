@@ -39,5 +39,6 @@ export const ROUTES = {
     },
     PROFILES: {
         ONE: (id: string) => `/${PROFILES.ROOT}/${id}`,
+        EDIT: `/${PROFILES.ROOT}/${ROUTER_KEYS.EDIT}`,
     },
 } as const;

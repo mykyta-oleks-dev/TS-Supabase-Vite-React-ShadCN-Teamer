@@ -1,6 +1,7 @@
 import { TABLES } from '../../_shared/constants/tables.constants.ts';
 import {
     AppError,
+    ForbiddenError,
     NotFoundError,
 } from '../../_shared/types/middleware/error-handling.types.ts';
 import { TypedSupabaseClient } from '../../_shared/types/supabase/client.types.ts';
@@ -26,7 +27,7 @@ class UsersRepository {
         if (error) handleError(error);
 
         if (!user) {
-            throw new AppError(USERS_ERRORS.PROFILE_NOT_CREATED);
+            throw new AppError(USERS_ERRORS.NOT_CREATED);
         }
 
         return user;
@@ -62,15 +63,21 @@ class UsersRepository {
         id: string,
         data: updateProfileData
     ) => {
+        const old = await this._getOne(client, id);
+
         const { error } = await client
             .from(TABLES.USERS)
             .update(data)
             .eq('id', id);
 
         if (error) handleError(error);
+
+        await this._removeImage(client, old.avatar);
     };
 
     delete = async (client: TypedSupabaseClient, id: string) => {
+        const old = await this._getOne(client, id);
+
         const { error } = await client
             .from(TABLES.USERS)
             .update({
@@ -79,6 +86,37 @@ class UsersRepository {
             .eq('id', id);
 
         if (error) handleError(error);
+
+        await this._removeImage(client, old.avatar);
+    };
+
+    private readonly _getOne = async (
+        client: TypedSupabaseClient,
+        id: string
+    ) => {
+        const { data: users, error: oldProductsError } = await client
+            .from(TABLES.USERS)
+            .select()
+            .eq('id', id);
+
+        if (oldProductsError) handleError(oldProductsError);
+
+        if (!users?.length) {
+            throw new ForbiddenError(USERS_ERRORS.NOT_FOUND);
+        }
+
+        const user = users[0];
+
+        return user;
+    };
+
+    private readonly _removeImage = async (
+        client: TypedSupabaseClient,
+        avatar: string
+    ) => {
+        const oldImage = avatar.split(`${TABLES.USERS}/`)[1];
+
+        if (oldImage) client.storage.from(TABLES.USERS).remove([oldImage]);
     };
 }
 

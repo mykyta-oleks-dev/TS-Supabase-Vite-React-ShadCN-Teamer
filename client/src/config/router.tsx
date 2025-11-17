@@ -13,6 +13,7 @@ import ProductDetailsPage from '@/pages/products/details.page';
 import ProductEditPage from '@/pages/products/edit.page';
 import ProductNewPage from '@/pages/products/new.page';
 import ProfileDetailsPage from '@/pages/profile/details.page';
+import ProfileEditPage from '@/pages/profile/edit.page';
 
 const router = createBrowserRouter([
     {
@@ -48,8 +49,8 @@ const router = createBrowserRouter([
                             },
                             {
                                 path: ROUTER_KEYS.CREATE,
-                                element: <ProductNewPage />
-                            }
+                                element: <ProductNewPage />,
+                            },
                         ],
                     },
                     {
@@ -57,10 +58,14 @@ const router = createBrowserRouter([
                         children: [
                             {
                                 path: ROUTER_KEYS.DYNAMIC,
-                                element: <ProfileDetailsPage />
-                            }
-                        ]
-                    }
+                                element: <ProfileDetailsPage />,
+                            },
+                            {
+                                path: ROUTER_KEYS.EDIT,
+                                element: <ProfileEditPage />,
+                            },
+                        ],
+                    },
                 ],
             },
             {
