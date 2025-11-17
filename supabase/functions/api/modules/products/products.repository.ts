@@ -70,9 +70,10 @@ class ProductsRepository {
         if (query.userId) dbQuery = dbQuery.eq('user_id', query.userId);
 
         if (query.text) {
-            dbQuery = dbQuery.or(
-                `title.ilike.%${query.text}%,description.ilike.%${query.text}%`
-            );
+            dbQuery = dbQuery.textSearch('fts', query.text, {
+                type: 'websearch',
+                config: 'english',
+            });
         }
 
         if (query.dateFrom) {
@@ -129,11 +130,11 @@ class ProductsRepository {
     ) => {
         await this._checkAuthority(client, userId, id);
 
-        const {data: oldProducts, error: oldProductsError } = await client
+        const { data: oldProducts, error: oldProductsError } = await client
             .from(TABLES.PRODUCTS)
             .select()
             .eq('id', id);
-        
+
         if (oldProductsError) handleError(oldProductsError);
 
         if (!oldProducts?.length) {

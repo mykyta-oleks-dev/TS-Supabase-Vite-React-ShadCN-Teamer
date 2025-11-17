@@ -38,6 +38,7 @@ export type Database = {
         Row: {
           created_at: string
           description: string
+          fts: unknown
           id: number
           image: string
           status: Database["public"]["Enums"]["Status"]
@@ -49,6 +50,7 @@ export type Database = {
         Insert: {
           created_at?: string
           description: string
+          fts?: unknown
           id?: number
           image: string
           status?: Database["public"]["Enums"]["Status"]
@@ -60,6 +62,7 @@ export type Database = {
         Update: {
           created_at?: string
           description?: string
+          fts?: unknown
           id?: number
           image?: string
           status?: Database["public"]["Enums"]["Status"]
