@@ -8,7 +8,7 @@ const useUser = (id: string | undefined) => {
     return useQuery({
         queryKey: KEYS.USER_BY_ID(id),
         queryFn: async () => {
-            if (!id) return null;
+            if (!id) return;
 
             try {
                 const res = await getOneUser(id);
@@ -20,7 +20,7 @@ const useUser = (id: string | undefined) => {
                 return user;
             } catch (error) {
                 if (isAxiosError(error) && error.response?.status === 404) {
-                    return null;
+                    return;
                 }
             }
         },

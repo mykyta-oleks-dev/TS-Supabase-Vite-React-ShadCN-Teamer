@@ -1,13 +1,14 @@
 import { ROUTES } from '@/constants/router.constants';
-import NavLink from '../nav-link';
-import { MdHome as MdHomeIcon } from 'react-icons/md';
+import { handleLogout } from '@/handlers/auth.handlers';
+import useAuth from '@/store/auth';
+import { useMemo } from 'react';
 import { AiFillProduct as AiFillProductIcon } from 'react-icons/ai';
 import { FaUser as FaUserIcon } from 'react-icons/fa';
 import type { IconType } from 'react-icons/lib';
+import { MdHome as MdHomeIcon } from 'react-icons/md';
+import NavLink from '../nav-link';
+import { OnlineUsersStack } from '../online-users-stack';
 import { Button } from '../ui/button';
-import { handleLogout } from '@/handlers/auth.handlers';
-import { useMemo } from 'react';
-import useAuth from '@/store/auth';
 
 const NavMenu = () => {
     const session = useAuth((s) => s.session);
@@ -36,7 +37,7 @@ const NavMenu = () => {
 
     return (
         <div className="flex flex-col gap-3 h-full">
-            <nav className="mb-5">
+            <nav>
                 <ul className="flex flex-col gap-3">
                     {links.map((l) => {
                         if (!l) return null;
@@ -50,6 +51,8 @@ const NavMenu = () => {
                     })}
                 </ul>
             </nav>
+            <hr />
+            <OnlineUsersStack />
             <Button className="mt-auto" onClick={handleLogout}>
                 Log Out
             </Button>

@@ -43,7 +43,7 @@ const useRegistered = () => {
         }
     }, [navigate, session, isLoading, isLoadingAuth, user]);
 
-    return { session };
+    return { session, user };
 };
 
 export default useRegistered;

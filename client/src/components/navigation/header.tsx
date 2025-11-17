@@ -1,4 +1,8 @@
+import { ROOMS } from '@/constants/realtime.constants';
+import { MenuIcon } from 'lucide-react';
 import { RiTeamFill as RiTeamFillIcon } from 'react-icons/ri';
+import { OnlineUsersStack } from '../online-users-stack';
+import { Button } from '../ui/button';
 import {
     Drawer,
     DrawerContent,
@@ -7,20 +11,21 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from '../ui/drawer';
-import { Button } from '../ui/button';
-import { MenuIcon } from 'lucide-react';
 import NavMenu from './nav-menu';
-import { RealtimeAvatarStack } from '../realtime-avatar-stack';
+import { Link } from 'react-router';
+import { ROUTES } from '@/constants/router.constants';
 
 const Header = () => {
     return (
         <header className="px-5 py-3 border-b border-primary flex justify-between">
-            <h1 className="flex gap-3 items-center text-2xl">
-                <RiTeamFillIcon size={30} className="text-primary" />
-                <span>Teamer</span>
-            </h1>
+            <Link to={ROUTES.ROOT}>
+                <h1 className="flex gap-3 items-center text-2xl">
+                    <RiTeamFillIcon size={30} className="text-primary" />
+                    <span>Teamer</span>
+                </h1>
+            </Link>
             <div className="flex gap-3 items-center">
-                <RealtimeAvatarStack roomName="online" />
+                <OnlineUsersStack maxAvatarsAmount={ROOMS.ONLINE.MAX_HEADER} />
                 <Drawer direction="left">
                     <DrawerTrigger asChild>
                         <Button variant="outline" size="icon">

@@ -1,18 +1,13 @@
 import AvatarStack from '@/components/avatar-stack';
-import { useRealtimePresenceRoom } from '@/hooks/use-realtime-presence-room';
-import type { User } from '@/types/models/user.types';
+import useOnlineUsers from '@/store/onlineUsers';
 import { useMemo } from 'react';
 
-export const RealtimeAvatarStack = ({
-    roomName,
+export const OnlineUsersStack = ({
     maxAvatarsAmount,
-    user,
 }: {
-    roomName: string;
     maxAvatarsAmount?: number;
-    user: User | undefined;
 }) => {
-    const { users: usersMap } = useRealtimePresenceRoom(roomName, user);
+    const usersMap = useOnlineUsers((s) => s.usersMap);
     const avatars = useMemo(() => {
         return Object.values(usersMap).map((user) => ({
             name: user.name,

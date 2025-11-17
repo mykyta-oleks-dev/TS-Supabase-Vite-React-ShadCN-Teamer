@@ -1,10 +1,10 @@
 'use client';
 
-import { REALTIME_SUBSCRIBE_STATES } from '@supabase/supabase-js';
-import { useEffect, useState } from 'react';
-import useCurrentUser from './query/user/useCurrentUser';
-import { handleError } from '@/lib/utils';
 import getSupabase from '@/config/supabase';
+import useOnlineUsers from '@/store/onlineUsers';
+import { REALTIME_SUBSCRIBE_STATES } from '@supabase/supabase-js';
+import { useEffect } from 'react';
+import type { User } from '@/types/models/user.types';
 
 const supabase = getSupabase();
 
@@ -14,20 +14,16 @@ export type RealtimeUser = {
     image: string;
 };
 
-export const useRealtimePresenceRoom = (roomName: string) => {
-    const {
-        query: { data: user, error },
-    } = useCurrentUser();
-
-    if (error) handleError(error, true);
-
-    const [users, setUsers] = useState<Record<string, RealtimeUser>>({});
+export const useRealtimePresenceRoom = (roomName: string, user: User | undefined) => {
+    const { usersMap, setUsersMap } = useOnlineUsers();
 
     useEffect(() => {
+        console.log({ roomName, user, setUsersMap });
         const room = supabase.channel(roomName);
 
         room.on('presence', { event: 'sync' }, () => {
             const newState = room.presenceState<{
+                id: string;
                 image: string;
                 name: string;
             }>();
@@ -35,25 +31,36 @@ export const useRealtimePresenceRoom = (roomName: string) => {
             const newUsers = Object.fromEntries(
                 Object.entries(newState).map(([key, values]) => [
                     key,
-                    { name: values[0].name, image: values[0].image },
+                    {
+                        id: values[0].id,
+                        name: values[0].name,
+                        image: values[0].image,
+                    },
                 ])
             ) as Record<string, RealtimeUser>;
-            setUsers(newUsers);
+
+            console.log('fired realtime');
+
+            setUsersMap(newUsers);
         }).subscribe(async (status) => {
             if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED && user) {
+                console.log('fired user subscription');
                 await room.track({
+                    id: user.id,
                     name: user.full_name,
                     image: user.avatar,
                 });
             } else {
-                setUsers({});
+                console.log('fired user unsubscription');
+                setUsersMap({});
             }
         });
 
         return () => {
+            console.log('fired total unsubscription');
             room.unsubscribe();
         };
-    }, [roomName, user]);
+    }, [roomName, user, setUsersMap]);
 
-    return { users };
+    return { users: usersMap };
 };

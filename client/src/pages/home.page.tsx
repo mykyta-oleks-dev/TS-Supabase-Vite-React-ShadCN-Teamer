@@ -27,8 +27,6 @@ function HomePage() {
 
     const isLeader = user.id === team.leader_id;
 
-    console.log(teamData);
-
     return (
         <div className="flex flex-col gap-3 items-start">
             <PageTitle title={`Team "${team.name}"`} className="mb-2">
