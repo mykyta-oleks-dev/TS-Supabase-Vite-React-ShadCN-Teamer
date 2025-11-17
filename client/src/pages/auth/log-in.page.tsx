@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { AUTH_FIELDS } from '@/constants/fields.constants';
-import { ROUTES } from '@/constants/router.constants';
+import { APP_NAME, ROUTES } from '@/constants/router.constants';
 import { handleLogin } from '@/handlers/auth.handlers';
 import useRegistered from '@/hooks/protection/auth/useRegistered';
 import useHash from '@/hooks/useHash';
@@ -42,7 +42,8 @@ const LogInPage = () => {
     return (
         <Card className="w-4/5 md:w-lg">
             <CardHeader>
-                <CardTitle className="text-2xl">Login</CardTitle>
+                <title>{`${APP_NAME} - Log In`}</title>
+                <CardTitle className="text-2xl">Log In</CardTitle>
                 <CardDescription>
                     Enter your credentials below to login to your account
                 </CardDescription>

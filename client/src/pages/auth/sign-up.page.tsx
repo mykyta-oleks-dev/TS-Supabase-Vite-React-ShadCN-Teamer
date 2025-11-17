@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { AUTH_FIELDS } from '@/constants/fields.constants';
-import { ROUTES } from '@/constants/router.constants';
+import { APP_NAME, ROUTES } from '@/constants/router.constants';
 import { handleSignup } from '@/handlers/auth.handlers';
 import useNotAuthed from '@/hooks/protection/auth/useNotAuthed';
 import { signUpSchema, type signUpData } from '@/schemas/auth.schemas';
@@ -47,6 +47,7 @@ const SignUpPage = () => {
     return (
         <Card className="w-4/5 md:w-lg">
             <CardHeader>
+                <title>{`${APP_NAME} - Sign Up`}</title>
                 <CardTitle className="text-2xl">Sign Up</CardTitle>
                 <CardDescription>
                     Enter your credentials below to create a new account

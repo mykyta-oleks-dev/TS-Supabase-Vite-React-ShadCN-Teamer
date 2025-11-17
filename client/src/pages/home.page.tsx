@@ -2,6 +2,7 @@ import PageTitle from '@/components/page-title';
 import TeamMembers from '@/components/team-members';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { APP_NAME } from '@/constants/router.constants';
 import { handleCopyCode } from '@/handlers/teams.handlers';
 import useTeam from '@/hooks/query/team/useTeam';
 import useCurrentUser from '@/hooks/query/user/useCurrentUser';
@@ -20,7 +21,14 @@ function HomePage() {
 
     const error = userError ?? teamError;
 
-    if (isLoading || !user || !teamData) return <Spinner />;
+    if (isLoading || !user || !teamData) {
+        return (
+            <>
+                <title>{`${APP_NAME} - Home Page`}</title>
+                <Spinner />
+            </>
+        );
+    }
     if (error) handleError(error, true);
 
     const { team, users, usersIsArray, products } = teamData;
@@ -29,6 +37,8 @@ function HomePage() {
 
     return (
         <div className="flex flex-col gap-3 items-start">
+            <title>{`${APP_NAME} - Home Page`}</title>
+
             <PageTitle title={`Team "${team.name}"`} className="mb-2">
                 {isLeader && (
                     <Button onClick={() => handleCopyCode(team)}>

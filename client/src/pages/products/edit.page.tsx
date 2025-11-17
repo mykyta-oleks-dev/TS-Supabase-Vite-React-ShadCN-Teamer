@@ -2,7 +2,7 @@ import PageTitle from '@/components/page-title';
 import ProductUpdateForm from '@/components/products/form/update';
 import { Spinner } from '@/components/ui/spinner';
 import { PRODUCTS_ERRORS } from '@/constants/errors.constants';
-import { ROUTES } from '@/constants/router.constants';
+import { APP_NAME, ROUTES } from '@/constants/router.constants';
 import useProductUpdateProtection from '@/hooks/protection/product/useProductUpdateProtection';
 import useProductUpdateMutation from '@/hooks/query/products/useProductUpdateMutation';
 import { handleError } from '@/lib/utils';
@@ -27,6 +27,7 @@ const ProductEditPage = () => {
     if (isLoading) {
         return (
             <div className="flex items-center">
+                <title>{`${APP_NAME} - Loading product...`}</title>
                 <Spinner />
             </div>
         );
@@ -58,7 +59,8 @@ const ProductEditPage = () => {
 
     return (
         <div>
-            <PageTitle title="Create new product" />
+            <title>{`${APP_NAME} - Edit the product "${data.product.title}"`}</title>
+            <PageTitle title={`Edit the product "${data.product.title}"`} />
 
             <ProductUpdateForm product={data.product} onSubmit={handleUpdate} />
         </div>

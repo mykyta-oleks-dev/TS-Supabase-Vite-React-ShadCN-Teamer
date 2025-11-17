@@ -4,8 +4,11 @@ import PagesLoader from '@/components/pages-loader';
 import { productsColumns } from '@/components/products/table/columns';
 import ProductsFilters from '@/components/products/table/filters';
 import { Button } from '@/components/ui/button';
-import { ROUTES } from '@/constants/router.constants';
-import { handleFiltersSave, handlePaginationChange } from '@/handlers/products.handlers';
+import { APP_NAME, ROUTES } from '@/constants/router.constants';
+import {
+    handleFiltersSave,
+    handlePaginationChange,
+} from '@/handlers/products.handlers';
 import useManyProducts from '@/hooks/query/products/useManyProducts';
 import useProductPaginationParams from '@/hooks/useProductPaginationParams';
 import { handleError } from '@/lib/utils';
@@ -21,6 +24,8 @@ const ProductsTablePage = () => {
 
     return (
         <div>
+            <title>{`${APP_NAME} - All team's products`}</title>
+
             <PageTitle title="Table of team's products">
                 <Button asChild>
                     <Link to={ROUTES.PRODUCTS.CREATE}>Create new</Link>
@@ -31,14 +36,18 @@ const ProductsTablePage = () => {
                 {isFetching && !isFetched && <PagesLoader />}
                 <ProductsFilters
                     params={productQuery}
-                    onFiltersSave={(values) => handleFiltersSave(values, setSearchParams)}
+                    onFiltersSave={(values) =>
+                        handleFiltersSave(values, setSearchParams)
+                    }
                 />
                 <DataTable
                     columns={productsColumns}
                     data={data?.products ?? []}
                     pages={data?.pages ?? 1}
                     params={productQuery}
-                    onPaginationChange={(values) => handlePaginationChange(values, setSearchParams)}
+                    onPaginationChange={(values) =>
+                        handlePaginationChange(values, setSearchParams)
+                    }
                 />
             </div>
         </div>

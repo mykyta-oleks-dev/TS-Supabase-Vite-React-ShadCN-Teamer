@@ -8,6 +8,7 @@ import {
 import useAuth from '@/store/auth';
 import SendEmail from './send-email';
 import NewPassword from './new-password';
+import { APP_NAME } from '@/constants/router.constants';
 
 const ResetPassword = () => {
     const session = useAuth((s) => s.session);
@@ -15,6 +16,7 @@ const ResetPassword = () => {
     return (
         <Card className="w-4/5 md:w-lg">
             <CardHeader>
+                <title>{`${APP_NAME} - Reset password`}</title>
                 <CardTitle className="text-2xl">Reset your password</CardTitle>
                 <CardDescription>
                     {session

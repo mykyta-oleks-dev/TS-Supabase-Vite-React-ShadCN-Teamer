@@ -9,6 +9,7 @@ import useRegistered from '@/hooks/protection/auth/useRegistered';
 import JoinTeam from './join';
 import CreateTeam from './create';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { APP_NAME } from '@/constants/router.constants';
 
 const JoinOrCreateTeamPage = () => {
     const { session } = useRegistered();
@@ -16,6 +17,7 @@ const JoinOrCreateTeamPage = () => {
     return (
         <Card className="w-4/5 md:w-lg">
             <CardHeader>
+                <title>{`${APP_NAME} - Join or Create a team`}</title>
                 <CardTitle className="text-2xl">
                     Join or Create a team
                 </CardTitle>

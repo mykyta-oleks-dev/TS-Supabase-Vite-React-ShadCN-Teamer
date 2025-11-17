@@ -55,6 +55,8 @@ const useTeam = (deep?: boolean) => {
             };
         },
         enabled: !!id,
+
+        placeholderData: (prev) => prev,
     });
 };
 

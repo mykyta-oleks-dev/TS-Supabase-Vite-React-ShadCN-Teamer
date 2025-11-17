@@ -2,7 +2,7 @@ import PageTitle from '@/components/page-title';
 import StatusDisplay from '@/components/products/status';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
-import { ROUTES } from '@/constants/router.constants';
+import { APP_NAME, ROUTES } from '@/constants/router.constants';
 import useOneProduct from '@/hooks/query/products/useOneProduct';
 import useProductStatusMutationDetails from '@/hooks/query/products/useProductStatusMutationDetails';
 import useCurrentUser from '@/hooks/query/user/useCurrentUser';
@@ -39,12 +39,15 @@ const ProductDetailsPage = () => {
     if (isLoading)
         return (
             <div className="flex items-center w-full">
+                <title>{`${APP_NAME} - Loading product...`}</title>
                 <Spinner />
             </div>
         );
 
     return (
         <div className="relative">
+            <title>{`${APP_NAME} - Product "${data?.product.title}"`}</title>
+
             <PageTitle title={`Product "${data?.product.title}"`} />
             {data && (
                 <div className="flex flex-col gap-3">

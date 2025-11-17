@@ -13,7 +13,7 @@ import {
 } from '../ui/drawer';
 import NavMenu from './nav-menu';
 import { Link } from 'react-router';
-import { ROUTES } from '@/constants/router.constants';
+import { APP_NAME, ROUTES } from '@/constants/router.constants';
 
 const Header = () => {
     return (
@@ -21,7 +21,7 @@ const Header = () => {
             <Link to={ROUTES.ROOT}>
                 <h1 className="flex gap-3 items-center text-2xl">
                     <RiTeamFillIcon size={30} className="text-primary" />
-                    <span>Teamer</span>
+                    <span>{APP_NAME}</span>
                 </h1>
             </Link>
             <div className="flex gap-3 items-center">

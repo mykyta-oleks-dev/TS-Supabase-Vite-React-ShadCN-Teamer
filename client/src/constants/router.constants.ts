@@ -1,3 +1,5 @@
+export const APP_NAME = 'Teamer';
+
 export const ROUTER_KEYS = {
     ROOT: '/',
     DYNAMIC: ':id',
