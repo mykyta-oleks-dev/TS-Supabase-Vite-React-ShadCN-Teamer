@@ -114,3 +114,9 @@ export const setSessionFromHash = async (hash?: string) => {
 
     if (error) handleError(error, true);
 };
+
+export const splitIntoParagraphs = (text: string | undefined | null) => {
+    if (!text) return null;
+
+    return text.split('\n').map((p, idx) => <p key={`p-${idx}_${Date.now()}`}>{p}</p>);
+};

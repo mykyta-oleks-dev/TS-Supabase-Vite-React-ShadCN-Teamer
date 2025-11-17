@@ -6,7 +6,7 @@ import { ROUTES } from '@/constants/router.constants';
 import useOneProduct from '@/hooks/query/products/useOneProduct';
 import useProductStatusMutationDetails from '@/hooks/query/products/useProductStatusMutationDetails';
 import useCurrentUser from '@/hooks/query/user/useCurrentUser';
-import { handleError } from '@/lib/utils';
+import { handleError, splitIntoParagraphs } from '@/lib/utils';
 import type { Status } from '@/types/models/product.types';
 import { useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
@@ -28,11 +28,7 @@ const ProductDetailsPage = () => {
 
     if (error) handleError(error, true);
 
-    const descriptionElements =
-        data?.product.description
-            .split('\n')
-            .map((p, idx) => <p key={`desc-p-${idx}_${Date.now()}`}>{p}</p>) ??
-        null;
+    const descriptionElements = splitIntoParagraphs(data?.product.description);
 
     const handleStatusChange = async (status: Status) => {
         await mutateAsync(status);

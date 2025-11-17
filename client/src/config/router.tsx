@@ -12,6 +12,7 @@ import ProductsTablePage from '@/pages/products/table.page';
 import ProductDetailsPage from '@/pages/products/details.page';
 import ProductEditPage from '@/pages/products/edit.page';
 import ProductNewPage from '@/pages/products/new.page';
+import ProfileDetailsPage from '@/pages/profile/details.page';
 
 const router = createBrowserRouter([
     {
@@ -51,6 +52,15 @@ const router = createBrowserRouter([
                             }
                         ],
                     },
+                    {
+                        path: ROUTER_KEYS.PROFILES.ROOT,
+                        children: [
+                            {
+                                path: ROUTER_KEYS.DYNAMIC,
+                                element: <ProfileDetailsPage />
+                            }
+                        ]
+                    }
                 ],
             },
             {

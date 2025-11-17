@@ -4,7 +4,7 @@ import { mapUserFromAPI } from '@/types/models/user.types';
 import { useQuery } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 
-const useUser = (id?: string) => {
+const useUser = (id: string | undefined) => {
     return useQuery({
         queryKey: KEYS.USER_BY_ID(id),
         queryFn: async () => {
