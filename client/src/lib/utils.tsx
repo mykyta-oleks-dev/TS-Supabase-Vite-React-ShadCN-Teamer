@@ -89,7 +89,7 @@ export const getUrlToPath = (to: string) => {
 };
 
 export const isCurrentUrl = (to: string): boolean =>
-    globalThis.location.href === getUrlToPath(to);
+    globalThis.location.href.includes(getUrlToPath(to));
 
 export const setSessionFromHash = async (hash?: string) => {
     if (!hash) return;
@@ -118,5 +118,7 @@ export const setSessionFromHash = async (hash?: string) => {
 export const splitIntoParagraphs = (text: string | undefined | null) => {
     if (!text) return null;
 
-    return text.split('\n').map((p, idx) => <p key={`p-${idx}_${Date.now()}`}>{p}</p>);
+    return text
+        .split('\n')
+        .map((p, idx) => <p key={`p-${idx}_${Date.now()}`}>{p}</p>);
 };
