@@ -1,5 +1,6 @@
 import { RiTeamFill as RiTeamFillIcon } from 'react-icons/ri';
 import NavMenu from './nav-menu';
+import { RealtimeAvatarStack } from '../realtime-avatar-stack';
 
 const Aside = () => {
     return (
@@ -8,6 +9,7 @@ const Aside = () => {
                 <RiTeamFillIcon size={30} className="text-primary" />
                 <span>Teamer</span>
             </h1>
+            <RealtimeAvatarStack roomName='online' />
             <NavMenu />
         </aside>
     );

@@ -126,7 +126,7 @@ const UpdateProfileForm = ({
                         className="flex-1"
                         isSubmitting={isSubmitting}
                     >
-                        Create Profile
+                        Update
                     </SubmitButton>
                     <Button
                         className="flex-1"
