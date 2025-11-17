@@ -14,7 +14,6 @@ import {
 } from '../types/middleware/error-handling.types.ts';
 
 export const handleError = (error: unknown) => {
-    console.log('handleError', error, typeof error);
     if (error instanceof AppError) throw error;
 
     if (error instanceof AuthError) handleAuthError(error);
@@ -61,7 +60,6 @@ const handleAuthError = (error: AuthError) => {
             throw new ForbiddenError(AUTH_ERRORS.NOT_CONFIRMED);
 
         default:
-            console.log('handleAuthError', error);
             throw error;
     }
 };

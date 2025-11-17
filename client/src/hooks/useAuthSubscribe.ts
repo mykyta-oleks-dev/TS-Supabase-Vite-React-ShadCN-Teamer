@@ -15,7 +15,6 @@ const useAuthSubscribe = () => {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((event, session) => {
             if ((event === 'SIGNED_IN' || event === 'PASSWORD_RECOVERY') && session) {
-                console.log(session.user.id);
                 setSession(session);
             } else if (event === 'SIGNED_OUT' || !session) {
                 reset();

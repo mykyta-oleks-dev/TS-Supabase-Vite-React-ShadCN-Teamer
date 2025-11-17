@@ -20,20 +20,14 @@ const useProductStatusMutationTable = (params?: GetProductQueryParams) => {
         },
 
         onMutate: async ({ id, status }) => {
-            console.log({ id, status, key });
-
             const query = queryClient.getQueryData<ManyProductsParsed>(key);
 
             if (!query) return query;
-
-            console.log({ query });
 
             queryClient.setQueryData<ManyProductsParsed>(key, (old) => {
                 if (!old) return old;
 
                 const product = old.products.find((p) => p.id === id);
-
-                console.log({ old, product });
 
                 if (!product) return old;
 
@@ -46,11 +40,6 @@ const useProductStatusMutationTable = (params?: GetProductQueryParams) => {
                         ...p,
                         status,
                     };
-                });
-
-                console.log({
-                    old: product,
-                    new: newProducts.find((p) => p.id === id),
                 });
 
                 let totalDeleted = old.totalDeleted;

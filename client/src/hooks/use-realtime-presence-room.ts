@@ -14,11 +14,12 @@ export type RealtimeUser = {
     image: string;
 };
 
-export const useRealtimePresenceRoom = (roomName: string, user: User | undefined) => {
+export const useRealtimePresenceRoom = (roomName: string | undefined, user: User | undefined) => {
     const { usersMap, setUsersMap } = useOnlineUsers();
 
     useEffect(() => {
-        console.log({ roomName, user, setUsersMap });
+        if (!roomName) return;
+        
         const room = supabase.channel(roomName);
 
         room.on('presence', { event: 'sync' }, () => {
@@ -39,25 +40,20 @@ export const useRealtimePresenceRoom = (roomName: string, user: User | undefined
                 ])
             ) as Record<string, RealtimeUser>;
 
-            console.log('fired realtime');
-
             setUsersMap(newUsers);
         }).subscribe(async (status) => {
             if (status === REALTIME_SUBSCRIBE_STATES.SUBSCRIBED && user) {
-                console.log('fired user subscription');
                 await room.track({
                     id: user.id,
                     name: user.full_name,
                     image: user.avatar,
                 });
             } else {
-                console.log('fired user unsubscription');
                 setUsersMap({});
             }
         });
 
         return () => {
-            console.log('fired total unsubscription');
             room.unsubscribe();
         };
     }, [roomName, user, setUsersMap]);
